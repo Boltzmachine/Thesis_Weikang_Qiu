@@ -1,0 +1,44 @@
+{
+  // Always build the whole dissertation, even when a chapter file is focused
+  "latex-workshop.latex.rootFile": "Disseration.tex",
+
+  "latex-workshop.latex.outDir": "%DIR%/build",
+
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk",
+      "command": "latexmk",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-pdf",
+        "-outdir=%OUTDIR%",
+        "%DOC%"
+      ],
+      "env": {}
+    }
+  ],
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "latexmk (pdflatex + bibtex)",
+      "tools": ["latexmk"]
+    }
+  ],
+
+  // Rebuild on save, preview in a VS Code tab
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.view.pdf.viewer": "tab",
+
+  // Ctrl/Cmd+click in the PDF jumps back to the source, and vice versa
+  "latex-workshop.synctex.afterBuild.enabled": true,
+
+  // Keep aux files out of sight; `latexmk -c` handles the rest
+  "latex-workshop.latex.autoClean.run": "never",
+  "latex-workshop.message.badbox.show": false,
+
+  "files.associations": {
+    "*.tex": "latex",
+    "*.cls": "latex"
+  }
+}

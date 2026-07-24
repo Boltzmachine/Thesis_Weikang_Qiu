@@ -1,0 +1,85 @@
+% Packages and macros needed by the chapters under PHIL/
+% (extracted from the original paper preamble, PHIL/appendix.tex)
+
+% T1 encoding: accented letters (ö in "Teichteil-Königsbuch") become single
+% glyphs, so TeX can hyphenate the word instead of overflowing the margin.
+\usepackage[T1]{fontenc}
+
+\usepackage{booktabs}           % professional-quality tables
+\usepackage{multirow}           % tabular cells spanning multiple rows
+\usepackage{multicol}
+\usepackage{amsfonts}           % blackboard math symbols
+\usepackage{array}
+\usepackage{wrapfig}
+\usepackage{nicefrac}           % compact symbols for 1/2, etc.
+\usepackage{url}
+\usepackage{enumitem}
+\usepackage{xspace}
+\usepackage[mathscr]{euscript}
+\usepackage[export]{adjustbox}
+
+% Author-annotation helpers
+\newcommand{\rex}[1]{{{\textcolor{magenta}{[rex: #1]}}}}
+\newcommand{\jure}[1]{{{\textcolor{red}{[Jure: #1]}}}}
+\newcommand{\michal}[1]{{{\textcolor{blue}{[Michal: #1]}}}}
+\newcommand{\update}[1]{{{\textcolor{ForestGreen}{[Update: #1]}}}}
+
+% Shorthands
+\newcommand{\etal}{\textit{et al.}\xspace}
+\newcommand{\alg}{\textsc{PHIL}\xspace}
+\newcommand{\sail}[0]{\textsc{SaIL}\xspace}
+\newcommand{\VS}{\mathcal{V}}
+\newcommand{\xhdr}[1]{{\noindent\bfseries #1}.}
+
+% Math
+\DeclareRobustCommand{\bbone}{\text{\usefont{U}{bbold}{m}{n}1}}
+\DeclareMathOperator{\EX}{\mathbb{E}} % expected value
+
+% algorithm2e configuration (package itself is loaded in Disseration.tex)
+\SetKwComment{Comment}{$\triangleright$\ }{}
+\newcommand{\algorithmStyle}[0]{\footnotesize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% HyBRiD chapter (from the ICML 2024 paper preamble)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{tabularx}
+\usepackage{caption}
+\usepackage{pifont}
+\usepackage{bbm}                % \mathbbm
+\usepackage{microtype}
+\usepackage[textsize=tiny]{todonotes}
+\usepackage[capitalize,noabbrev]{cleveref}   % load last
+
+% Theorem environments (numbered per chapter, not per section, in a book class)
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% Table rules/struts used by the HyBRiD tables
+\newcommand{\Tstrut}{\rule{0pt}{2.9ex}}         % "top" strut
+\newcommand{\Bstrut}{\rule[-1.2ex]{0pt}{0pt}}   % "bottom" strut
+\newcommand{\TBstrut}{\Tstrut\Bstrut}
+\newcommand{\shline}{\addlinespace[3pt]\hline\addlinespace[3pt]}
+
+% Names
+\newcommand{\mname}{\textsc{HyBRiD}}
+\newcommand{\multiheadname}{\textit{multi-head drop-bottleneck}}
+\newcommand{\avgimp}{$12.1\%$}
+
+% Review annotations (\rex is defined above and deliberately not redefined)
+\newcommand{\htl}[1]{\textcolor{orange}{[htl: #1]}}
+\newcommand{\yize}[1]{\textcolor{magenta}{[Yize: #1]}}
+\newcommand{\jialin}[1]{\textcolor{brown}{[jialin: #1]}}
+\newcommand{\sw}[1]{{\color{magenta}***SW: #1***}}
+\newcommand{\cam}[1]{{\color{red}#1}}
