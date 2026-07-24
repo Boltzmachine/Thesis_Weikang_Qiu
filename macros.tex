@@ -108,3 +108,20 @@
 % Review annotations (\rex is defined above and deliberately not redefined)
 \newcommand{\yy}[1]{\textcolor{orange}{(Yujun: #1)}}
 \newcommand{\qwk}[1]{\textcolor{blue}{(Weikang: #1)}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PRISM chapter (from the ICLR 2026 paper preamble)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The paper's math_commands.tex defines 431 macros, none of which the chapters
+% use, so it is not merged. Its `algorithm`/`algorithmic` packages are also
+% skipped: no algorithm environment is used, and they would clash with the
+% algorithm2e loaded for the PHIL chapter.
+
+\newcommand{\modelname}{\textbf{{PRISM}}\xspace}
+
+% Last-resort stretch for paragraphs TeX cannot otherwise break — these papers
+% were set in two columns and some have long unbreakable inline math that now
+% overflows the wider one-column measure. Only applies where a line would
+% otherwise stick out; well-set paragraphs are untouched.
+\emergencystretch=3em

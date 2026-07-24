@@ -1,0 +1,132 @@
+\vspace{-0.1cm}
+\section{Preliminary}
+\label{sec:prelim}
+\vspace{-0.2cm}
+
+
+
+% diffusion Diffusion 
+% clip img encoder, text enc
+% text embedding: 
+% ENC_{img}(I), ENC_{text}(T)
+% remove A
+
+
+
+% \textbf{Functional Magnetic Resonance Imaging (fMRI). } 
+% Each raw fMRI sample is a 4D volume (space and time), averaged over time to produce a 3D brain volume per stimulus. This is then flattened into a 1D vector to work with machine learning models, with each element representing a single voxel’s neural activation~\citep{allen2022massive}.
+
+
+
+\textbf{Notations. } 
+% \yj{We denote the set of fMRI samples collected while the subject views images as $\mathcal{X}$. Each sample is preprocessed following \citep{scotti2023reconstructing}, yielding a 1D vector $\mathbf{x}_i \in \mathbb{R}^v$ representing neural activity across $v$ voxels. We partition $\mathcal{X}$ into training, validation, and test subsets, using superscripts to indicate the split—for example, the training set with $N$ samples is denoted as $\mathcal{X}^{\text{train}} = \{\mathbf{x}_1, \ldots, \mathbf{x}_N\}$.
+% % Let $\mathcal{X}^{\text{train}} = \{\mathbf{x}_1, \ldots, \mathbf{x}_N\}$ and $\mathcal{X}^{\text{test}} = \{\mathbf{x}_1, \ldots, \mathbf{x}_M\}$ denote the sets of training and test fMRI samples, respectively. We assume that the fMRI data is collected while the subject is viewing an image and is preprocessed following \citep{scotti2023reconstructing}, resulting in each fMRI sample being represented as a 1D vector $\mathbf{x}_i \in \mathbb{R}^v$ with $v$ voxels.
+% We denote the $i$-th image stimulus presented during fMRI recording as $\mathbf{Y}_i \in \mathbb{R}^{H \times W \times 3}$. Let $m$ represent the number of objects in the image.
+% % as identified by a pre-trained \yj{don't mention identified by a pre-trained model, as the number of objects should be something objective. you use vlm to detect it, but that is just a tool.}
+% % \xiang{object recognition?} 
+% % model. 
+% % \yj{the next sentence is a little bit surprising. add a transition sentence, say that in your method, you will use text descriptions of the objects in the image, which you utilize a VLM to generate it. } 
+% In our method, we use a pre-trained vision-language model (VLM) to generate object-level descriptions from each image. An attribute keyword $a$—a text phrase specifying aspects such as color, geometry, or layout—is used to construct a prompt $\mathcal{P}(a)$. Given an image $\mathbf{Y}_i$ and prompt $\mathcal{P}(a)$, the VLM produces descriptions conditioned on the specified attribute.}
+% %The resulting structured output is denoted by $D_i^a=\text{VLM}(I_i,\mathcal{P}(a))$.
+In our work, we denote the set of fMRI samples collected during image viewing as $\mathcal{X}$. Each sample is a preprocessed 1D vector $\mathbf{x}_i \in \mathbb{R}^v$, capturing neural activity across $v$ voxels selected from brain regions \citep{scotti2023reconstructing}. The dataset is split into training and test subsets, with superscripts indicating the split. For example, we denote the training set with $N$ samples as: $\mathcal{X}^{\text{train}} = \{\mathbf{x}_1, \ldots, \mathbf{x}_N\}$. The corresponding image stimulus for the $i$-th sample is denoted as: $\mathbf{Y}_i \in \mathbb{R}^{H \times W \times 3}$, which contains $m$ objects. 
+% To generate object-level textual descriptions of each image, we use a pre-trained vision-language model (VLM) guided by an attribute keyword $a$, which specifies a property such as geometry, action, or spatial layout. We construct a prompt $\mathcal{P}(a)$ from $a$ and feed it along with $\mathbf{Y}_i$ into the VLM to generate attribute-conditioned descriptions.
+
+%which is a hierarchical textual description that includes the most salient objects in the image and provides detailed, attribute-conditioned descriptions for each. Specifically, it consists of a list of object-level entries, where each entry includes a natural language description annotated with semantic roles (e.g., [Agent], [Action], [Patient]). These role labels are derived from PropBank-style semantic analysis and serve to disentangle the compositional meaning of each object’s description.
+%We use $h_i^{I}, h_i^{T}$ to denote the flattened representation extract from model $m$. The model could be Clip image encoder,  Clip text encoder, Resnet50 
+
+% Let $\mathcal{A} = \{a_1, a_2, \dots, a_p\}$ denote a set of image attributes, where each attribute $a_i$ can be used to describe an image $\mathbf{G}_n$. Given $\mathbf{G}_n$ and an attribute $a_i$, a vision-language model generates a corresponding textual description $d_i$, forming the set $\mathcal{D} = \{d_1, d_2, \dots, d_p\}$. We use $\mathbf{X}_{n} \in \mathbb{R}^d$ denote the preprocessed fMRI data recorded when a subject is viewing the $n$-th image $\mathbf{G}_n \in \mathbb{R}^{H \times W \times 3}$, where $d$ is the number of voxels, and $H$, $W$ are the height and width of the image, respectively. We use $\mathbf{F}_{n}^v$ as the $n$-th image representation extracted from vision model $v$ (e.g., CLIP Image encoder \citep{radford2021learning} , ResNet50 \citep{he2016deep}), and $\mathbf{F}_{n}^t$ as the $n$-th text representation extracted from language model $t$ (e.g., T5 \citep{raffel2020exploring}, LLama \citep{grattafiori2024llama} , CLIP Text encoder \citep{radford2021learning}). 
+
+$\textbf{Problem Setup. }$ Our goal is to reconstruct the visual images that subjects viewed during fMRI recording. Formally, we seek to learn a reconstruction function $\mathcal{F}: \mathbb{R}^v \rightarrow \mathbb{R}^{H \times W \times 3}$ that maps each fMRI sample $\mathbf{x}_i$ to its corresponding image stimulus $\mathbf{Y}_i$.
+% In our framework, we instantiate $\mathcal{F}$ as a composition of three components: an multi-layer perceptron (MLP) that maps $X_i$ into a language embedding space, a language model (LM) that generates structured descriptions, and a diffusion model that reconstructs the image:
+% $
+% \mathcal{F}(X_i) = \text{Diffusion}(\text{LM}(\text{MLP}(X_i))).
+% $ The objective of the fmri-image reconstuction is to minimize the perceptual loss between $\hat{I}_i$ and $I_i$.
+
+% diffusion pipeline, basic diffusion, various diffusion
+$\textbf{Diffusion Model. }$ 
+Diffusion models~\citep{rombach2022high, zhang2023adding} are a class of generative models that synthesize data by learning to reverse a multi-step noising process. Starting from Gaussian noise, they iteratively denoise a latent variable over a fixed number of timesteps using a denoising network—typically a U-Net—conditioned on the current timestep $t$. This process gradually produces samples resembling the training distribution.
+ % \yj{lack citation for this conditional generation}
+To incorporate external inputs such as text, the denoising network can take a conditioning input $\mathbf{C}$, usually text embeddings from a pre-trained encoder~\citep{zhang2023adding}. Conditioning is implemented via cross-attention mechanisms within the U-Net architecture~\citep{williams2023unified}, enabling the integration of textual information. In these layers, the latent representations $\mathbf{H}_t \in \mathbb{R}^{h \times w \times d}$ at time $t$ serve as queries, and $\mathbf{C} \in \mathbb{R}^{d_t \times d'}$ serves as both keys and values~\citep{williams2023unified, yang2024mastering}: 
+%\yj{check formula and meaning}
+\begin{equation*}
+\vspace{-0.1cm}
+\text{CrossAttention}(\mathbf{H}_t, \mathbf{C}) = \text{softmax} \left( \frac{ \phi(\mathbf{H}_t) \cdot \mathbf{W}_Q \cdot (\varphi(\mathbf{C}) \cdot \mathbf{W}_{K})^\top}{\sqrt{d_k}} \right) \varphi(\mathbf{C}) \cdot \mathbf{W}_{V},
+\end{equation*}
+where $\mathbf{W}_Q\in \mathbb{R}^{d \times d_k} $ ,  $\mathbf{W}_K \in \mathbb{R}^{d^\prime \times d_k} $, $\mathbf{W}_V \in \mathbb{R}^{d^\prime \times d}$ are projection matrices; and $ \phi(\cdot)$ and $ \varphi(\cdot)$ are learned transformations. Further details are available in Section~\ref{app:diffusion} of the Appendix.
+
+
+
+
+%\yj{unclear, Unet coming from nowhere. a little bit architecture descriptions of the diffusion model, including the components that you will mention. Otherwise, give an illustrative figure.}
+%At each timestep, \yj{I know you are referring to the denosing process, but timesteps come from nowhere. Readers who do not know diffusion model can hardly learn from what you write. Every new word, terminologies need an explanation. Otherwise, do not use those terminologies. }
+% \yj{You should also mention the specific work you are following as almost no reviewer has ever seen it. }
+
+
+% where \( \mathbf{Q} = \mathbf{W}_Q \cdot\phi(\mathbf{h}_t) \) are queries from the intermediate image latent features at timestep $t$, and \( \mathbf{K}, \mathbf{V} = \mathbf{W}_{K,V} \cdot\varphi(\mathbf{c}) \) are keys and values derived from the conditioning embedding. Here, \( \phi(\cdot) \) and \( \varphi(\cdot) \) are feature projections (e.g., linear layers), and \( d \) is the feature dimension. This allows the model to align visual content with semantic information at each generation step. More details on the diffusion model can be found in Appendix~\ref{app:diffusion}.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% We adopt a latent diffusion model (LDM) to reconstruct images from brain-derived semantic descriptions. Specifically, LDMs operate in a compressed latent space for greater efficiency and fidelity \citep{rombach2022high}. Given an image $I_i \in \mathbb{R}^{H \times W \times 3}$, a pre-trained VAE encoder maps it to a latent $\mathbf{z}_i \in \mathbb{R}^{h \times w \times c}$:
+% \[
+% \mathbf{z}_i = \text{Encoder}(I_i).
+% \]
+% The diffusion model learns to reverse a noising process over $\mathbf{z}_i$, starting from Gaussian noise $\mathbf{x}_T \sim \mathcal{N}(0, \mathbf{I})$ and producing a denoised latent $\mathbf{x}_0$, which is then decoded back to image space:
+% \[
+% \hat{I}_i = \text{Decoder}(\mathbf{x}_0).
+% \]
+
+% To condition image generation on semantic information, the U-Net employs cross-attention layers. At each timestep, given an intermediate latent feature $\mathbf{x} \in \mathbb{R}^{h \times w \times d}$ and a context embedding $\mathbf{c} \in \mathbb{R}^{n \times d}$ (e.g., from a language model), cross-attention computes:
+% \[
+% \text{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \text{softmax}\left(\frac{\mathbf{Q}\mathbf{K}^\top}{\sqrt{d}}\right)\mathbf{V},
+% \]
+% where $\mathbf{Q} = \mathbf{W}_Q \mathbf{x}$, $\mathbf{K} = \mathbf{W}_K \mathbf{c}$, and $\mathbf{V} = \mathbf{W}_V \mathbf{c}$. This allows each spatial location in the latent to attend to relevant parts of the structured text description, guiding the generation process toward semantically aligned outputs.
+
+
+
+% Diffusion models generate images by learning to reverse a gradual noising process \citep{croitoru2023diffusion, rombach2022high}. At each timestep $t$, a neural network $\epsilon_\theta(\mathbf{x}_t, t, \mathbf{c})$ predicts the noise added to the input $\mathbf{x}_t$, conditioned on some context $\mathbf{c}$. In image reconstruction tasks, $\mathbf{c}$ typically encodes high-level semantic information (e.g., textual descriptions). The network $\epsilon_\theta$ is commonly implemented as a U-Net with cross-attention layers that fuse the input image representation with contextual signals. Specifically, in each cross-attention block, the image features serve as queries, while the context $\mathbf{c}$ provides keys and values:
+% $$
+% \text{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \text{softmax}\left(\frac{\mathbf{Q} \mathbf{K}^\top}{\sqrt{d}}\right) \mathbf{V},
+% $$
+
+% \noindent where $\mathbf{Q}$ comes from latent image features, and $\mathbf{K}, \mathbf{V}$ are projected from the context embedding $\mathbf{c}$. This design allows the model to selectively integrate external semantic information into different layers of the generative process.
+
+
+
+
+% Diffusion models learn to reverse a gradual noising process by training a neural network to denoise images at each time step \citep{croitoru2023diffusion, rombach2022high}. The forward process is defined as a Markov chain that adds Gaussian noise to the image $\mathbf{x}_0$ over $T$ steps:
+% $$
+% q(\mathbf{x}_t \mid \mathbf{x}_{t-1}) = \mathcal{N}(\mathbf{x}_t; \sqrt{1 - \beta_t} \mathbf{x}_{t-1}, \beta_t \mathbf{I}),
+% $$
+
+% \noindent where $\beta_t$ is the variance schedule controlling the noise level at each timestep $t$. The marginal distribution is given by:
+
+% $$
+% q(\mathbf{x}_t \mid \mathbf{x}_0) = \mathcal{N}(\mathbf{x}_t; \sqrt{\bar{\alpha}_t} \mathbf{x}_0, (1 - \bar{\alpha}_t) \mathbf{I}),
+% $$
+
+% \noindent with $\bar{\alpha}_t = \prod_{s=1}^{t} (1 - \beta_s)$. The reverse process is learned via a parameterized model $p_\theta(\mathbf{x}_{t-1} \mid \mathbf{x}_t)$, trained to approximate:
+
+% $$
+% p_\theta(\mathbf{x}_{t-1} \mid \mathbf{x}_t) = \mathcal{N}(\mathbf{x}_{t-1}; \mu_\theta(\mathbf{x}_t, t), \Sigma_\theta(\mathbf{x}_t, t)),
+% $$
+
+% \noindent where $\mu_\theta$ is typically derived from a neural network predicting the noise $\epsilon_\theta(\mathbf{x}_t, t)$, such that:
+
+% $$
+% \mu_\theta(\mathbf{x}_t, t) = \frac{1}{\sqrt{\alpha_t}} \left( \mathbf{x}_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \epsilon_\theta(\mathbf{x}_t, t) \right),
+% $$
+
+
+% The model $\epsilon_\theta$ is commonly implemented using a U-Net architecture, which captures both global context and fine details through its encoder-decoder structure with skip connections. The U-Net takes $\mathbf{x}_t$ and a time embedding $t$ as inputs and predicts the added noise $\epsilon$ at step $t$.
+

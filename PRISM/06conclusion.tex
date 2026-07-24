@@ -1,0 +1,20 @@
+\section{Conclusion}
+
+% In this work, we addressed the challenge of reconstructing visual stimuli from fMRI signals. Our analysis shows that fMRI signals align more closely with language model text space than with visual-based alternatives, motivating text as a brain-aligned intermediate representation. Moreover, we find that using the compositional nature of visual perception further improves reconstruction quality when integrated with generation models. Motivated by these finds, we introduce \modelname, a framework that projects fMRI signals into a structured text space and incorporates an object-centric diffusion module and an attribute/relationship search module. Extensive experiments on real-world fMRI datasets demonstrate that PRISM outperforms prior methods, achieving up to an $8\%$ reduction in perceptual loss.
+In this work, we address the challenge of reconstructing visual stimuli from fMRI signals. Our analysis reveals that fMRI signals align more closely with the text space of language models than with vision-based or joint text–image representations, identifying text as a brain-aligned intermediate space. Building on this insight, we show that explicitly modeling the compositional structure of visual perception—capturing objects along with their attributes and relationships—further improves reconstruction quality. Guided by these findings, we develop \modelname, a framework that maps fMRI signals into a structured text space and incorporates two specialized modules: an object-centric diffusion module that generates images by composing individual objects, and an attribute/relationship search module that automatically discovers attributes and relationships aligned with neural activity. Experiments on real-world fMRI datasets demonstrate that PRISM reduces perceptual loss by up to 6\% compared to prior methods, underscoring the power of structured text as a bridge between brain activity and image generation.
+
+
+\section{Ethics statement}
+Our work does not involve human or animal subjects, personally identifiable data, or sensitive information. The datasets used are publicly available, and we follow their respective licenses. The methods and findings presented do not pose foreseeable risks of misuse, discrimination, or harm. We therefore believe our work raises no specific ethical concerns under the ICLR Code of Ethics. 
+
+
+\section{Reproducibility statement}
+
+\Cref{sec:prism-method} details the proposed framework and its design. \Cref{sec:exp} describes the datasets, baseline methods, and evaluation protocols used for comparison. Additional implementation details, including training procedures and hyperparameter settings, are provided in the Appendix. Upon acceptance of this paper, we will release our code on GitHub.
+
+% \section{Acknowledgements}
+% We thank the anonymous reviewers for their constructive comments. This work is supported by National Science Foundation under Award No. IIS-
+
+
+
+
