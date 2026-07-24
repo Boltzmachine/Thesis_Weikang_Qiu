@@ -5,6 +5,10 @@
 *.bak
 
 build/
+
+# Build output that lands in the project root instead of build/
+/Disseration.pdf
+*.synctex*
 *.aux
 *.bbl
 *.blg

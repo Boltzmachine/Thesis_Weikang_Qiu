@@ -1,0 +1,1005 @@
+\section{Dataset Details}
+\label{app:dataset}
+
+\subsection{Details of each dataset in brain instruction tuning}
+In this section, we give a brief description of each source of our brain instruction datasets as well as examples from them.
+
+\setlength{\LTcapwidth}{\textwidth}
+
+{\scriptsize 
+\begin{longtable}{>{\raggedright\arraybackslash}m{0.2\textwidth}m{0.2\textwidth}m{0.5\textwidth}}
+\caption{Dataset details and examples.}
+\label{tab:dataset_details}\\
+
+\toprule
+\textbf{Dataset} & \textbf{Description} & \textbf{Example}\\
+\midrule
+\endfirsthead
+
+% \multicolumn{3}{c}{\tablename\ \thetable{} -- Continued from previous page}\\
+\toprule
+\textbf{Dataset} & \textbf{Description} & \textbf{Example}\\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{3}{r}{Continued on next page}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+    Previous Caption
+    \vspace{0.5em}
+\end{minipage} & 
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+    Generating a one-sentence caption of the image that the subject previously saw.
+    \vspace{0.5em}
+\end{minipage} &
+\begin{minipage}[c]{\linewidth}
+    \centering
+    \begin{minipage}[c]{0.3\linewidth}
+        \includegraphics[width=0.7\linewidth]{figures/table5_example/prev-coco.jpg}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[c]{0.65\linewidth}
+        A neat bedroom pairs modern chairs with a glass table.
+    \end{minipage}
+\end{minipage}\\
+\midrule
+
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+    \makecell[l]{COCO Caption\\\cite{chen2015microsoft}}
+    \vspace{0.5em}
+\end{minipage} & 
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+    Generate a one-sentence caption of the image the subject currently sees.
+    \vspace{0.5em}
+\end{minipage} &
+\begin{minipage}[c]{\linewidth}
+    \centering
+    \begin{minipage}[c]{0.3\linewidth}
+        \includegraphics[width=0.7\linewidth]{figures/table5_example/coco-caption.jpg}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[c]{0.65\linewidth}
+        The pedestrian is walking down the side of the highway by the bus.
+    \end{minipage}
+\end{minipage}\\
+\midrule
+
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+Image Paragraph Captioning\\ \cite{krause2017hierarchical}
+\vspace{0.5em}
+\end{minipage} & 
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+ Generate a one-paragraph caption of the image the subject currently sees    \vspace{0.5em}
+\end{minipage} &
+\begin{minipage}[c]{\linewidth}
+    \centering
+    \begin{minipage}[c]{0.3\linewidth}
+        \includegraphics[width=0.7\linewidth]{figures/table5_example/paragraph-caption.jpg}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[c]{0.65\linewidth}
+        An elephant with a harness, and a seat on his back is seen in a dirt field on a sunny day. The seat on the back of the elephant is brown and is tied with ropes. The sun is shining through the trees onto the ground below. Behind the elephant there is a cinder block wall with grass growing in front of the wall. There are trees behind the wall.    \end{minipage}
+\end{minipage}\\
+\midrule
+
+
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+COCO QA\\\cite{ren2015exploring}
+\vspace{0.5em}
+\end{minipage} & 
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+Answer questions according to the image.
+\vspace{0.5em}
+\end{minipage} &
+\begin{minipage}[c]{\linewidth}
+    \centering
+    \begin{minipage}[c]{0.3\linewidth}
+        \includegraphics[width=0.7\linewidth]{figures/table5_example/coco-qa.jpg}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[c]{0.65\linewidth}
+        [Q]: what eats leaves from a basket in an enclosure? [A]: Giraffe.
+    \end{minipage}
+\end{minipage}\\
+\midrule
+
+
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+Visual Genome QA\\\cite{krishna2017visual}
+\vspace{0.5em}
+\end{minipage} & 
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+Answer image-based questions that require richer semantic understanding of the image than COCO-QA.
+\vspace{0.5em}
+\end{minipage} &
+\begin{minipage}[c]{\linewidth}
+    \centering
+    \begin{minipage}[c]{0.3\linewidth}
+        \includegraphics[width=0.7\linewidth]{figures/table5_example/visual-genome.jpg}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[c]{0.65\linewidth}
+        [Q]: Where was the photo taken? [A]: In an office.
+    \end{minipage}
+\end{minipage}\\
+\midrule
+
+
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+VQAv2\\\cite{goyal2017making}
+\vspace{0.5em}
+\end{minipage} & 
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+ Answer image-based questions with better equality and diversity than COCO-QA.
+ 
+ \vspace{0.5em}
+\end{minipage} &
+\begin{minipage}[c]{\linewidth}
+    \centering
+    \begin{minipage}[c]{0.3\linewidth}
+        \includegraphics[width=0.7\linewidth]{figures/table5_example/vqa-v2.jpg}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[c]{0.65\linewidth}
+        [Q]: What are the two white letters? [A]: hu
+    \end{minipage}
+\end{minipage}\\
+\midrule
+
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+OK-VQA\\\cite{marino2019ok}
+\vspace{0.5em}
+\end{minipage} & 
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+ Answer image-based questions that require external knowledge beyond the image itself.
+\vspace{0.5em}
+\end{minipage} &
+\begin{minipage}[c]{\linewidth}
+    \centering
+    \begin{minipage}[c]{0.3\linewidth}
+        \includegraphics[width=0.7\linewidth]{figures/table5_example/ok-vqa.jpg}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[c]{0.65\linewidth}
+        [Q]: What part of the body do you wear the rightmost objects on? [A]: Neck.
+    \end{minipage}
+\end{minipage}\\
+\midrule
+
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+ST-VQA\\\cite{biten2019scene}
+\vspace{0.5em}
+\end{minipage} & 
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+ Answer questions of high-level semantic information present in images as the textual cue
+ \vspace{0.5em}
+\end{minipage} &
+\begin{minipage}[c]{\linewidth}
+    \centering
+    \begin{minipage}[c]{0.3\linewidth}
+        \includegraphics[width=0.7\linewidth]{figures/table5_example/st-vqa.jpg}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[c]{0.65\linewidth}
+        [Q]: What is written on the front of the shirt? [A]: Marine.
+    \end{minipage}
+\end{minipage}\\
+\midrule
+
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+TallyQA\\\cite{acharya2019tallyqa}
+\vspace{0.5em}
+\end{minipage} & 
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+Count objects present in images.
+\vspace{0.5em}
+\end{minipage} &
+\begin{minipage}[c]{\linewidth}
+    \centering
+    \begin{minipage}[c]{0.3\linewidth}
+        \includegraphics[width=0.7\linewidth]{figures/table5_example/tally-qa.jpg}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[c]{0.65\linewidth}
+        [Q]: How many bats on the wall? [A]: 2
+    \end{minipage}
+\end{minipage}\\
+\midrule
+
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+VQA-E\\\cite{li2018vqa}
+\vspace{0.5em}
+\end{minipage} & 
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+Answer questions and generate corresponding explanations for an image-based question.
+\vspace{0.5em}
+\end{minipage} &
+\begin{minipage}[c]{\linewidth}
+    \centering
+    \begin{minipage}[c]{0.3\linewidth}
+        \includegraphics[width=0.7\linewidth]{figures/table5_example/vqa-e.jpg}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[c]{0.65\linewidth}
+        [Q]: Are the people going for a walk in the forest? [A]: Yes. Here is the explanation: A picture of the land, trees, and people passing by as they ride in a vehicle.
+    \end{minipage}
+\end{minipage}\\
+\midrule
+
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+A-OKVQA\\\cite{schwenk2022okvqa}
+\vspace{0.5em}
+\end{minipage} & 
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+Answer multiple-choice questions.
+\vspace{0.5em}
+\end{minipage} &
+\begin{minipage}[c]{\linewidth}
+    \centering
+    \begin{minipage}[c]{0.3\linewidth}
+        \includegraphics[width=0.7\linewidth]{figures/table5_example/a-okvqa.jpg}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[c]{0.65\linewidth}
+        [Q]: What season is up next? Multiple Choices: A. autumn B. spring C. summer D. winter [A]: B
+    \end{minipage}
+\end{minipage}\\
+\midrule
+
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+FSVQA\\\cite{shin2016color}
+\vspace{0.5em}
+\end{minipage} & 
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+Answer the questions in full sentences.
+\vspace{0.5em}
+\end{minipage} &
+\begin{minipage}[c]{\linewidth}
+    \centering
+    \begin{minipage}[c]{0.3\linewidth}
+        \includegraphics[width=0.7\linewidth]{figures/table5_example/fsvqa.jpg}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[c]{0.65\linewidth}
+        [Q]: Is this an area that is more populated with pedestrians than cars? [A]: Yes, this is an area that is more populated with pedestrians than cars.
+    \end{minipage}
+\end{minipage}\\
+\midrule
+
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+VisDial\\\cite{murahari2019improving}
+
+\vspace{0.5em}
+\end{minipage} & 
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+Generate answers for image-based questions in a multi-turn dialogue.     \vspace{0.5em}
+\end{minipage} &
+\begin{minipage}[c]{\linewidth}
+    \centering
+    \begin{minipage}[c]{0.3\linewidth}
+        \includegraphics[width=0.7\linewidth]{figures/table5_example/visdial.jpg}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[c]{0.65\linewidth}
+        [Q1]: Is the photo in color? [A1]: No. [Q2]: Is the man wearing glasses [A2]: Can't tell. [Q3]: How many horses are there? [A3]: 2 
+    \end{minipage}
+\end{minipage}\\
+\midrule
+
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+LLava Instruction 150K\\\cite{liu2023visual}
+\vspace{0.5em}
+\end{minipage} & 
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+Generate answers for object-level and scene-level answering or reasoning questions for single or multi-round conversations. 
+\vspace{0.5em}
+\end{minipage} &
+\begin{minipage}[c]{\linewidth}
+    \centering
+    \begin{minipage}[c]{0.3\linewidth}
+        \includegraphics[width=0.7\linewidth]{figures/table5_example/llava.jpg}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[c]{0.65\linewidth}
+        [Q1]: What is the main activity of the person in the fMRI? [A1]: The main activity of the person in the fMRI is brushing her teeth. [Q2]: What should be considered when maintaining oral hygiene in a public setting? [A2]: When maintaining oral hygiene in a public setting (as depicted in the fMRI by a woman brushing her teeth with a green toothbrush while carrying a shoulder bag), factors such as cleanliness, privacy, time management, and personal hygiene supplies should be taken into account...
+    \end{minipage}
+\end{minipage}\\
+\midrule
+
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+LVIS Instruct4V\\\cite{wang2023see}
+
+\vspace{0.5em}
+\end{minipage} & 
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.8em}
+ Similar to LLava Instruct4V but is finer-grained and of higher quality.
+ \vspace{0.5em}
+\end{minipage} &
+\begin{minipage}[c]{\linewidth}
+    \centering
+    \begin{minipage}[c]{0.3\linewidth}
+        \includegraphics[width=0.7\linewidth]{figures/table5_example/lvis.jpg}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[c]{0.65\linewidth}
+        [Q1]: What is the primary object in the fMRI? [A1]: The primary object in the fMRI is a bird. [Q2]: Can you describe the color and appearance of the bird? [A2]: The bird has a deep brown body with a darker head. Its eyes are distinctively surrounded by a yellowish hue. The bird also possesses a blue-tinted beak. [Q3]: How many birds are in the picture?' [A3]: There is only one bird in the picture...
+    \end{minipage}
+\end{minipage}\\
+\midrule
+
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+TDIUC (only used in downstream)\\\cite{kafle2017analysis}
+\vspace{0.5em}
+\end{minipage} & 
+\begin{minipage}[c]{\linewidth}
+    \vspace{0.5em}
+Generate answers for image-based questions from 12 different task-directed question types such as object presence and utility/affordance. 
+\vspace{0.5em}
+\end{minipage} &
+\begin{minipage}[c]{\linewidth}
+    \centering
+    \begin{minipage}[c]{0.3\linewidth}
+        \includegraphics[width=0.7\linewidth]{figures/tdiuc.jpg}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[c]{0.65\linewidth}
+        [Q]: What object can be thrown? [A]: Baseball
+    \end{minipage}
+\end{minipage}\\
+
+
+\end{longtable}
+}  
+% \begin{table}[H]
+%     \caption{Dataset details and examples.}
+%     \label{tab:dataset_details}
+%     \vskip 0.1in
+%     \centering
+%     \tiny
+%     \begin{tabularx}{\linewidth}{>{\centering\arraybackslash}m{0.15\linewidth}m{0.2\linewidth}X}
+% % \begin{longtable}
+%     \toprule
+%     Dataset & Description&Example\\
+%     \midrule
+%     Previous Caption & Generating a one-sentence caption of the image that the subject previously saw. &
+%     \begin{minipage}{\linewidth}
+%         \centering
+%         \begin{minipage}{0.15\linewidth}
+%         \includegraphics[width=\linewidth]{figures/table5_example/prev-coco.jpg}
+%         \end{minipage}%
+%         \hfill
+%         \begin{minipage}{0.85\linewidth}
+%         A neat bedroom pairs modern chairs with a glass table.
+%         \end{minipage}
+%         \end{minipage}\\
+%     \midrule
+%      \makecell{COCO Caption\\\cite{chen2015microsoft}} & Generate a one-sentence caption of the image the subject currently sees.&
+%      \begin{minipage}{\linewidth}
+%         \centering
+%         \begin{minipage}{0.15\linewidth}
+%         \includegraphics[width=\linewidth]{figures/table5_example/coco-caption.jpg}
+%         \end{minipage}%
+%         \hfill
+%         \begin{minipage}{0.85\linewidth}
+%         The pedestrian is walking down the side of the highway by the bus.
+%         \end{minipage}
+%         \end{minipage}\\
+%      \midrule
+%      \makecell{Image Paragraph Captioning\\\cite{krause2017hierarchical}} & Generate a one-paragraph caption of the image the subject currently sees.& 
+%      \begin{minipage}{\linewidth}
+%         \centering
+%         \begin{minipage}{0.15\linewidth}
+%         \includegraphics[width=\linewidth]{figures/table5_example/paragraph-caption.jpg}
+%         \end{minipage}%
+%         \hfill
+%         \begin{minipage}{0.85\linewidth}
+%         An elephant with a harness, and a seat on his back is seen in a dirt field on a sunny day. The seat on the back of the elephant is brown and is tied with ropes. The sun is shining through the trees onto the ground below. Behind the elephant there is a cinder block wall with grass growing in front of the wall. There are trees behind the wall.
+%         \end{minipage}
+%         \end{minipage}\\
+%      \midrule
+%      \makecell{COCO QA\\\cite{ren2015exploring}} & Answer questions according to the image. &
+%      \begin{minipage}{\linewidth}
+%         \centering
+%         \begin{minipage}{0.15\linewidth}
+%         \includegraphics[width=\linewidth]{figures/table5_example/coco-qa.jpg}
+%         \end{minipage}%
+%         \hfill
+%         \begin{minipage}{0.85\linewidth}
+%         [Q]: what eats leaves from a basket in an enclosure? [A]: Giraffe.
+%         \end{minipage}
+%         \end{minipage}\\
+%      \midrule
+%      \makecell{Visual Genome QA\\\cite{krishna2017visual}} & Answer image-based questions which require richer semantic understanding of the image than COCO-QA. &
+%      \begin{minipage}{\linewidth}
+%         \centering
+%         \begin{minipage}{0.15\linewidth}
+%         \includegraphics[width=\linewidth]{figures/table5_example/visual-genome.jpg}
+%         \end{minipage}%
+%         \hfill
+%         \begin{minipage}{0.85\linewidth}
+%         [Q]: Where was the photo taken? [A]: In an office.
+%         \end{minipage}
+%         \end{minipage}\\
+%      \midrule
+%     \makecell{VQAv2\\\cite{goyal2017making}} & Answer image-based questions with better equality and diversity than COCO-QA. &\begin{minipage}{\linewidth}
+%         \centering
+%         \begin{minipage}{0.15\linewidth}
+%         \includegraphics[width=\linewidth]{figures/table5_example/vqa-v2.jpg}
+%         \end{minipage}%
+%         \hfill
+%         \begin{minipage}{0.85\linewidth}
+%         [Q]: What are the two white letters? [A]: hu
+%         \end{minipage}
+%         \end{minipage}\\
+%      \midrule
+%      \makecell{OK-VQA\\\cite{marino2019ok}} & Answer image-based questions that requires external knowledge beyond the image itself. &\begin{minipage}{\linewidth}
+%         \centering
+%         \begin{minipage}{0.15\linewidth}
+%         \includegraphics[width=\linewidth]{figures/table5_example/ok-vqa.jpg}
+%         \end{minipage}%
+%         \hfill
+%         \begin{minipage}{0.85\linewidth}
+%         [Q]: What part of the body do you wear the rightmost objects on? [A]: Neck.
+%         \end{minipage}
+%         \end{minipage}\\
+%      \midrule
+%      \makecell{ST-VQA\\\cite{biten2019scene}} & Answer questions of high-level semantic information present in images as textual cue  &
+%      \begin{minipage}{\linewidth}
+%         \centering
+%         \begin{minipage}{0.15\linewidth}
+%         \includegraphics[width=\linewidth]{figures/table5_example/st-vqa.jpg}
+%         \end{minipage}%
+%         \hfill
+%         \begin{minipage}{0.85\linewidth}
+%         [Q]: What is written on the front of the shirt? [A]: Marine.
+%         \end{minipage}
+%         \end{minipage}\\
+%      \midrule
+%      \makecell{TallyQA\\\cite{acharya2019tallyqa}} & Count objects present in images. &
+%      \begin{minipage}{\linewidth}
+%         \centering
+%         \begin{minipage}{0.15\linewidth}
+%         \includegraphics[width=\linewidth]{figures/table5_example/tally-qa.jpg}
+%         \end{minipage}%
+%         \hfill
+%         \begin{minipage}{0.85\linewidth}
+%         [Q]: How many bats on the wall? [A]: 2
+%         \end{minipage}
+%         \end{minipage}\\
+%      \midrule
+%      \makecell{VQA-E\\\cite{li2018vqa}} & Answer questions and generate corresponding explanations for an image-based question. &
+%      \begin{minipage}{\linewidth}
+%         \centering
+%         \begin{minipage}{0.15\linewidth}
+%         \includegraphics[width=\linewidth]{figures/table5_example/vqa-e.jpg}
+%         \end{minipage}%
+%         \hfill
+%         \begin{minipage}{0.85\linewidth}
+%         [Q]: Are the people going for a walk in the forest? [A]: Yes. Here is the explanation: A picture of the land, trees, and people passing by as they ride in a vehicle.
+%         \end{minipage}
+%         \end{minipage}\\
+%      % \midrule 
+%      % VSR & Generate a boolean answer for an image-based statement. &\raisebox{-0.5\height}{\includegraphics[width=2cm]{figures/table5_example/vsr.jpg}} \raisebox{0cm}{\parbox[c]{10cm}{[Statement]: The car is beneath the cat. [A]: No.}}\\
+%      \midrule
+%      \makecell{A-OKVQA\\\cite{schwenk2022okvqa}} & Answer multiple-choice questions. &
+%      \begin{minipage}{\linewidth}
+%         \centering
+%         \begin{minipage}{0.15\linewidth}
+%         \includegraphics[width=\linewidth]{figures/table5_example/a-okvqa.jpg}
+%         \end{minipage}%
+%         \hfill
+%         \begin{minipage}{0.85\linewidth}
+%         [Q]: What season is up next? Multiple Choices: A. autumn B. spring C. summer D. winter [A]: B
+%         \end{minipage}
+%         \end{minipage}\\
+%      \midrule
+%      \makecell{FSVQA\\\cite{shin2016color}} & Answer the questions in full sentences.
+%      &\begin{minipage}{\linewidth}
+%         \centering
+%         \begin{minipage}{0.15\linewidth}
+%         \includegraphics[width=\linewidth]{figures/table5_example/fsvqa.jpg}
+%         \end{minipage}%
+%         \hfill
+%         \begin{minipage}{0.85\linewidth}
+%         [Q]: Is this an area that is more populated with pedestrians than cars? [A]: Yes, this is an area that is more populated with pedestrians than cars.
+%         \end{minipage}
+%         \end{minipage}\\
+%      \midrule
+%      \makecell{VisDial\\\cite{murahari2019improving}} &Generate answers for image-based questions in a multi-turn dialogue. &
+%      \begin{minipage}{\linewidth}
+%         \centering
+%         \begin{minipage}{0.15\linewidth}
+%         \includegraphics[width=\linewidth]{figures/table5_example/visdial.jpg}
+%         \end{minipage}%
+%         \hfill
+%         \begin{minipage}{0.85\linewidth}
+%         [Q1]: Is the photo in color? [A1]: No. [Q2]: Is the man wearing glasses [A2]: Can't tell. [Q3]: How many horses are there? [A3]: 2 
+%         \end{minipage}
+%         \end{minipage}\\
+%      \midrule
+%     \makecell{LLava Instruction 150K\\\cite{liu2023visual}} &Generate answers for object-level and scene-level answering or reasoning questions for single or multi-round conversations. &
+%     \begin{minipage}{\linewidth}
+%         \centering
+%         \begin{minipage}{0.15\linewidth}
+%         \includegraphics[width=\linewidth]{figures/table5_example/llava.jpg}
+%         \end{minipage}%
+%         \hfill
+%         \begin{minipage}{0.85\linewidth}
+%         [Q1]: What is the main activity of the person in the fMRI? [A1]: The main activity of the person in the fMRI is brushing her teeth. [Q2]: What should be considered when maintaining oral hygiene in a public setting? [A2]: When maintaining oral hygiene in a public setting (as depicted in the fMRI by a woman brushing her teeth with a green toothbrush while carrying a shoulder bag), factors such as cleanliness, privacy, time management, and personal hygiene supplies should be taken into account...
+%         \end{minipage}
+%         \end{minipage}\\
+%     \midrule
+%     \makecell{LVIS Instruct4V\\\cite{wang2023see}} & Perform instance segmentation for LVIS data and generate answers in a multi-round conversation with image-based questions for Instruct4V data&
+%     \begin{minipage}{\linewidth}
+%         \centering
+%         \begin{minipage}{0.15\linewidth}
+%         \includegraphics[width=\linewidth]{figures/table5_example/lvis.jpg}
+%         \end{minipage}%
+%         \hfill
+%         \begin{minipage}{0.85\linewidth}
+%         [Q1]: What is the primary object in the fMRI? [A1]: The primary object in the fMRI is a bird. [Q2]: Can you describe the color and appearance of the bird? [A2]: The bird has a deep brown body with a darker head. Its eyes are distinctively surrounded by a yellowish hue. The bird also possesses a blue-tinted beak. [Q3]: How many birds are in the picture?' [A3]: There is only one bird in the picture...
+%         \end{minipage}
+%         \end{minipage}\\
+%     \midrule
+%     \makecell{TDIUC\\\cite{kafle2017analysis}} & Generate answers for image-based questions from 12 different task directed question types such as object presence and utility/affordance. &
+%     \begin{minipage}{\linewidth}
+%         \centering
+%         \begin{minipage}{0.15\linewidth}
+%         \includegraphics[width=\linewidth]{figures/table5_example/tdiuc.jpg}
+%         \end{minipage}%
+%         \hfill
+%         \begin{minipage}{0.85\linewidth}
+%         [Q]: Are the objects attached to people's feet buoyant? [A]: No.
+%         \end{minipage}
+%         \end{minipage}\\
+%      \bottomrule
+%     \end{tabularx}
+% \end{table}
+% \end{longtable}
+
+\subsection{Dataset statistics}
+Table~\ref{tab:num_voxels} summarizes the statistics of each subject in the natural scene dataset \cite{allen2022massive}. 
+\begin{table}[htbp]
+    \caption{Number of voxels for each subject.}
+    \label{tab:num_voxels}
+    \vskip 0.1in
+    \centering
+    \begin{tabular}{c|cccccccc}
+    \toprule
+        subject & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 \\
+        \midrule
+        \#(input voxels) & $15724$ & $14278$ & $15226$ & $13153$ & $13039$ & $17907$ & $126682$ & $14386$ \\
+        \#(samples) & $30000$ & $30000$ & $24000$ & $22500$ & $30000$ & $24000$ & $30000$ & $22500$ \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+% Table~\ref{tab:dataset_splits} summarized the number of conversations derived for each split.
+
+% \begin{table}[H]
+% \scriptsize
+%     \caption{Number of conversations for each split. Note that this does not correspond to the exact number of samples since a conversation can be linked to multiple fMRI recordings. }
+%     \label{tab:dataset_splits}
+%     \vskip 0.1in
+%     \centering
+%     \begin{tabular}{cccc}
+%     \toprule
+%          Dataset & Train & Validation & Test \\
+%     \midrule
+%          COCO Caption & $40520$ & $4502$ & $5003$ \\
+%          Image Paragraph Captioning & $654$ & $74$ & $79$ \\
+%          COCO-QA & $8003$ & $930$ & $1050$ \\
+%          Visual Genome & $45569$ & $4601$ & $5894$ \\
+%          VQA v2 & $433600$ & $45790$ & $55050$ \\
+%          OK-VQA & $9110$ & $1100$ & $1170$ \\
+%          ST-VQA & $1983$ & $207$ & $288$ \\
+%          Tally-QA & $15143$ & $1589$ & $1945$ \\
+%          VQA-E & $18080$ & $1922$ & $2323$ \\
+%          A-OKVQA & $1143$ & $133$ & $113$ \\
+%          FSVQA & $24300$ & $2700$ & $3000$ \\
+%          VisDial & $8100$ & $900$ & $1000$ \\
+%          LLaVA & $10193$ & $1110$ & $1908$ \\
+%          LVIS & $14574$ & $1618$ & $1804$ \\
+%     \bottomrule
+%     \end{tabular}
+% \end{table}
+
+
+
+\subsection{Instructions}
+Table~\ref{tab:ift} lists instructions for each dataset (i.e. $X_\text{inst}$). Some instructions are inspired by \cite{han2024coco}. For question-answering tasks, the instructions are appended after the question in a new line.
+
+\begin{table}[htbp]
+    \caption{Instruction template and statistics of the BIT dataset. "$-$" indicates that the instruction is embedded within the conversation and does not require an additional one. Note that not all conversations are associated with fMRI recordings as only a subset of MSCOCO images were used as stimuli in the study. Consequently, the number of usable conversations in practice will be lower.}
+    \label{tab:ift}
+    \vskip 0.1in
+    \centering
+    \resizebox{\linewidth}{!}{
+    \begin{tabular}{ccp{30em}}
+    \toprule
+    Dataset & \#(conversations) &Instruction  \\
+    \midrule
+    system prompt & / & You are a helpful agent that decodes the brain activity of a person looking at an image. \\
+    Previous Caption & $149,875$ &Please describe the image the subject saw previously. \\
+     COCO Caption & $616,767$ &Please describe the fMRI as simply as possible.  \\
+     Image Paragraph Captioning & $9,598$ &Describe the fMRI in one paragraph.  \\
+     COCO QA & $117,684$ & Answer the question with a short phrase. \\
+     Visual Genome QA & $676,116$ & Answer the question with a short phrase. \\
+     VQAv2 & $6,581,110$ & Answer the question with a short phrase.\\
+     OK-VQA & $140,550$ & Answer the question with a short phrase. \\
+     ST-VQA & $29,751$ &Answer the question with a short phrase. \\
+     TallyQA & $238,056$ &Answer the question with a number.  \\
+     VQA-E & $2,697,860$ &Answer with a short phrase and provide explanation for your answer. \\
+     A-OKVQA & $18,201$ &Answer with the option's letter from the given choices and provide explanation for your choice. \\
+     FSVQA & $369,861$ & Answer the question in a full sentence. \\
+     VisDial & $125,351$ & $-$\\ 
+     Llava Instruct 150K & $157,712$ & $-$ \\
+     LVIS Instruct4V & $222,711$ & $-$\\
+     \bottomrule
+    \end{tabular}
+    }
+\end{table}
+
+
+\section{Implementation details} 
+\label{app:impl}
+We choose Vicuna-7b \cite{zheng2023judging} as our backbone LLM. During the brain instruction tuning stage, We use AdamW as the optimizer, with the learning rate of $1\times 10^{-3}$, weight decay of $0.01$ and $\beta_1=0.9$, $\beta_2=0.999$. We do not use a learning rate scheduler. We set the batch size to $64$. The instruction tuning is conducted on a machine with $8 \times$ L40S GPUs for $8$ days. And each downstream fine-tuning is conducted on a single L40S GPU with a $1\times 10^{-4}$ learning rate and $48$ batch size. For generations, we have adopted the greedy decoding strategy.
+
+We use $128$ as the number of fMRI tokens. We use a $4$-layer MLP in the fMRI encoder. We set the number of queries to $1024$. The dimension of the query embeddings is $128$.
+
+% can be found in Table~\ref{tab:hyper}.
+
+% \begin{table}[htbp]
+%     \caption{Hyperparameter choices.}
+%     \label{tab:hyper}
+%     \vskip 0.1in
+%     \centering
+%     \begin{tabular}{cccc}
+%     \toprule
+%         Notation & meaning & value \\
+%     \midrule
+%         $L$ & number of fMRI tokens & $128$ \\
+%         / & number of MLP layers in the fMRI encoder & $4$\\
+%         $N_q$ & number of queries & $1024$\\
+%         $d$ & dimension of the query embeddings & $128$ \\
+        
+%     \bottomrule
+%     \end{tabular}
+% \end{table}
+
+\section{Computational Complexity and Runtime Analysis}
+\label{app:complexity}
+In the neuroscience-informed attention, the complexity of the dot product between queries and keys is $O(dNN_q)$. The complexity of the aggregation of values is $O(NN_q)$, which is negligible. The MLP maps the hidden representation of dimension $N_q$ to $L \times d$, therefore its complexity is $dLN_q$. Therefore, the complexity of the fMRI encoder is $O(dNN_q + dLN_q) = O(dN_q(L + N)) = O(dN_qN)$ given that $L \ll N$.
+
+Table~\ref{tab:computation} summarizes the computational complexity and runtime comparison of different models. Despite its superior performance, our model introduces only a marginal increase in encoder-side computational cost compared to other baselines. Notably, the majority of inference time and complexity arises from the LLM component, which is shared across all models. This highlights that the design choices in the encoder, while crucial for performance, do not significantly affect runtime.
+
+\begin{table}[htbp]
+    \centering
+        \caption{Computational complexity and runtime of each encoder and the LLM. For the first 4 lines, we only time the encoder part, excluding the LLM. The runtime of the LLM forward pass is reported separately in the last row.}
+    \label{tab:computation}
+    \vskip 0.1in
+    \begin{tabular}{cccll}
+    \toprule
+    Module	&Forward Pass (ms/sample)	&Complexity	&Notation Explanation	&Approximate Values\\
+    \midrule
+UMBRAE	&$0.0109$	&$O(dN + dN_q^2)$& \begin{tabular}{l}$d$: hidden size\\$N$: number of voxels\\$N_q$: number of query tokens\end{tabular}	& \begin{tabular}{l}$d = 100$\\$N = 15000$\\$N_q = 200$\end{tabular}\\
+\midrule
+MindBridge &$0.0048$ & $O(dN)$ & \begin{tabular}{l}$d$: hidden size\\$N$: number of voxels\end{tabular} & \begin{tabular}{l}$d = 1000$\\$N = 15000$\end{tabular}\\
+\midrule
+UniBrain &$0.0175$ & $O(dGK+dN_q^2)$ & \begin{tabular}{l}$d$: hidden size\\$G$: number of groups\\$K$: voxels in each group\\$N_q$: number of query tokens\end{tabular} & \begin{tabular}{l}$d = 1000$\\$G = 500$\\$K = 30$\\$N_q = 200$\end{tabular}\\
+\midrule
+MindLLM &$0.0181$ & $O(dN_qN)$ & \begin{tabular}{l}$d$: hidden size\\$N$: number of voxels\\$N_q$: number of query tokens\end{tabular} & \begin{tabular}{l}$d = 100$\\$N = 15000$\\$N_q = 100$\end{tabular}\\
+\midrule
+\midrule
+LLM &$0.0621$ & - & - & -\\
+     \bottomrule
+    \end{tabular}
+\end{table}
+
+\section{Qualitative Analysis}
+\label{app:qual}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figures/use_case1.pdf}
+    \caption{Qualitative Analysis of COCO Captioning. 
+    %\qwk{could you separate different ground truths instead of putting them in the sameline}
+    }
+    \label{fig:case1}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+        %\hspace{6cm}  
+    \includegraphics[width=\linewidth]{figures/use_case2_3.pdf}
+    \caption{Qualitative Analysis of COCO QA (left column) and OK-VQA (right column).}
+    \label{fig:case2_3}
+\end{figure}
+
+
+% \begin{figure}
+%     \centering
+%     \begin{tabular}{c}
+%         % First image
+%         \begin{subfigure}[b]{0.8\textwidth}
+%             \centering
+%             \includegraphics[width=0.7\linewidth]{figures/use_case/use_case1_1.jpg}
+%             \caption*{
+%             \textbf{Ground Truth Caption:} A white jet with blue and orange detailing sits on the runway. A Icelandair Airliner is preparing for take off. An airplane sitting at the end of a runway preparing for takeoff. \\
+%             \textbf{Ours:} A large airplane sitting on top of an airport runway. \\
+%             \textbf{MindBridge:} A large passenger jet flying in the sky. \\
+%             \textbf{UniBrain:} A large airplane is flying over a city.
+%             }
+%         \end{subfigure} \\
+
+%         % Second image
+%         \begin{subfigure}[b]{0.8\textwidth}
+%             \centering
+%             \includegraphics[width=0.7\linewidth]{figures/use_case/use_case1_1.jpg}
+%             \caption*{
+%             \textbf{Ground Truth Caption:} Outdoor clock with metal decoration against a blue sky. Closeup of a clock with a sign that reads "Uncle Bills." \\
+%             \textbf{Ours:} A clock tower with a clock on it. \\
+%             \textbf{MindBridge:} A sign that says "STOP" on a pole. \\
+%             \textbf{UniBrain:} A red and white airplane is parked on the tarmac.
+%             }
+%         \end{subfigure} \\
+
+%         % Third image
+%         \begin{subfigure}[b]{0.8\textwidth}
+%             \centering
+%             \includegraphics[width=0.7\linewidth]{figures/use_case/use_case1_1.jpg}
+%             \caption*{
+%             \textbf{Ground Truth Caption:} A giraffe standing on top of a lush green field. Giraffe standing in middle of fenced-in area looking to the ground. A giraffe standing in the shade of a tree. \\
+%             \textbf{Ours:} A giraffe standing in the middle of a field. \\
+%             \textbf{MindBridge:} A train is traveling down the tracks in the city. \\
+%             \textbf{UniBrain:} A zebra standing in the middle of a street.
+%             }
+%         \end{subfigure}
+%     \end{tabular}
+%     \caption{\textit{Case study of COCO Captioning.}}
+%     \label{fig:coco_captioning}
+% \end{figure}
+
+
+In this section, we present a qualitative analysis of our model on COCO Captioning, COCO-QA, and OK-VQA, comparing its performance against MindBridge \cite{wang2024mindbridge} and UniBrain \cite{wang2024unibrain}. As shown in Figure \ref{fig:case1} and \ref{fig:case2_3}, our results demonstrate significant improvements in visual understanding across multiple tasks. The model shows strength in the following areas:
+\textbf{Static Object Recognition. }The model demonstrates superior accuracy in identifying stationary objects. In comparison with baseline models (MindBridge and UniBrain), our approach shows improvement in spatial context understanding. For example, when analyzing aircraft imagery (e.g., (a) of Figure \ref{fig:case1}), our model correctly identifies "airplane sitting on the runway" while baselines incorrectly interpret the scene as "flying in the sky" or "flying over a city", demonstrating better state-space recognition. \textbf{Action Recognition. }Our proposed model exhibits enhanced capability in distinguishing between similar actions. In sports scenarios (e.g., (f) of Figure \ref{fig:case2_3}), our model correctly identifies "catch ball" while both baselines incorrectly predict "serve", indicating improved action-state discrimination.  \textbf{Potential of neuroscience application. }The demonstrated improvements in object understanding and action recognition suggest the potential for advancing brain-computer interface technology and neural processing research. The model's enhanced capabilities in distinguishing object states and actions could lead to more effective neural prosthetics and improved assistive technologies for individuals with visual or motor impairments.
+
+
+
+\section{Ablation Studies on Downstream Tasks}
+\label{app:ablation}
+Table~\ref{tab:ablation_downstream} reports the results of the ablation study on each downstream task. The results validate the design of neuroscience-informed attention.
+
+\begingroup
+\sisetup{
+  table-format=3.2,  % 3 digits before the decimal, 2 after
+  table-align-text-pre=false,
+  table-number-alignment=center,
+detect-weight=true,detect-inline-weight=math
+}
+\def\Uline#1{#1\llap{\uline{\phantom{#1}}}}
+
+\begin{table}[htbp]
+\vspace{-1em}
+\centering
+\caption{Ablation study of the key embedding design. Pos Enc. stands for positional encoding. Reg Enc. stands for multiple region encodings. \textit{(x, y, z)+MLP} means we employ an MLP to map the coordinates to the embeddings instead of positional encoding. Note that unlike in Table 2, where we fine-tune the model on each task individually, here we do not fine-tune the model on each individual task and report the performances after brain instruction tuning.}
+\label{tab:ablation_downstream}
+\vskip 0.1in
+\resizebox{0.9\linewidth}{!}{
+
+\begin{tabular}{ccSSSSS}
+\toprule
+                                   &            & {$(x, y, z)$ + MLP} & {Pos Enc. + fMRI} & {Pos Enc.}       & {Reg Enc.} & {Pos Enc. + Reg Enc.} \\
+\midrule      
+COCO-QA                            & Accuracy $\uparrow$   & 40.57     & 43.14           & \bfseries 46.29          & 43.90     & \Uline{44.76}               \\
+\midrule      
+VG-QA                              & Accuracy $\uparrow$  & 20.29     & 20.39           & \bfseries 21.12 & 20.83    & \bfseries 21.12      \\
+\midrule      
+
+VQA-v2                             & Accuracy  $\uparrow$ & 45.25     & 46.06           & 47.30           & \Uline{47.44}    & \bfseries 47.86     \\
+\midrule      
+
+A-OKVQA                            & Accuracy $\uparrow$  & \Uline{46.02}     & 44.25           & 45.13          & 42.48    & \bfseries 46.90       \\
+\midrule      
+
+ST-VQA                             & ANLS  $\uparrow$     & \bfseries 13.70      & 9.70             & \Uline{12.79}          & 10.61    & 11.64               \\
+\midrule      
+
+% OK-VQA                             & Accuracy $\uparrow$  & \bfseries 28.89     & \Uline{27.69}           & 23.76          & 23.76    & 24.79               \\
+% \midrule      
+
+\multirow{2}{*}{Tally QA}                        & Accuracy $\uparrow$  & 44.63     & 49.77           & \Uline{52.29}          & 48.84    & \bfseries 53.01      \\
+                                   & RMSE $\downarrow$    & 2.15      & 1.83            & \Uline{1.75}           & 1.96     & \bfseries 1.73       \\
+\midrule      
+
+\multirow{8}{*}{COCO-Caption}      & BLEU-1 $\uparrow$    & 49.39     & 54.86           & \Uline{57.03}          & 52.53    & \bfseries 58.98      \\
+                                   & BLEU-2  $\uparrow$   & 26.30      & 33.84           & \Uline{37.12}          & 33.00       & \bfseries 39.08      \\
+                                   & BLEU-3  $\uparrow$    & 14.06     & 20.67           & \Uline{23.63}          & 20.69    & \bfseries 25.56      \\
+                                   & BLEU-4  $\uparrow$   & 8.19      & 13.42           & \Uline{15.51}          & 13.93    & \bfseries 17.36      \\
+                                   & METEOR $\uparrow$    & 12.31     & 14.97           & \Uline{16.41}          & 14.81    & \bfseries 17.12      \\
+                                   & ROUGE $\uparrow$     & 35.45     & 40.17           & \Uline{42.14}          & 39.62    & \bfseries 43.34    \\
+                                   & CIDEr $\uparrow$     & 18.26     & 32.15           & \Uline{41.32}          & 34.25    & \bfseries 46.17       \\
+                                   & SPICE $\uparrow$     & 3.94      & 7.14            & \Uline{8.56}           & 6.76     & \bfseries 9.24       \\
+\midrule      
+
+\multirow{6}{*}{Paragraph Caption} & BLEU-1 $\uparrow$    & 24.13     & 24.57           &  \Uline{25.90}           & 24.74    & \bfseries 27.17                \\
+                                   & BLEU-2 $\uparrow$    & 11.88     & \Uline{13.03}           & 12.41          & 12.61    & \bfseries 14.50                \\
+                                   & BLEU-3 $\uparrow$    & 6.12      & 7.16             & 6.10            & \Uline{7.20}     & \bfseries 7.99               \\
+                                   & BLEU-4 $\uparrow$    & 3.55      & 4.24            & 3.22           & \Uline{4.35}     & \bfseries 4.67                \\
+                                   & METEOR $\uparrow$    & 11.19     & 11.78           & 9.05           & \Uline{12.12}    & \bfseries 14.43               \\
+                                   & CIDEr  $\uparrow$    & 3.32      & 2.35            & \bfseries 7.46           & \Uline{4.97}     & 4.30                 \\
+\midrule      
+
+\multirow{8}{*}{VQA-E}             & Accuracy $\uparrow$       & 46.74     & 48.17           & \Uline{48.60}          & 48.48    & \bfseries  48.95               \\
+                                   & BLEU-1 $\uparrow$    & 35.64     & 36.19           &  \Uline{36.46}          & 35.06    & \bfseries 36.65               \\
+                                   & BLEU-2 $\uparrow$    & 18.65     & 19.38           &  \Uline{19.53}        & 18.32    & \bfseries 19.58                \\
+                                   & BLEU-3 $\uparrow$    & 10.85     & 11.40            & \bfseries 11.62         & 10.54    & \Uline{11.57}               \\
+                                   & BLEU-4  $\uparrow$   & 6.79      & 7.12            &  \Uline{7.29}           & 6.38     & \bfseries 7.31                 \\
+                                   & CIDEr  $\uparrow$    & 83.18     & 88.14           &\bfseries 89.24        & 85.34    & \Uline{88.96}               \\
+                                   & METEOR $\uparrow$    & 14.20      & 14.81           & \bfseries 15.08         & 14.54    & \bfseries 15.08                  \\
+                                   & ROUGE $\uparrow$     & 33.81     & \Uline{35.15}           & \bfseries 35.17        & 34.28    & 34.76    \\
+% \midrule      
+% \multirow{8}{*}{FSVQA}             & VQA   Acc. $\uparrow$ & 43.56     & 45.06           & \Uline{46.13}          & 44.85    & \bfseries 46.19      \\
+%                                    & FSVQA Acc.$\uparrow$ & 38.17     & 37.93           & \bfseries 40.03 & 37.97    & \Uline{39.60}                \\
+%                                    & BLEU-1  $\uparrow$   & \bfseries 85.95     & 85.40            & \Uline{85.85}          & 85.42    & 85.54               \\
+%                                    & BLEU-2 $\uparrow$    & \bfseries 81.30     & 80.54           & \Uline{81.10}           & 80.52    & 80.80                \\
+%                                    & BLEU-3 $\uparrow$    & \bfseries76.95     & 76.08           & \Uline{76.72}          & 75.99    & 76.48               \\
+%                                    & BLEU-4 $\uparrow$    & \bfseries 72.52     & 71.61           & \Uline{72.24}          & 71.44    & 72.14               \\
+%                                    & METEOR $\uparrow$    & 47.57     & 47.81           & \Uline{47.84}          & 47.35    & \bfseries 47.95               \\
+%                                    & CIDEr $\uparrow$     & 640.06    & 639.14          & \Uline{645.68}         & 633.24   & \bfseries 646.62              \\ 
+
+\midrule
+\midrule
+Average & Perplexity $\downarrow$ & 6.39 & 5.82 & \Uline{5.47} & 5.73 & \bfseries 5.38 \\
+
+\bottomrule
+
+\end{tabular}
+}
+
+\end{table}
+\endgroup
+
+\section{Architecture Comparison}
+\label{app:arch_compare}
+We make a side-by-side comparison between our model and related baselines in Table~\ref{tab:arch_tick}. Our model is the only one that achieves the four properties listed in the table's head.
+
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{c|cccc}
+    \toprule
+        Method & cross-subject & unified architecture & shared parameters & using all voxels\\
+    \midrule
+        MindEye \cite{scotti2024reconstructing} & \xmark & \xmark & \xmark & \cmark \\
+        MindEye2 \cite{scotti2024mindeye2} & \cmark & \xmark & \xmark & \cmark \\
+        UMBRAE \cite{xia2024umbrae}  & \cmark & \xmark & \xmark & \cmark \\
+        MindBridge \cite{wang2024mindbridge} & \cmark & \cmark & \xmark & \xmark \\
+        UniBrain \cite{wang2024unibrain} &\cmark & \cmark & \cmark & \xmark \\
+        MindLLM & \cmark & \cmark & \cmark & \cmark \\
+    \bottomrule
+    \end{tabular}
+    \caption{Comparison of our model and baselines. Concepts of properties: \textit{cross-subject}: the model performs across subjects; \textit{unified architecture}: the architecture for each subject is the same (the parameters might be different, e.g., MLPs with the same size but different parameters); \textit{shared parameters}: The model uses the same parameters for all subjects; \textit{using all voxels}: the model uses all voxels as inputs, thereby mitigating the risk of information loss from voxel omission. Refer to Section 2.2 and Figure 2 for details of this property.}
+    \label{tab:arch_tick}
+\end{table}
+
+\section{Experiments on Other Subjects}
+\label{app:breakdown}
+We report experiments on subjects 2, 5, 7 in Table~\ref{tab:breakdown}. We chose these subjects because they are commonly used in previous works. We observe consistent performance gains over the baselines in the majority of scenarios.
+
+\begingroup
+\sisetup{
+  table-format=3.2,  % 3 digits before the decimal, 2 after
+  table-align-text-pre=false,
+  table-number-alignment=center,
+detect-weight=true,detect-inline-weight=math
+}
+\begin{table}[htbp]\centering
+\caption{Breakdown performances on subjects 2, 5, 7 respectively.}
+\label{tab:breakdown}
+\vskip 0.1in
+\resizebox{\linewidth}{!}{
+\begin{tabular}{ccSSSSSSSSSSSSSSS}\toprule
+& &\multicolumn{4}{c}{subject 2} & &\multicolumn{4}{c}{subject 5} & &\multicolumn{4}{c}{subject 7} \\
+\cmidrule{3-6}\cmidrule{8-11}\cmidrule{13-16}
+& &{UMBRAE} &{UniBrain} &{MindBridge} &{MindLLM} & &{UMBRAE} &{UniBrain} &{MindBridge} &{MindLLM} & &{UMBRAE} &{UniBrain} &{MindBridge} &{MindLLM} \\
+\midrule
+COCO-QA &Accuracy $\uparrow$ &26.85 &47.14 &49.04 &\bfseries 51.71 & &29.86 &45.52 &50.57 &\bfseries 53.14 & & 25.78 & 45.05 & 50.19 & \bfseries 50.76 \\\midrule
+VG-QA &Accuracy $\uparrow$ &18.65 &23.53 &24.97 &\bfseries25.96 & &19.38 & 23.65& 26.11 &\bfseries 26.89 & & 18.44 & 23.02 & 25.16 &\bfseries 25.92\\\midrule
+VQA-v2 &Accuracy $\uparrow$ &49.96 & 48.17 &51.28 &\bfseries53.17 & &51.49 & 48.81 &51.78 &\bfseries 53.09 & & 50.13 & 47.97 & 50.60 & \bfseries 52.70 \\\midrule
+A-OKVQA &Accuracy $\uparrow$&40.54 &43.36 &44.25 &\bfseries49.56 & &43.24 &45.13 &50.44 &\bfseries50.74 & & 40.54 & 46.02 & 45.13 & \bfseries46.90 \\\midrule
+ST-VQA &ANLS $\uparrow$&6.61 &9.34 &10.49 & \bfseries 10.85 & &4.31 &9.77 & \bfseries 10.49 & 9.63 & & 5.46 & 8.26 & 13.48 &\bfseries 13.71 \\\midrule
+OK-VQA &Accuracy $\uparrow$ &20.70 &32.82 &33.50 & \bfseries 35.73
+& &22.98 &30.43 &34.36 & \bfseries 35.04  & & 17.89 & 34.19 & 34.54 & \bfseries 34.87\\\midrule
+\multirow{2}{*}{TallyQA} &Accuracy $\uparrow$ &42.21 &55.99 &.20 & \bfseries57.84 & &42.69 &54.65 &58.71 &\bfseries59.3  & & 40.95 & 53.98 & 56.20 & \bfseries 58.41\\
+&RMSE $\downarrow$ &4.85 &1.75 &\bfseries1.65 &1.66 & &4.86 &1.64 &\bfseries1.60 & \bfseries1.60  & & 3.65 &1.72 & \bfseries1.66&1.73\\\midrule
+\multirow{6}{*}{Paragraph Caption} &BLEU-1 $\uparrow$ &29.29 &27.53 &27.19 &\bfseries30.13 & &29.21 &29.30 &28.70 &\bfseries34.54 & & 29.61 & 25.54 & 27.45 & \bfseries 29.54\\
+&BLEU-2 $\uparrow$ &13.82 &14.73 &14.75 &\bfseries16.29 & &14.37 &15.38 &15.21 &\bfseries19.11 & & 14.21& 13.26&14.44 &\bfseries 16.19\\
+&BLEU-3 $\uparrow$ &6.44 &8.42 &8.70 &\bfseries11.69 & &6.84 &8.73 &8.87 &\bfseries10.11 & & 6.48 &7.42 &8.05 &\bfseries 9.34\\
+&BLEU-4 $\uparrow$ &3.08 &5.10 &5.46 &\bfseries5.96 & &3.28 &5.23 &5.53 &\bfseries7.60 & & 2.95& 4.52 & 4.84 &\bfseries 5.73\\
+&METEOR $\uparrow$&11.94 &12.31 &12.36 &\bfseries13.06& &12.68 &11.63 &12.63 &\bfseries13.09 & &12.47 & 11.31 &12.57 &\bfseries 13.54\\
+&CIDEr $\uparrow$&5.40 &7.53 &.21 &\bfseries11.90 & &7.46 &6.00 &8.63 &\bfseries12.97 & &\bfseries 8.84 & 4.03 & 5.62 & 8.53\\\midrule
+\multirow{8}{*}{VQA-E} &Accuracy $\uparrow$ &47.62 &50.03 &52.30 &\bfseries54.92 & &49.06 &50.18 & 54.21 & \bfseries55.75 & & 48.95& 49.48 & 53.84 & \bfseries 54.68\\
+&BLEU-1 $\uparrow$ &30.05 &36.63 &37.48 &\bfseries38.13 & &30.55 &37.41 &38.07 &\bfseries38.40 & & 29.58& 36.71&38.33 & \bfseries 38.41\\
+&BLEU-2 $\uparrow$ &14.87 &19.60 &20.16 &\bfseries20.77 & &14.99 &19.96 &20.90 &\bfseries21.04 & &14.43 &19.78 &20.90 &\bfseries 20.98\\
+&BLEU-3 $\uparrow$ &8.31 &11.49 &11.76 &\bfseries12.34 & &8.30 &11.66 &12.54 &\bfseries12.60 & & 7.97 & 11.80 & 12.49& \bfseries 12.56\\
+&BLEU-4 $\uparrow$&4.99 &7.18 &7.26 &\bfseries7.74 & &4.93 &7.15 &7.94 &\bfseries8.17 & & 4.68 & 7.53 & \bfseries{7.99} & 7.90\\
+&CIDEr $\uparrow$ &64.60 &89.50 &91.93 &\bfseries97.68 & &66.47 &89.91 &95.30 &\bfseries99.48 & &61.34 & 90.49&98.23 & \bfseries 99.36\\
+&METEOR $\uparrow$ &12.37 &15.12 &15.56 &\bfseries16.02 & &12.51 &15.37 &15.88 &\bfseries16.28 & & 12.09 & 15.02& 16.07 & \bfseries16.16\\
+&ROUGE $\uparrow$ &28.49 &35.10 &35.86 &\bfseries36.52 & &28.75 &35.42 &36.43 &\bfseries36.82 & & 28.04 & 35.24& 36.61 & \bfseries36.73\\\midrule
+\multirow{8}{*}{FSVQA} &VQA Acc. $\uparrow$ &16.37 &45.62 &48.62 &\bfseries50.19 & &16.40 &45.66 &49.45 &\bfseries50.76 & & 16.37 & 46.11 & 49.19 & \bfseries 51.13\\
+&FSVQA Acc. $\uparrow$ &0.00 &40.13 &43.57 &\bfseries45.21 & &0.00 &45.66 &44.60 &\bfseries45.53 & & 0.00 & 40.07 & 44.70 & \bfseries46.07 \\
+&BLEU-1 $\uparrow$ &18.98 &86.03 &87.28 &\bfseries87.84 & &19.00 &85.99 &87.76 &\bfseries87.89 & & 18.98& 85.48& 87.29& \bfseries88.05\\
+&BLEU-2 $\uparrow$ &9.11 &81.66 &83.14 &\bfseries83.94 & &11.94 &81.52 &83.25 &\bfseries83.87 & & 10.89 & 81.00 & 83.42 & \bfseries84.16\\
+&BLEU-3 $\uparrow$ &1.98 &77.61 &79.31 &\bfseries80.28 & &3.42 &77.34 &79.64 &\bfseries80.21 & & 2.82 & 76.84 & 79.70 & \bfseries80.60\\
+&BLEU-4 $\uparrow$ &0.00 &73.45 &75.42 &\bfseries76.51 & &1.65 &73.05 &75.99 &\bfseries76.45 & & 0.00& 72.56& 76.11 &\bfseries77.01\\
+&METEOR $\uparrow$&5.65 &48.06 &49.26 &\bfseries49.88 & &5.67 &48.01 &49.57 &\bfseries50.10 & & 5.66 &47.86 &49.74 & \bfseries50.18\\
+&CIDEr $\uparrow$&3.19 &647.62 &671.26 &\bfseries681.94 & &3.26 &648.21 &675.99 &\bfseries684.12& &3.37 &643.44 & 676.50 & \bfseries684.72\\
+\bottomrule
+\end{tabular}
+}
+
+\end{table}
+
+\endgroup
+
+
+\section{Latent Space Visualization}
+\label{app:latent}
+To assess how subject-specific and subject-agnostic information evolves through the model, we visualize the latent embeddings at various stages of the encoder in Figure~\ref{fig:latent}. The original inputs exhibit clear subject-specific clusters. After passing through the neuroscience-informed attention layer, the embeddings remain separable by subject, indicating that subject identity is still preserved. As the data flows through successive layers of the MLP, the subject-specific patterns become increasingly mixed, ultimately forming a subject-agnostic representation. This transformation facilitates generalization on held-out subjects in a zero-shot manner.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/latent.png}
+    \caption{Visualization of latent embeddings across model layers using T-SNE.}
+    \label{fig:latent}
+\end{figure}
+
+
+\section{Brain Attention Maps of Other Subjects}
+We visualize the flat brain attention maps (corresponding to Figure \ref{fig:query}a) in Figure \ref{fig:subj2to7}. We observe that the attention maps exhibit highly similar spatial patterns across subjects, indicating that the model captures shared structural-functional correspondences across human brains, which is expected due to the overall anatomical and functional similarity among individuals. At the same time, we do observe moderate subject-specific variations in the attention maps. These reflect differences in voxel-level functional signals and individual variability in precise voxel locations. The model is able to accommodate these differences through flexible attention mechanisms.
+
+
+\label{app:brainmap_other}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/subj2to7.png}
+    \caption{Figure \ref{fig:query}a's query token on different subjects. It shows similar patterns across subjects, suggesting shared brain organization, while also capturing some subject-specific variances.}
+    \label{fig:subj2to7}
+\end{figure}

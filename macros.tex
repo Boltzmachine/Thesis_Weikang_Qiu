@@ -83,3 +83,28 @@
 \newcommand{\jialin}[1]{\textcolor{brown}{[jialin: #1]}}
 \newcommand{\sw}[1]{{\color{magenta}***SW: #1***}}
 \newcommand{\cam}[1]{{\color{red}#1}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MindLLM chapter (from the ICML 2025 paper preamble)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Packages already loaded above are not repeated: mathtools, amsthm, tabularx,
+% caption, pifont, cleveref, adjustbox, multicol, enumitem, array, subcaption.
+% The paper's `subfigure` package is deliberately NOT loaded — it clashes with
+% subcaption, and only the subcaption `subfigure` *environment* is used.
+% Theorem environments are shared with the HyBRiD block above.
+
+\usepackage{makecell}
+\usepackage{siunitx}
+\usepackage[normalem]{ulem}     % \uline
+\usepackage[most]{tcolorbox}
+
+% Names and marks
+\newcommand{\mindllm}{MindLLM}  % the paper's \name, renamed to avoid a clash
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+\newcommand{\tdag}{\textsuperscript{\textdagger}}
+
+% Review annotations (\rex is defined above and deliberately not redefined)
+\newcommand{\yy}[1]{\textcolor{orange}{(Yujun: #1)}}
+\newcommand{\qwk}[1]{\textcolor{blue}{(Weikang: #1)}}

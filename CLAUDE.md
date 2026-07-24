@@ -57,7 +57,7 @@ make distclean# latexmk -C   (everything, incl. build/)
 
 ## General Notes
 
-合并paper时，appendix统一先不放
+合并paper时，appendix统一先不放（但是下载要下载的）
 macro全文统一
 如果你要copy一些东西，请不用verbose的输出内容，以免出现错误。尽量使用程序，例如cat来合并bib。但是，你需要保证rewind的时候也能撤销这些。
 

@@ -5,7 +5,7 @@
 
 \usepackage{graphicx}
 % Chapters under PHIL/ reference their images as figures/xxx.png
-\graphicspath{{./}{PHIL/}{HYBRID/}}
+\graphicspath{{./}{PHIL/}{HYBRID/}{MINDLLM/}}
 \usepackage{lscape}
 \usepackage{times}
 \usepackage{float}
@@ -29,7 +29,10 @@
 
 \begin{document}
 
-\newcommand{\unit}[1]{\ensuremath{\, \mathrm{#1}}}
+% \unit came with the Yale template but is used nowhere in the text, and it
+% clashes with siunitx (loaded in macros.tex for the MindLLM chapter), which
+% defines \unit itself. Left disabled rather than deleted.
+% \newcommand{\unit}[1]{\ensuremath{\, \mathrm{#1}}}
 
 \titleformat{\chapter}[display]
     {\fontfamily{ptm}\huge\bfseries}{\chaptertitlename\ \thechapter}{5pt}{\centering\singlespacing\huge}% NEW
@@ -64,6 +67,7 @@
 	\include{Introduction}
     \input{PHIL/main}
     \input{HYBRID/main}
+    \input{MINDLLM/main}
 
 
    \addcontentsline{toc}{chapter}{Bibliography} % To get an entry in the TOC.
