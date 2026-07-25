@@ -74,9 +74,15 @@
     \input{REPQA/main}
 
 
-   \addcontentsline{toc}{chapter}{Bibliography} % To get an entry in the TOC.
     \setstretch{1.0}
-    
+
+    % Start the bibliography on its own page and give hyperref a real anchor
+    % there, so the TOC "Bibliography" link points at the bibliography rather
+    % than the last float on the preceding page.
+    \clearpage
+    \phantomsection
+    \addcontentsline{toc}{chapter}{Bibliography} % To get an entry in the TOC.
+
     \bibliographystyle{plainnat}
     \bibliography{bibfile}
 
