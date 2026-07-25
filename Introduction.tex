@@ -1,2 +1,29 @@
 \chapter{Introduction} \label{chapter:introduction}
 
+Multimodal machine learning has made significant progress in recent years \cite{han2024onellm,lin2024video,radford2021learningtransferablevisualmodels,yuan2024chatmusicianunderstandinggeneratingmusic,liu2023visual}. Modern models are increasingly capable of processing and integrating heterogeneous data sources—such as text, images, audio, and video—enabling a wide range of applications in generation, reasoning, and interaction.
+
+When translating between different modalities, language is usually treated as the primary communication modality. For example, many generative models adopt a Text-to-X paradigm \cite{zhang2024texttoimagediffusionmodelsgenerative,singer2022makeavideotexttovideogenerationtextvideo,rombach2022highresolutionimagesynthesislatent} (e.g., text-to-image generation), where language serves as the interface through which users specify intent. Conversely, X-to-Text paradigms are also common \cite{lin2024video,liu2023visual,tschannen2023imagecaptionersscalablevision}. Vision large language models, for instance, take images together with linguistic instructions as input and produce responses in natural language, supporting tasks such as visual question answering and visual reasoning. In everyday life, voice assistants (e.g., Siri and Alexa) further exemplify this design choice: users communicate intentions through language, and systems execute actions accordingly. However, this prevailing design raises a fundamental question: \emph{is language truly the most efficient and effective communication modality?}
+
+
+% \begin{figure}[htbp]
+%     \centering
+%     \includegraphics[width=\linewidth]{area.pdf}
+%     \caption{The overview of the research plan. \cite{qiu2024learninghighorderrelationshipsbrain,qiu2025mindllm,huang2025seeingbrainnewinsights,feng2025item,qiu2026efficientlonghorizonvisionlanguageactionmodels}}
+%     \label{fig:overview}
+% \end{figure}
+
+There are several limitations to using language as the primary communication modality. First, verbal and written language are inherently low-bandwidth. Empirical studies suggest that speaking produces approximately 100–150 words per minute, while human thought unfolds at an estimated rate of 400–800 words per minute \cite{hargie2021skilled}, indicating a substantial mismatch between internal cognition and external expression. This bottleneck becomes evident in practical systems such as text-to-image generation models, where users often must craft lengthy and detailed prompts to specify visual attributes precisely—a process that can be both time-consuming and cognitively inefficient.
+
+Second, not all forms of experience or meaning are readily expressible in language. Consider Composition VII, painted by Wassily Kandinsky in 1913: its abstract structure and affective intensity resist precise linguistic description. This limitation is not merely a matter of insufficient eloquence, but rather reflects the existence of phenomena that cannot be fully articulated in language and can only be shown. As Ludwig Wittgenstein famously stated, “Whereof one cannot speak, thereof one must be silent.” \cite{wittgenstein2023tractatus}
+
+Motivated by these observations, we propose to build machine learning models that enable more direct communication between Mind and World. Achieving this paradigm requires addressing three fundamental challenges:
+
+\begin{itemize}
+    \item Developing machine learning models that incorporate neural priors to better reflect brain organization, thereby improving interpretability, data efficiency, and performance on mind-related tasks.
+
+    \item Learning representations that align brain activity with high-level semantic and perceptual spaces under limited supervision.
+    
+    \item Bridging the gap between neural representations and continuous action spaces, and enabling real-time, closed-loop interaction with external systems.
+\end{itemize}
+
+To address these challenges, the dissertation is structured into three parts. First, I develop neuroscience-informed models for brain signals. Second, I design representation learning frameworks that bridge neural activity with semantic and visual spaces. Third, I build integrative systems that connect neural signals to embodied agents, enabling direct neural-to-action interaction.

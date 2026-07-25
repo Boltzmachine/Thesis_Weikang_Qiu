@@ -5,7 +5,7 @@
 
 \usepackage{graphicx}
 % Chapters under PHIL/ reference their images as figures/xxx.png
-\graphicspath{{./}{PHIL/}{HYBRID/}{MINDLLM/}{PRISM/}}
+\graphicspath{{./}{PHIL/}{HYBRID/}{MINDLLM/}{PRISM/}{DEDIT/}}
 \usepackage{lscape}
 \usepackage{times}
 \usepackage{float}
@@ -20,6 +20,7 @@
 \usepackage[pagebackref=true]{hyperref}
 \usepackage{hyperref}
 \usepackage[dvipsnames]{xcolor}
+\hypersetup{hidelinks}
 \usepackage{setspace}
 \usepackage{titlesec}
 \definecolor{linkColor}{rgb}{0.,0.11,0.22}
@@ -39,9 +40,9 @@
 \titlespacing*{\chapter}{0pt}{50pt}{30pt}% NEW
 
 	% Dissertation Title: Subtitle
-	\title{Yale Sample Thesis Template}
+	\title{Machine Learning Models that Connect Mind and World}
 	% Full Name of Author (as it should appear on the diploma)
-	\author{Full Name of Author}
+	\author{Weikang Qiu}
 	%
 	% where there is an advisory committee, only the chairperson is listed
 	\advisor{Full Name of the Advisor(s)}
@@ -69,6 +70,7 @@
     \input{HYBRID/main}
     \input{MINDLLM/main}
     \input{PRISM/main}
+    \input{DEDIT/main}
 
 
    \addcontentsline{toc}{chapter}{Bibliography} % To get an entry in the TOC.
