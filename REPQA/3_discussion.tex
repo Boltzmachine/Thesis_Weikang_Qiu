@@ -1,0 +1,24 @@
+\section{Discussion}\label{sec:discussion}
+
+In this study, we examined a critical yet underexplored factor in developing effective patient education agents, i.e., the readability of LLM-generated responses, through \bench, a benchmark of expert-grounded patient education QA pairs.
+\bench comprises 533 QA pairs curated from 27 authoritative online resources and reviewed by professionals in nursing, public health, and clinical communication, together with a large-scale collection of 36,060 public health questions used to explore strategies for improving readability.
+Unlike prior healthcare benchmarks, which primarily assess the factual or reasoning accuracy of LLMs against professional examinations or specialized clinical tasks, \bench is designed around the needs of lay users and couples three readability metrics (Flesch--Kincaid grade, professional-language proportion, and Yngve depth) with an informativeness metric that measures how much of an expert-grounded reference answer a response conveys.
+
+Our evaluation of 19 LLMs revealed a consistent and important limitation of current systems: they struggled both to follow targeted readability instructions and to recognize the reading level required by a question or exhibited by a response.
+Models generally adjusted readability in the right direction but remained poorly calibrated in absolute terms, systematically undershooting higher target grade levels, and their ability to detect high-difficulty questions and high-grade text was uniformly weak.
+Together, these observations pointed to a gap between raw reasoning ability and effective communication: stronger reasoning does not automatically translate into responses that lay users can understand.
+
+We further benchmarked several existing readability-enhancement strategies spanning test-time control (standard prompting, chain-of-thought, and readability-guided lookahead decoding) and reinforcement-learning fine-tuning (GRPO and DAPO).
+We found that test-time controls traded off unevenly across readability axes, e.g., prompting lowered word-level grade and jargon but increased syntactic complexity and eroded informativeness, whereas reinforcement learning was the only family of methods that improved word choice, syntax, and faithfulness jointly.
+Among them, DAPO yielded the largest readability gains, reducing the grade level by 41.4\% and the professional-language score by 73.3\% on average.
+However, these gains can come at the expense of informativeness, particularly for \textit{Suggestion} and \textit{Fact} questions, as models over-simplified by compressing lists and collapsing categories. This exposed a fundamental readability–informativeness trade-off that must be navigated when building accessible healthcare agents.
+
+A further observation concerns the evaluation of readability itself.
+In a blind expert evaluation, domain experts favored responses from a model that the static metrics ranked lower, indicating that automated readability metrics, while useful and scalable, may diverge from human perception of clarity and usefulness.
+This motivates future work on readability measures and reward signals that better align with expert and patient judgments, as well as methods that preserve essential clinical content while simplifying language, for example by substituting jargon with plain-language equivalents rather than discarding it.
+
+In conclusion, building user-centered public health agents requires explicitly optimizing for readability without sacrificing informativeness, an objective that current LLMs and existing enhancement strategies only partially achieve.
+By providing an expert-grounded benchmark, complementary readability and informativeness metrics, and a large-scale training corpus, \bench offers a foundation for studying and improving this trade-off, and we hope it will guide the development of more accessible and trustworthy LLM-powered healthcare agents.
+
+\textbf{Limitations.}
+We focused on English content and lay users in the U.S. healthcare context. As such, the generalizability of our findings to other languages, cultures, or health systems remains limited. In addition, the readability metrics adopted here, although standard and complementary, are imperfect proxies for human comprehension, as highlighted by our expert evaluation.

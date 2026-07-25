@@ -1,0 +1,404 @@
+\renewcommand{\thesection}{S\arabic{section}}
+\setcounter{section}{0}
+\renewcommand{\thetable}{S\arabic{table}}
+\setcounter{table}{0}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\setcounter{figure}{0}
+\renewcommand{\theequation}{S\arabic{equation}}
+\setcounter{equation}{0}
+
+\begin{center}
+{\large \textbf{Supplementary Information}}
+\end{center}
+
+\section{Dataset Setup}\label{app:dataset}
+
+\subsection{Online Public Resources}\label{app:online}
+
+Table~\ref{tab:test_links} lists all the public resources for curating high-quality question-answering pairs in the test set of \bench.
+Table~\ref{tab:train_links} lists all the online resources used for curating public health questions. Each link may be associated with multiple health-related categories.
+
+\begin{table}[h]
+    \centering
+    \caption{Public resources of Public Health for Curating QA Pairs.}
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{ll}
+    \toprule
+     Topic & Links \\
+    \midrule
+    \midrule
+    General Health & \url{https://www.aarp.org/health/top-health-questions/} \\
+    \midrule
+    \multirow{2}{*}{Cardiovascular} & \url{https://www.ohsu.edu/knight-cardiovascular-institute/frequently-asked-cardiovascular-questions } \\
+    & \url{https://www.multicare.org/vitals/answers-to-common-heart-questions/ } \\
+    \midrule
+    Cholesterol & \url{https://nyulangone.org/care-services/center-for-the-prevention-of-cardiovascular-disease/frequently-asked-questions-about-heart-health} \\
+    \midrule
+    \multirow{3}{*}{Diabetes} & \url{https://diabetesaction.org/questions-general-information} \\
+    & \url{https://uihc.org/health-topics/diabetes-frequently-asked-questions} \\
+    & \url{https://www.nichd.nih.gov/health/topics/diabetes/more_information/other-faqs} \\
+    \midrule
+    HIV & \url{https://www.unaids.org/en/frequently-asked-questions-about-hiv-and-aids} \\
+    \midrule
+    \multirow{3}{*}{Diet} & \url{https://www.uclahealth.org/medical-services/weight-management/patient-resources/frequently-asked-questions} \\
+    & \url{https://www.cdc.gov/bmi/faq/index.html} \\
+    & \url{https://www.nutrition.gov/expert-q-a} \\
+    \midrule
+    Exercise & \url{https://www.unk.edu/blog/2020/02/exercise-and-physical-activity-faqs.php} \\
+    \midrule
+    Alcohol & \url{https://dmh.lacounty.gov/our-services/employment-education/education/alcohol-abuse-faq/} \\
+    \midrule
+    Smoking & \url{https://resphealth.org/quitting-smoking-faqs/} \\
+    \midrule
+    \multirow{3}{*}{Sleep} & \url{https://www.gwhospital.com/frequently-asked-questions-about-sleep} \\
+    & \url{https://medlineplus.gov/ency/quiz/000805_16.htm?quiz=1} \\
+    & \url{https://www.mayoclinichealthsystem.org/hometown-health/speaking-of-health/8-common-sleep-study-questions} \\
+    \midrule
+    \multirow{4}{*}{Mental health} & \url{https://www.wellnessinmind.org/frequently-asked-questions/} \\
+    & \url{https://www.mountsinai.org/care/psychiatry/services/depression-anxiety-disorders/faq} \\
+    & \url{https://bbrfoundation.org/faq/frequently-asked-questions-about-depression} \\
+    & \url{https://wmich.edu/suicideprevention/basics/faq} \\
+    \midrule
+    \multirow{2}{*}{Sexual health} & \url{https://doh.wa.gov/you-and-your-family/illness-and-disease-z/sexually-transmitted-infections-sti/frequently-asked-questions} \\
+    & \url{https://www.vdh.virginia.gov/adolescent-health-hub/sexual-health-faqs/} \\
+    \midrule
+    \multirow{4}{*}{Health equity} &
+    \url{https://lgbtq.unc.edu/resources/frequently-asked-questions/} \\
+    & \url{https://www.unfe.org/know-the-facts/faqs/} \\
+    & \url{https://lpbcc.wordpress.com/wp-content/uploads/2012/02/ref-27-health-inequalities-q-a-final.pdf} \\
+    & \url{https://www.heart.org/en/health-topics/consumer-healthcare/why-is-health-insurance-important/faqs-about-health-insurance} \\
+    \bottomrule
+    \end{tabular}
+    }
+    \vspace{-0.1in}
+    \label{tab:test_links}
+\end{table}
+
+\begin{table}[h]
+    \centering
+    \caption{Public resources of Public Health for Curating Large Scale Healthcare Questions.}
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{ll}
+    \toprule
+     Topics & Links \\
+    \midrule
+    \midrule
+Exercise, Diet, Cardiovascular, Weight, Sleep, Cholesterol & 		\url{https://www.heart.org/en/healthy-living} \\
+Cardiovascular & 	\url{https://www.heart.org/en/about-us/heart-attack-and-stroke-symptoms} \\
+Cardiovascular, Cholesterol, Diabetes, Mental health, Weight & 			\url{https://www.heart.org/en/health-topics} \\
+Exercise, Diet, Sleep, Cardiovascular, Weight, Cholesterol, Smoking & 	\url{https://www.heart.org/en/healthy-living/healthy-lifestyle/lifes-essential-8} \\
+Cardiovascular, Cholesterol, Diabetes & 					\url{https://professional.heart.org/en/guidelines-statements} \\
+Others & 	\url{https://www.uspreventiveservicestaskforce.org/uspstf/recommendation-topics/information-for-consumers} \\
+Exercise, Diet, Mental health, Smoking, Sleep & 			\url{https://www.sbm.org/healthy-living} \\
+Cardiovascular, Sleep, Weight & 					\url{https://www.nhlbi.nih.gov/health} \\
+Cardiovascular, Sleep, Weight & 					\url{https://www.nhlbi.nih.gov/es/salud} \\
+Others & 	\url{https://www.nhlbi.nih.gov/resources?f\%5B0\%5D=language\%3AEnglish&f\%5B1\%5D=language\%3ASpanish} \\
+Diabetes, Weight, Diet & 					\url{https://www.niddk.nih.gov/health-information} \\
+Diabetes, Weight, Diet & 					\url{https://www.niddk.nih.gov/health-information/informacion-de-la-salud} \\
+Diabetes, SOGI & \url{https://www.cdc.gov/diabetes/risk-factors/diabetes-risk-lgbtq.html} \\
+Diabetes, SOGI & \url{https://www.lgbtqiahealtheducation.org/wp-content/uploads/2019/07/TFIE-35_LGBT-diabetes-Brief_final2_pages.pdf} \\
+Cardiovascular & 	\url{https://www.ahajournals.org/doi/10.1161/CIR.0000000000001209} \\
+Cardiovascular & 	\url{https://www.ahajournals.org/doi/full/10.1161/CIR.0000000000001003} \\
+Mental health & 	\url{https://psycnet.apa.org/fulltext/2024-79040-001.html} \\
+SOGI & 	\url{https://translegislation.com/} \\
+SOGI & 	\url{https://www.aclu.org/legislative-attacks-on-lgbtq-rights-2024} \\
+SOGI & 	\url{https://medlineplus.gov/lgbtqiahealth.html} \\
+SOGI & 	\url{https://lgbtqhealthcaredirectory.org/} \\
+SOGI & 	\url{https://www.lgbtqiahealtheducation.org/resources/} \\
+SOGI & 	\url{https://www.hrc.org/resources} \\
+Mental health & 	\url{https://www.samhsa.gov/find-help} \\
+Mental health & 	\url{https://www.apa.org/topics} \\
+Mental health & 	\url{https://www.nimh.nih.gov/health} \\
+Smoking & 	\url{https://smokefree.gov/} \\
+Cardiovascular, Smoking & \url{https://www.ahajournals.org/doi/10.1161/CIR.0000000000000625} \\
+HIV care & 	\url{https://clinicalinfo.hiv.gov/en/guidelines} \\
+HIV care & 	\url{https://www.hiv.gov/hiv-basics} \\
+HIV care & 	\url{https://www.hivguidelines.org/} \\
+HIV care & 	\url{https://www.cdc.gov/hiv/index.html} \\
+HIV care & 	\url{https://www.cdc.gov/hivpartners/php/index.html} \\
+HIV care & 	\url{https://www.who.int/news-room/fact-sheets/detail/hiv-aids} \\
+Sleep & 	\url{https://www.nhlbi.nih.gov/health/heart-healthy-living/sleep} \\
+Others & 	\url{https://www.drugs.com/} \\
+Others & 	\url{https://www.ncbi.nlm.nih.gov/books/NBK430685/} \\
+Diabetes & 	\url{https://pro.aace.com/clinical-guidance/diabetes} \\
+Diabetes & 	\url{https://professional.diabetes.org/standards-of-care} \\
+Others & 	\url{https://goldcopd.org/2024-gold-report/} \\
+Others & 	\url{https://www.cdc.gov/vaccines/hcp/imz-schedules/index.html} \\
+Others & 	\url{https://www.cancer.org/cancer/types/colon-rectal-cancer/detection-diagnosis-staging/acs-recommendations.html} \\
+Others & 	\url{https://www.asccp.org/clinical-practice/guidelines} \\
+Others & 	\url{https://www.acog.org/clinical/clinical-guidance/practice-bulletin/articles/2017/07/breast-cancer-risk-assessment-and-screening-in-average-risk-women} \\
+Others & 	\url{https://www.asam.org/quality-care/clinical-guidelines/alcohol-withdrawal-management-guideline} \\
+Others & 	\url{https://www.asam.org/asam-criteria/implementation-tools/criteria-intake-assessment-form} \\
+Others & 	\url{https://readable.com/readability/flesch-reading-ease-flesch-kincaid-grade-level/} \\
+Others & 	\url{https://www.spanishreadability.com/fernandez-huerta-readability-index} \\
+Others & 	\url{https://www.mccc.edu/nursing/documents/NRS225TherapeuticCommunications.pdf} \\
+Others & 	\url{https://www.reddit.com/r/hivaids/?share_id=aoMnalJwXk4SBcVZtxc40&utm_content=1&utm_medium=ios_app&utm_name=ioscss&utm_source=share&utm_term=4} \\
+HIV care & 	\url{https://forums.poz.com/index.php?PHPSESSID=qe2trb4da2kmn0dch13402q9u2&action=forum} \\
+Others & 	\url{https://h-i-v.net/forums} \\
+    \bottomrule
+    \end{tabular}
+    }
+    \vspace{-0.1in}
+    \label{tab:train_links}
+\end{table}
+
+\subsection{Strategies of Curating Dataset}\label{app:scrape}
+
+To curate a high-quality set of patient education question-answer (QA) pairs, the initial content collection was conducted manually by annotators, most of whom are PhD students (Table~\ref{tab:biography}).
+They identified and extracted QA-relevant content from reputable public health websites, as listed in Table~\ref{tab:test_links}.
+The annotators focused on capturing both explicit QA formats (e.g., FAQ sections) and implicit pairs derived from health articles, clinical guidelines, and symptom descriptions. The extracted content was subsequently organized and labeled by domain experts in nursing and public health to ensure accuracy and domain relevance.
+
+To generate diverse and high-quality healthcare problems, annotators systematically reviewed all primary links and their subpages across each public health website listed in Table~\ref{tab:train_links}. The resources examined included articles, PDF documents, clinical guidelines, and other educational materials. After collecting the relevant content, it was segmented into coherent text chunks based on topical boundaries and structural cues. These chunks were then used as input to an LLM (GPT-4o mini, in our case), which generated multiple healthcare problems designed to be diverse and user-oriented, guided by specific prompt instructions.
+Each generated problem was subsequently reviewed and validated by domain experts in nursing and public health to ensure factual accuracy, clinical relevance, and clarity.
+
+\begin{table}[h]
+    \centering
+    \caption{Biographies of all annotators involved in \bench construction.}
+    \resizebox{0.8\textwidth}{!}{
+    \begin{tabular}{lllcc}
+    \toprule
+     ID & Year & Major &  Assigned Task & Expert Validator? \\
+    \midrule
+    \midrule
+    1 & 3rd year PhD & Computer Science & Scrape Website Content & \ding{55} \\
+    2 & 3rd year PhD & Computer Science & Scrape Website Content & \ding{55} \\
+    3 & 3rd year PhD & Computer Science & Scrape Website Content & \ding{55} \\
+    4 & 4th year PhD & Electrical Engineering & Scrape Website Content & \ding{55} \\
+    5 & 2nd year Master & Computer Science & Scrape Website Content & \ding{55} \\
+    6 & 4th year PhD & Data Science & Scrape Website Content & \ding{55} \\
+    7 & 4th year PhD & Nursing \& Public Health & Collect Dataset & \ding{51} \\
+    8 & 2nd year Master & Public Health & Collect Dataset & \ding{51} \\
+    9 & 1st year PhD & Nursing \& Public Health & Collect Dataset & \ding{51} \\
+    10 & 3rd year PhD & Nursing \& Public Health & Collect Dataset & \ding{51} \\
+    \bottomrule
+    \end{tabular}
+    }
+    \label{tab:biography}
+\end{table}
+
+\subsection{Examples of Generated Questions with High and Medium Difficulties}\label{app:example_diffculty}
+
+In the study design (RQ2), we extended the original questions into two counterparts of medium and high difficulty using the prompt provided in Section~\ref{app:prompt_rq1_and_rq2}, and applied them for classification.
+Below, we presented several examples of the generated questions:
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=Example 1]
+"original\_question": "What are the negative effects of smoking?"\\
+"medium\_difficulty": "How does smoking affect cardiovascular health?"\\
+"high\_difficulty": "What are the carcinogenic mechanisms of tobacco?"
+\end{tcolorbox}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=Example 2]
+"original\_question": "Is vaping actually bad for you?"\\
+"medium\_difficulty": "What are the long-term health risks of vaping?"\\
+"high\_difficulty": "Discuss the pathophysiology of e-cigarette lung injury."
+\end{tcolorbox}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=Example 3]
+"original\_question": "How many calories should I eat in a day?"\\
+"medium\_difficulty": "How is daily caloric need calculated?"\\
+"high\_difficulty": "What is the Harris-Benedict equation for BMR?"
+\end{tcolorbox}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=Example 4]
+"original\_question": "What are the types of diabetes?"\\
+"medium\_difficulty": "Distinguish between Type 1 and Type 2 diabetes."\\
+"high\_difficulty": "Explain the autoimmune pathology of Type 1 diabetes."
+\end{tcolorbox}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=Example 5]
+"original\_question": "Can I smoke with high blood pressure?"\\
+"medium\_difficulty": "How does smoking affect hypertension management?"\\
+"high\_difficulty": "Explain nicotine's effect on arterial blood pressure."
+\end{tcolorbox}
+
+\section{Experimental Setup}\label{app:exp}
+
+\subsection{Configuration of Models}\label{app:hyperparams}
+We set the learning rate to $1 \times 10^{-5}$ and applied early stopping, using a validation set split from the training data. For post-training, we adopted LoRA~\citep{hu2021loralowrankadaptationlarge} with a rank of 16. In the reward formulation (Eq.~\ref{equ:reward}), we set the weights as $\alpha = 1.0$ (Flesch--Kincaid), $\beta = 0.3$ (professional language), and $\gamma = 3.0$ (Yngve depth) with baseline $\delta_0 = 2.0$; the length penalty uses $\eta = 0.1$ with a budget of $L_{\max} = 120$ tokens, and the informativeness term uses $\mu = 75$ (a weight of $1.5$ applied to a cosine-to-penalty scale of $50$). The weights were calibrated so that the components have comparable influence and the informativeness term dominates, preventing the model from gaming the readability terms with short, content-free answers. Each training run was performed on an A40 GPU for 48 hours.
+
+During training with GRPO and DAPO, we used a temperature of $\tau = 0.9$ and set the maximum generation length to 256 tokens. For inference during evaluation, we adopted greedy decoding with a maximum length of 2048 tokens. All other generation hyperparameters follow the default settings in \url{https://huggingface.co/docs/transformers/en/main_classes/text_generation#transformers.GenerationConfig}.
+
+\subsection{Prompt for LLMs}
+\label{app:prompt}
+
+\subsubsection{Prompt for RQ1 and RQ2}\label{app:prompt_rq1_and_rq2}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=System Prompt for Instruction Following]
+You are a helpful agent in answering questions related to health.
+Answer clearly and kindly at a \{5th grade/middle school/high school/college\} reading level (U.S. grade).
+Maintain a positive sentiment and conversational tone.
+\end{tcolorbox}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=System Prompt for Reading Level Inference]
+You are a careful readability assessor for healthcare and science texts. Your job is to classify the readability/audience level of a given paragraph.
+\\
+\\
+Definitions (pick exactly one):\\
+1) Elementary school: very simple words and ideas; no jargon; everyday concepts only.\\
+2) Middle school: mostly common words; some domain terms with brief explanations; moderately short sentences; basic causal reasoning.\\
+3) High school: frequent domain terms and abstractions; complex sentences and clauses; assumes some prior science knowledge; limited definitions of jargon.\\
+4) College: specialized terminology or references; dense concepts and implicit assumptions; long/complex sentences; minimal or no lay explanations.
+\\
+\\
+Instructions:\\
+1) Judge solely from the paragraph provided. Do not invent context.\\
+2) Choose ONE label from: {"Elementary school","Middle school","High school","College"}.
+\\
+\\
+Output format:\\
+1) You may include optional analysis.\\
+2) The LAST line must be exactly: `Final Answer: <ONE WORD from {"Elementary school","Middle school","High school","College"}>'\\
+3) No extra words after the label on that last line.
+\end{tcolorbox}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=System Prompt for Generating High and Medium Levels Counterpart of Original Questions]
+You are an expert in public health communication and medical education. Your task is to transform a simple public health question, aimed at the general public, into two more challenging versions: one "medium-difficulty" version and one "high-difficulty" version.
+\\
+\\
+Category Definitions:\\
+1. Medium Difficulty: This question should be something an educated and curious patient might ask their doctor. It is more specific than the original, may use some common medical terms, but remains generally accessible.\\
+2. High Difficulty: This question should be one that a medical student, clinician, or researcher would ask. It must be highly technical, use specific jargon or acronyms, and assume significant background knowledge.
+\\
+\\
+Core Constraints:\\
+1. Length: The two new questions you generate MUST be of a similar length to the original question. Focus on increasing the question's conceptual density, not just its word count.\\
+2. Output Format: Your output must be in a strict JSON format, containing three keys: original\_question, medium\_difficulty, and high\_difficulty.
+\\
+\\
+Examples:
+\\
+\\
+Input Question 1:\\
+"How can I quit smoking?"
+\\
+\\
+Required JSON Output:\\
+\{\\
+  "original\_question": "How can I quit smoking?",\\
+  "medium\_difficulty": "What are the best smoking cessation aids?",\\
+  "high\_difficulty": "What are the contraindications for varenicline therapy?"\\
+\}
+\end{tcolorbox}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=System Prompt for Predicting Needed Readability Level for a Question]
+You are an expert in public health communication and text analysis. Your task is to classify a given public health question based on the conceptual complexity and the level of readability required to provide a comprehensive answer.
+
+There are three categories:
+
+1. Simple: The question is for the general public, uses common language, and asks about general knowledge. An answer would require a low Flesch-Kincaid Grade Level.
+
+2. Intermediate: The question is for a curious and educated layperson. It is more specific, may use some common medical terms, and requires a more detailed answer than a simple question.
+
+3.  Complex: The question is for a medical student, healthcare professional, or researcher. It is highly technical, uses specific medical jargon or acronyms, and assumes significant background knowledge. An answer would require a high Flesch-Kincaid Grade Level.
+
+Read the question below and classify it into one of the three categories. Respond with only one word: `Simple`, `Intermediate`, or `Complex`.
+\end{tcolorbox}
+
+\subsubsection{Prompt for Benchmarking Readability-Enhancement Strategies}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=Standard System Prompt]
+You are a helpful agent in answering questions related to health. Please respond to questions based on credible information and use simple terms (limit medical jargon and 5th grade reading level). Answers should be short ($\sim$63 tokens) with simple sentence structure, and words should be easy to understand (fewer syllables). Maintain a positive sentiment and conversational tone.
+\end{tcolorbox}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=CoT System Prompt]
+You are a helpful agent in answering questions related to health. Please respond to questions based on credible information and use simple terms (limit medical jargon and 5th grade reading level). The final answers (excluding reasoning steps) should be short ($\sim$63 tokens) with simple sentence structure, and words should be easy to understand (fewer syllables). Begin by thinking through the problem step by step, clearly showing your reasoning. After completing your reasoning, provide your final conclusion, exactly starting with 'Final Answer:'.
+\end{tcolorbox}
+
+\section{Readability Metrics}\label{app:metric}
+
+\subsection{Flesch-Kincaid Grade Level}\label{app:grade}
+
+Table~\ref{tab:grade} presents the correspondence between the Flesch-Kincaid Grade Level scores and U.S. school grade levels.\footnote{\url{https://readable.com/readability/flesch-reading-ease-flesch-kincaid-grade-level/}} We used the \texttt{readability} Python library\footnote{\url{https://pypi.org/project/readability/}} to compute this metric and assess the readability of generated content.
+
+\begin{table}[h]
+    \centering
+    \caption{The relationship between Flesch-Kincaid grade level and grade level.}
+    \resizebox{0.8\textwidth}{!}{
+    \begin{tabular}{llll}
+    \toprule
+     Flesch-Kincaid Score & Reading Level & School Level &  Age Range (US) \\
+    \midrule
+    \midrule
+    0 - 3 & Basic & Kindergarten / Elementary & 5 - 8 \\
+    3 - 6 & Basic & Elementary & 8 - 11 \\
+    6 - 9 & Average & Middle School & 11 - 14 \\
+    9 - 12 & Average & High School & 14 - 17 \\
+    12 - 15 & Advanced & College & 17 - 20 \\
+    15 - 18 & Advanced & Post-grad & 20+ \\
+    \bottomrule
+    \end{tabular}
+    }
+    \label{tab:grade}
+\end{table}
+
+\subsection{Professional Language}\label{app:prof}
+
+We constructed the vocabulary by collecting professional terms from the Harvard Public Health medical dictionary.\footnote{\url{https://www.health.harvard.edu/a-through-c}} Specifically, annotators scraped terminology entries from the site, after which a subset of terms was removed based on a review by public health experts.
+The vocabulary is available at \url{https://anonymous.4open.science/r/RepQA-45A8/dataset/harvard_medical_terms.json}.
+
+\section{More Analysis}
+\label{app:exp1_analysis}
+We summarized the per-model trends in Table~\ref{tab:repqa-main}.
+The latest proprietary models tended to produce the most complex text: \texttt{GPT-5.4} attained the highest Flesch--Kincaid (FK) grade across categories, whereas several open-source models such as \texttt{Qwen2.5-7B} and \texttt{Gemma-3-12B} came closest to the target grade of $6$.
+For professional language (PL), \texttt{BioMistral-7B} produced some of the most specialized text, likely due to its fine-tuning on medical corpora, while the \texttt{Gemma-3} models used the least jargon, which is preferable for readability.
+For informativeness, \texttt{GPT-4.1} and \texttt{GPT-4.1-mini} attained the highest informative-cosine (IC) scores.
+
+Across the four evaluated categories (\textit{suggestion}, \textit{fact}, \textit{definition}, \textit{rationale}), the \textit{suggestion} category consistently exhibited both the lowest Flesch-Kincaid grade level and the lowest professional language, which aligns with intuition: suggestions typically do not require complex language compared to the explanation of medical facts, definitions, or rationales, which carry more domain-specific terminology.
+
+\section{More Readability Metrics}
+\label{app:more_metrics}
+The main text reported three readability metrics (Flesch--Kincaid grade, professional language, and Yngve depth). To verify that our conclusions are not specific to this choice, Table~\ref{tab:more_metrics} reported two further readability scores, Dale–Chall~\citep{tanprasert2021flesch} and SMOG~\citep{mc1969smog}, alongside Flesch--Kincaid and Yngve depth~\citep{yngve1960model}. The additional metrics were all strongly correlated with Flesch–Kincaid (Dale–Chall: 0.800; SMOG: 0.806; Yngve depth: 0.823). The close agreement across metrics further supported the robustness of our conclusions.
+
+% \begingroup
+% \sisetup{
+%   table-format=3.2,
+%   table-align-text-pre=false,
+%   table-number-alignment=center,
+% detect-weight=true,detect-inline-weight=math
+% }
+% \begin{table}[h]
+%     \centering
+%     \caption{Benchmarking both proprietary and open-source LLMs on additional readability metrics.}
+%     \begin{tabular}{lSSSS}
+%     \toprule
+%     {Model} & {Flesch-Kincaid} & {Dale Chall} & {SMOG} & {Yngve Depth} \\
+%     \midrule
+%     \multicolumn{5}{c}{\textbf{Proprietary Models}} \\
+%     \midrule
+% o4-mini & 3.79  &  7.03  &  5.53  &  2.84 \\
+% o3-mini & 3.99  &  6.72  &  5.56  &  2.55 \\
+% GPT-4o & 5.00  &  7.56  &  6.97  &  2.63 \\
+% GPT-4o-mini & 4.42  &  7.07  &  6.62  &  2.56 \\
+% GPT-4.1 & 4.31  &  6.74  &  5.93  &  2.68 \\
+% GPT-4 & 4.46  &  6.89  &  6.28  &  2.57 \\
+% GPT-4-turbo & 5.18  &  6.69  &  5.97  &  2.66 \\
+% Claude-3.7-Sonnet & 8.63  &  8.43  &  7.60  &  3.60 \\
+% Claude-3.5-Sonnet & 6.50  &  7.59  &  6.44  &  2.99 \\
+% Gemini-1.5-pro & 4.73  &  6.87  &  6.82  &  2.63 \\
+% Gemini-2.0-flash & 4.12  &  6.45  &  6.06  &  2.53 \\
+% Gemini-1.5-flash & 4.25  &  7.10  &  6.47  &  2.44 \\
+%     \midrule
+%     \multicolumn{5}{c}{\textbf{Open-Source Models}} \\
+%     \midrule
+% LLaMA3.1-8B & 6.27  &  8.22  &  8.19  &  2.89 \\
+% Qwen2.5-7B & 4.49  &  6.59  &  5.72  &  2.57 \\
+% Phi-4 & 5.30  &  7.21  &  7.49  &  2.76 \\
+% Yi-1.5-9B & 8.12  &  8.56  &  8.96  &  2.98 \\
+% Mistral-7B & 6.91  &  9.22  &  7.55  &  2.84 \\
+% InternLM3-8B & 6.72  &  8.31  &  7.60  &  3.05 \\
+% Gemma-3-12B & 3.54  &  7.87  &  6.69  &  2.49 \\
+% DeepSeek-V2-Lite & 6.89  &  8.29  &  8.30  &  2.82 \\
+% LLaMA3.1-70B & 8.17  &  8.78  &  8.63  &  3.21 \\
+% Qwen2.5-14B & 5.76  &  7.35  &  6.55  &  2.73 \\
+% Qwen2.5-32B & 3.50  &  6.34  &  5.03  &  2.41 \\
+% Qwen2.5-72B & 3.68  &  6.73  &  5.05  &  2.49 \\
+%     \bottomrule
+%     \end{tabular}
+%     \vspace{-0.1in}
+%     \label{tab:more_metrics}
+% \end{table}
+% \endgroup
+
+\section{LLM Usage}
+
+Large language models were used only for editorial polishing (grammar, style, and readability). They did not generate content or conduct analyses. All changes were reviewed by the authors.

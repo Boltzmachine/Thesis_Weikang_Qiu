@@ -120,6 +120,16 @@
 
 \newcommand{\modelname}{\textbf{{PRISM}}\xspace}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RepQA chapter (from the npj Digital Medicine paper preamble)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \bench is the only macro from that preamble the chapter actually uses; the
+% rest (\model, \Set, \Mat, \vpara, \reb, \xm, \xp, prop/problem theorems) and
+% its heavy packages (commath, listings, subfigure, threeparttable, lineno) go
+% unused, so they are not merged. \rex/\htl already exist above.
+\newcommand{\bench}{\textsc{RepQA}\xspace}
+
 % Last-resort stretch for paragraphs TeX cannot otherwise break — these papers
 % were set in two columns and some have long unbreakable inline math that now
 % overflows the wider one-column measure. Only applies where a line would
