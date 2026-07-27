@@ -130,6 +130,24 @@
 % unused, so they are not merged. \rex/\htl already exist above.
 \newcommand{\bench}{\textsc{RepQA}\xspace}
 
+% A part-divider page that carries a short introductory paragraph on the SAME
+% page as the part title (the book class would otherwise push the intro onto
+% the following page). Usage: \partwithintro{Part title}{Intro paragraph...}
+\makeatletter
+\newcommand{\partwithintro}[2]{%
+  \begingroup
+    % Suppress the automatic \vfil\newpage that book.cls fires right after the
+    % part title, so the introduction can share the part page.
+    \renewcommand\@endpart{}%
+    \part{#1}%
+  \endgroup
+  \vskip 2.5em
+  \begin{quote}#2\end{quote}%
+  \vfil            % balances the \null\vfil book.cls put before the title,
+  \newpage         % centering the title+intro block vertically on the page.
+}
+\makeatother
+
 % Last-resort stretch for paragraphs TeX cannot otherwise break — these papers
 % were set in two columns and some have long unbreakable inline math that now
 % overflows the wider one-column measure. Only applies where a line would

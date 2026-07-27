@@ -1,6 +1,8 @@
 {
-  // Always build the whole dissertation, even when a chapter file is focused
-  "latex-workshop.latex.rootFile": "Disseration.tex",
+  // Always build the whole dissertation, even when a chapter file is focused.
+  // The root is pinned via the "% !TEX root = Disseration.tex" magic comment
+  // at the top of Disseration.tex (and detection prefers that magic comment).
+  "latex-workshop.latex.rootFile.doNotPrompt": true,
 
   "latex-workshop.latex.outDir": "%DIR%/build",
 

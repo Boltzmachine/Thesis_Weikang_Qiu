@@ -4,6 +4,9 @@
 # Backups
 *.bak
 
+# cwatch daemon state (log, pid, pre-edit backups)
+.cwatch/
+
 build/
 
 # Build output that lands in the project root instead of build/
@@ -21,3 +24,6 @@ build/
 *.out
 *.synctex.gz
 *.toc
+
+# macOS
+.DS_Store
