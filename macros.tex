@@ -130,6 +130,19 @@
 % unused, so they are not merged. \rex/\htl already exist above.
 \newcommand{\bench}{\textsc{RepQA}\xspace}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DySta chapter (from the NeurIPS 2026 paper preamble)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Every package that preamble loads is already loaded above or in
+% Disseration.tex, except `listings` (and its PDDL definition), which only the
+% appendix needs, and `dblfloatfix`, which only matters in two-column mode.
+% The paper's generic \method is renamed \dysta for the same reason \mindllm
+% was: a name that plain would collide with the next merged paper.
+
+\newcommand{\dysta}{DySta\xspace}
+\newcommand{\bs}[1]{\boldsymbol{#1}}
+
+
 % A part-divider page that carries a short introductory paragraph on the SAME
 % page as the part title (the book class would otherwise push the intro onto
 % the following page). Usage: \partwithintro{Part title}{Intro paragraph...}

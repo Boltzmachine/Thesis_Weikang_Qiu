@@ -1,0 +1,95 @@
+
+% \begin{table*}[]
+% \newcolumntype{M}{>{\raggedleft\arraybackslash}p{0.1\linewidth}}
+% \newcommand{\cchead}[1]{\multicolumn{1}{c}{#1}}
+%     \centering\textbf{}
+% \caption{Results on the SimplerEnv benchmark.}
+% \label{tab:simplerenv}
+%     \resizebox{\linewidth}{!}{
+% \begin{tabular}{l|l|ccccc|ccc}
+% \toprule
+%  Google Robot & Method & PickCan & MoveNear & Drawer & DrawerApple & Average & FLOPs & Latency (ms) & Speedup \\
+%  \midrule
+%  \multirow{5}{*}{\makecell{SIMPLER\\ (Visual Matching)}}
+%  & CogACT \cite{li2024cogact} & $91.3$ & $85.0$ & $71.8$ & $50.9$ & $74.8$ & 100\% & $339$ & $1.00\times$ \\
+%   & + FlashVLA \cite{tan2025think} & $80.0$ & $57.1$ & $73.6$ \\
+%  % RT-1 & 85.7 & 44.2 & 73.0 & 6.5 & 52.4 & NA \\
+%  % & RT-1-X & 56.7 & 31.7 & 59.7 & 21.3 & 42.4 \\
+%  % & RT-2-X  & 78.7 & 77.9 & 25.0 & 3.7 & 46.3 & NA \\
+%  % & Octo-Base  & 17.0 & 4.2 & 22.7 & 0.0 & 11.0 & NA \\
+%  % & OpenVLA  & 18.0 & 56.3 & 63.0 & 0.0 & 34.3 & NA \\
+%  & + TTF \cite{liu2025ttf} & $89.3$ & $71.3$ & $58.4$  \\
+%  & + VLA-Cache \cite{xu2025vla} &  $92.0$ & $85.0$  & $70.5$ & $51.6$ & & $80.1\%$ \\
+%  % & EfficientVLA & 93.3 & 81.3 & 68.2 & 53.8 & 28.9\% \\
+%  & + \dysta{} (Ours) & $92.7$ & $88.8$ & $75.0$ & $47.2$ & & $40.2\%$ & $151$ \\
+%  \midrule
+%  \multirow{5}{*}{\makecell{SIMPLER\\ (Variant Aggregation)}}
+%  & CogACT \cite{li2024cogact} & $89.6$ & $80.8$ & $28.3$ & $46.6$ & $61.3$ \\
+%  & + FlashVLA \cite{tan2025think} & $82.5$ & $60.8$ & $28.6v$\\
+%  % & RT-1 [7] & 89.8 & 50.0 & 32.3 & 2.6 & 43.7 \\
+%  % & RT-1-X [48] & 49.0 & 32.3 & 29.4 & 10.1 & 30.2 \\
+%  % & RT-2-X [48] & 82.3 & 79.2 & 35.3 & 20.6 & 54.4 \\
+%  % & Octo-Base [62] & 0.6 & 3.1 & 1.1 & 0.0 & 1.2 \\
+%  % & OpenVLA [30] & 60.8 & 67.7 & 28.8 & 0.0 & 39.3 \\
+%  & + TTF \cite{liu2025ttf} & $88.0$ & $62.7$ & $34.0$ \\
+%  & + VLA-Cache \cite{xu2025vla} & $91.7$ & $79.3$  & $32.5$ & $45.8$ & \\
+%  % & EfficientVLA & 93.2 & 75.8 & 26.9 & 49.2 & \\
+%  & + \dysta{} (Ours) & $92.4$ & $81.0$ & $38.9$ & $46.0$ & \\
+%  \bottomrule
+% \end{tabular}
+% }
+% \end{table*}
+
+
+% \begin{table*}[t]
+% \newcolumntype{M}{>{\raggedleft\arraybackslash}p{0.1\linewidth}}
+% \newcommand{\cchead}[1]{\multicolumn{1}{c}{#1}}
+%     \centering\textbf{}
+% \caption{Results on the SimplerEnv benchmark. Task suites follows the setting of \citet{qu2025spatialvla}.}
+% \label{tab:simplerenv}
+%     \resizebox{\linewidth}{!}{
+% \begin{tabular}{l|cccccccc|ccc}
+% \toprule
+% \multirow{3}{*}{Method} & \multicolumn{4}{c}{Visual Matching} & \multicolumn{4}{c}{Variant Aggregation} & \multicolumn{3}{c}{Acceleration}  \\
+% \cmidrule(lr){2-5}\cmidrule(lr){6-9}\cmidrule(lr){10-12}
+% & \makecell{Pick\\Can} & \makecell{Move\\Near} & Drawer & \makecell{Drawer\\Apple} & \makecell{Pick\\Can}  & \makecell{Move\\Near} & Drawer & \makecell{Drawer\\Apple}   & FLOPs & \makecell{Latency\\(ms)} & Speedup \\
+%  \midrule
+%  CogACT \cite{li2024cogact} & $91.3$ & $85.0$ & $71.8$ & $50.9$ &$89.6$ & $80.8$ & $28.3$ & $46.6$  & 100\% & $1355$ & $1.00\times$ \\
+%   + FlashVLA \cite{tan2025think} & $80.0$ & $57.1$ & $73.6$ & & $82.5$ & $60.8$ & $28.6$ &\\
+%  + TTF \cite{liu2025ttf} & $89.3$ & $71.3$ & $58.4$ & & $88.0$ & $62.7$ & $34.0$ & \\
+%  + VLA-Cache \cite{xu2025vla} &  $92.0$ & $83.3$  & $70.5$ &  & $91.7$ & $79.3$  & $32.5$ & $45.8$ & $80.1\%$ \\
+%  + \dysta{} (Ours) & $\mathbf{92.7}$ & $\mathbf{88.8}$ & $\mathbf{75.0}$ & $47.2$ & $\mathbf{92.4}$  & $\mathbf{81.0}$ & $\mathbf{38.9}$ & $46.0$& $43.4\%$ & $577$ & $2.35\times$ \\
+%  \bottomrule
+% \end{tabular}
+% }
+% \end{table*}
+
+
+\begin{table}[t]
+\newcolumntype{M}{>{\raggedleft\arraybackslash}p{0.1\linewidth}}
+\newcommand{\cchead}[1]{\multicolumn{1}{c}{#1}}
+    \centering\textbf{}
+\caption{Results on the SimplerEnv benchmark. Task suites follow the setting of \citet{qu2025spatialvla}. All baselines and our method are applied to the same VLA base model (i.e., CogACT~\cite{li2024cogact}).}
+\label{tab:simplerenv}
+    \resizebox{\linewidth}{!}{
+\begin{tabular}{lcccccc|ccc}
+\toprule
+\multirow{3}{*}{Method} & \multicolumn{3}{c}{Visual Matching} & \multicolumn{3}{c}{Variant Aggregation} & \multicolumn{3}{c}{Acceleration}  \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+& \makecell{Pick\\Can} & \makecell{Move\\Near} & Drawer & \makecell{Pick\\Can}  & \makecell{Move\\Near} & Drawer  & FLOPs & \makecell{Latency\\(ms)} & Speedup \\
+ \midrule
+  % RT-2-X \cite{vuong2023open} & $78.7$ & $77.9$ & $25.0$ & $82.3$ & $79.2$ & $35.3$ & $-$ & $-$ & $-$\\
+  % Octo-Base \cite{team2024octo} & $17.0$ & $4.2$ & $22.7$ & $0.6$ & $3.1$ & $1.1$ & $-$ & $-$ & $-$ \\
+  % OpenVLA \cite{kim2024openvla}  & $18.0$ & $56.3$ & $63.0$ & $60.8$ & $67.7$ & $28.8$ & $-$ & $-$ & $-$ \\
+  % SpatialVLA \cite{qu2025spatialvla} & $81.0$ & $69.6$ & $59.3$ & $89.5$ & $71.7$ & $36.2$ & $-$ & $-$ & $-$ \\
+  % $\pi_0$ \cite{black2024pi0visionlanguageactionflowmodel} & $88.0$ & $80.3$ & $56.0$ & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ \\
+  % \midrule
+ CogACT \cite{li2024cogact} & $91.3$ & $\underline{85.0}$ & $71.8$ &$89.6$ & $\underline{80.8}$ & $28.3$  & 100\% & $1360$ & $1.00\times$ \\
+  + FlashVLA \cite{tan2025think} & $80.0$ & $57.1$ & $\underline{73.6}$ & $82.5$ & $60.8$ & $28.6$ & $83.4\%$ & $1024$ & $1.33\times$\\
+ + TTF \cite{liu2025ttf} & $89.3$ & $71.3$ & $58.4$ & $88.0$ & $62.7$ & $\underline{34.0}$ & $86.5\%$ & $1051$ & $1.29\times$  \\
+ + VLA-Cache \cite{xu2025vla} &  $\underline{92.0}$ & $83.3$  & $70.5$ & $\underline{91.7}$ & $79.3$  & $32.5$ & $80.1\%$ & $985$ & $1.38\times$ \\
+ + \dysta{} (Ours) & $\mathbf{92.7}$ & $\mathbf{88.8}$ & $\mathbf{75.0}$ & $\mathbf{92.4}$  & $\mathbf{81.0}$ & $\mathbf{38.9}$ & $\mathbf{43.4\%}$ & $\mathbf{601}$ & $\mathbf{2.26\times}$ \\
+ \bottomrule
+\end{tabular}
+}
+\end{table}

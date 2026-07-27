@@ -1,0 +1,196 @@
+\section{Experiments}
+In this section, we evaluate the model’s inference efficiency as well as its multi-frame integration ability. We further present ablation studies of the key components of our method and analyze the model’s behavior through attention-map visualizations.
+
+
+\subsection{Acceleration}
+In this study, we validate our method's performance under acceleration by enabling KV caching of static components. 
+
+\noindent\textbf{Baselines}
+For baselines, we compare to those that also adopt temporal information reuse. \emph{FlashVLA} \cite{tan2025think} simply reuses the previous action based on a heuristic criterion.
+\emph{TTF-VLA} \cite{liu2025ttf} and \emph{VLA-cache} \cite{xu2025vla} identify reusable visual patches using hand-designed heuristics and cache the corresponding embeddings from previous steps; however, these cached patches are not guaranteed to remain static in the hidden representation space. All methods are based on the same VLA base model (i.e., CogACT~\cite{li2024cogact}), with all other necessary variables controlled consistently.
+\input{DYSTA/tables/simplerenv}
+
+
+\begin{table}[t]
+\centering
+\caption{Results on the LIBERO benchmark. Policy inputs: third-person image, language instruction. All baselines and our method are applied to the same VLA base model (i.e., OpenVLA-OFT~\cite{kim2025fine}).}
+\label{tab:libero}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{lccccc|ccc}
+\toprule
+Models & Spatial & Object & Goal & Long & Average & FLOPs & Latency (ms) & Speedup \\
+\midrule
+% Diffusion Policy \cite{chi2025diffusion} & 78.3 & 92.5 & 68.3 & 50.5 & 72.4 & $-$ & $-$& $-$ \\
+% Octo \cite{team2024octo} & 78.9 & 85.7 & 84.6 & 51.1 & 75.1 & $-$ & $-$& $-$\\
+% DiT Policy \cite{hou2410diffusion} & 84.2 & 96.3 & 85.4 & 63.8 & 82.4 & $-$ & $-$& $-$\\
+% OpenVLA \cite{kim2024openvla} & 84.7 & 88.4 & 79.2 & 53.7 & 76.5 & $-$ & $-$& $-$\\
+% \midrule
+OpenVLA-OFT \cite{kim2025fine} & $\underline{96.2}$ & $\mathbf{98.3}$ & $\mathbf{96.2}$ & $\underline{90.7}$ & $\underline{95.4}$ & $100.0\%$ & $741$ & $1.00\times$\\
+% \midrule
++ FlashVLA \cite{tan2025think} & $71.8$ & $90.0$ &  $79.2$& $78.8$ & $80.0$ &  $88.7\%$& $657$ & $1.13\times$  \\
++ TTF \cite{liu2025ttf} & $95.8$ & $94.2$ &   $93.6$ &  $86.0$  & $92.4$ & $75.0\%$ & $575$ & $1.29\times$\\
+% EfficientVLA & & & & 89.8 & \\
++ VLA-Cache \cite{xu2025vla} & $95.6$ & $92.8$ & $94.0$ & $89.6$ & $93.0$ & $85.5\%$ & $652$ & $1.14\times$ \\
++ \dysta{} (Ours) & $\mathbf{97.8}$ & $\underline{97.6}$ & $\mathbf{96.2}$ & $\mathbf{92.4}$ & $\mathbf{96.0}$ & $\mathbf{63.4}\%$ & $\mathbf{437}$ & $\mathbf{1.70}\times$ \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\noindent\textbf{Simulation benchmark}
+We use SimplerEnv~\cite{li2024evaluating} and LIBERO~\cite{liu2023libero} task suite to evaluate the performance and acceleration. \citet{kim2025fine} offers two settings for LIBERO, one using only a third-person image and a language instruction as inputs, and another that additionally includes an extra camera view and proprioceptive state. We adopt the former setting, as it offers broader applicability and aligns more closely with standard VLA deployment scenarios. For the LIBERO benchmark, we finetune the model to the corresponding downstream datasets. For the SimplerEnv benchmark, we use Open X-Embodiment (OXE) \cite{vuong2023open} as the training dataset. All settings are consistent with the corresponding original base model. Dataset statistics could be found in Appendix \ref{app:dataset}.
+
+\noindent\textbf{Real-World benchmark} We evaluate \dysta{} with Cobot Magic robots on 7 tasks across 3 categories, each with 20 trials. This evaluation scale is consistent with prior work~\cite{shi2025memoryvlaperceptualcognitivememoryvisionlanguageaction,li2024cogact}. Models are finetuned on each task. More details could be found in Appendix~\ref{app:real}.
+
+\noindent\textbf{Evaluation} The performance is measured by success rate, and acceleration is measured by the FLOPs reduction rate and the inference latency.
+
+\noindent\textbf{Implementation details} We use two levels of static cache. L1 static cache consists of 133 ($52\%$) tokens and L2 static cache consists of 107 ($42\%$) tokens, resulting in 16 dynamic tokens. The sensitivity analysis of the static ratio is in Appendix~\ref{app:static_ratio}. FLOPs are measured by open-source tools \footnote{\url{https://github.com/MrYxJ/calculate-flops.pytorch}}. Additional details, including the recaching threshold $\delta_l$, the resulting average recaching intervals and the latency distribution when rollout, can be found in Appendix~\ref{app:impl} and Appendix~\ref{app:lat_dist}.
+
+\noindent\textbf{Results}
+Table~\ref{tab:simplerenv}  and Table~\ref{tab:libero} summarize the performance and the acceleration results. Table~\ref{tab:real_res} summarizes the results on the real-world benchmark. Across tables, we show that our method achieves improved or comparable performance across benchmarks with substantial speedup. Notably, on the SimplerEnv benchmark, our method improves the base model by $4.9\%$, and outperforms the best baseline by $3.9\%$ and achieves $2.26\times$ acceleration.  On the real-world benchmark, our model improves the base model by $10.6\%$ and achieves $2.21\times$ acceleration.
+
+\subsection{Multi-Frame Integration for Temporal-dependency Modeling} 
+
+\noindent\textbf{Baselines}
+We consider the following baselines: \emph{OpenVLA-OFT$^\dagger$} incorporates full image tokens from historical observations. Since this baseline incurs a prohibitively large context length compared with standard models, we allocate the maximum available resources and tune it for the best achievable performance. \emph{TTF-VLA} \cite{liu2025ttf} mixes the current observation with past observations in a patch-wise manner. \emph{TraceVLA} \cite{zheng2024tracevla} visualizes the trajectories of active points by overlaying them onto the image using distinct colors, referred to as visual traces. \emph{MemoryVLA} \cite{shi2025memoryvlaperceptualcognitivememoryvisionlanguageaction} feeds the LLM backbone with images from each timestep independently and extracts a representation for each; only the multi-timestep representations are provided to the decoder. \emph{ContextVLA} \cite{jang2025contextvla} pools historical observations into a fixed number of tokens and prepends them to the image tokens of the current observation. All methods are applied to the same VLA base model (i.e., OpenVLA-OFT~\cite{kim2025fine}), with all other necessary variables controlled consistently.
+
+
+\begin{table}[t]
+\centering
+\caption{Success rate (\%) on real-world experiments with the Cobot Magic robot. All baselines and our method are applied to the same VLA base model (i.e., OpenVLA-OFT~\cite{kim2025fine}).}
+\label{tab:real_res}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{l|cccc|cc|c|ccc}
+\toprule
+\multirow{3}{*}{Method}
+& \multicolumn{4}{c|}{Pick-and-Place}
+& \multicolumn{2}{c|}{Pouring}
+& \multicolumn{1}{c|}{Container}
+& \multicolumn{3}{c}{Acceleration Metrics} \\
+\cmidrule(lr){2-5}
+\cmidrule(lr){6-7}
+\cmidrule(lr){8-8}
+\cmidrule(lr){9-11}
+
+& \makecell{Corn\\$\rightarrow$Pot}
+& \makecell{Corn\\$\rightarrow$Plate}
+& \makecell{Bread\\$\rightarrow$Pan}
+& \makecell{Carrot\\Transfer}
+& \makecell{Pour\\Coke}
+& \makecell{Pour\\Bottle}
+& \makecell{Open\\Drawer}
+& FLOPs
+& \makecell{Latency\\(ms)}
+& Speedup \\
+\midrule
+
+OpenVLA-OFT
+& $55$ & $\underline{70}$ & $\mathbf{55}$ & $\underline{65}$
+& $\underline{60}$ & $35$
+& $\mathbf{35}$
+& $100.0\%$
+& $1089$
+& $1.00\times$ \\
+
++ FlashVLA
+& $35$ & $55$ & $30$ & $50$
+& $55$ & $30$
+& $15$
+& $\underline{62.5\%}$
+& $\underline{791}$
+& $\underline{1.30\times}$ \\
+
++ TTF
+& $35$ & $\underline{70}$ & $30$ & $55$
+& $55$ & $\underline{40}$
+& $15$
+& $98.6\%$
+& $1077$
+& $1.01\times$ \\
+
++ VLA-Cache
+& $\underline{60}$ & $65$ & $35$ & $50$
+& $45$ & $\underline{40}$
+& $30$
+& $74.0\%$
+& $836$
+& $1.27\times$ \\
+
+% \midrule
++ \dysta{} (Ours)
+& $\mathbf{65}$ & $\mathbf{80}$ & $\underline{50}$ & $\mathbf{70}$
+& $\mathbf{60}$ & $\mathbf{50}$
+& $\mathbf{35}$
+& $\mathbf{30.5\%}$
+& $\mathbf{493}$
+& $\mathbf{2.21\times}$ \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\noindent\textbf{Simulation benchmark and evaluation} We adopt the proposed LIBERO-memory benchmark to evaluate multi-frame integration by memory-dependent tasks, whose designs are inspired by the notion of episodic memory. The benchmark comprises three objectives.
+(1) \emph{(where) Position Reset.} After heating the first can, the robot is required to remember its original position and return it to the position. Performance is measured by success rate, where an episode is considered successful if the positional error is below a threshold.
+(2) \emph{(when) Doneness.} The model must track the elapsed heating time and remove the can at the appropriate moment. Given a target heating duration specified in the instruction, we measure the absolute difference (in seconds) between the actual and desired heating times, capturing overcooking or undercooking.
+(3)\emph{(what) On-Stove.} After heating and resetting the first can, the robot is required to remember which can has been cooked and place the second can on the stove for heating. We report the success rate of placing the second can on the stove.
+
+\input{DYSTA/tables/memory}
+
+
+\noindent\textbf{Real-world benchmark}
+We evaluate \dysta{} with Cobot Magic robots on 3 tasks, each with 20 trials. Models are finetuned on each task. Performance is measured by success rate. More details could be found in Appendix \ref{app:real}.
+
+
+\noindent\textbf{Implementation details} We use one static level. The ratio of static tokens is set to $0.9$, corresponding to $230$ static tokens and $26$ dynamic tokens. The number of observations is set to $20$, with a sampling interval of $20$ frames (1 frame per second), resulting in $750$ context tokens. More details could be found in Appendix~\ref{app:impl}. 
+
+
+\noindent\textbf{Results} 
+As shown in Table~\ref{tab:stove_res}, our method significantly and consistently outperforms all baselines on all objectives, with an average improvement of $24.5\%$. On the real-world experiments in Appendix~\ref{app:real_mem}, we achieve $23.3\%$ absolute in absolute success rate.
+Single-image methods such as TraceVLA almost always fail, since the task cannot be solved from the current observation alone, and visual traces provide only marginal additional benefit. 
+ContextVLA underperforms due to non-learnable pooling observations, which may discard critical temporal and spatial details.
+MemoryVLA presents the LLM backbone with only a single frame at each timestep, leaving multi-frame reasoning to a lightweight decoder; as a result, the LLM itself does not reason over multiple frames, which limits the model's capacity.
+While these baselines have their own ways to reduce context length, they do so at the cost of information or model capacity. In contrast, our approach preserves all relevant visual information by reusing temporally persistent static tokens, enabling effective multi-frame integration within a limited context window.
+
+\subsection{Ablation Studies}
+
+To validate the effectiveness of the proposed components, we conduct ablation studies on each of them, with results summarized in Table~\ref{tab:dysta-ablation}. From the second row, removing the contrastive learning objective leads to a noticeable performance degradation, as there is no longer an explicit mechanism to enforce temporal consistency in the static tokens. Performance also declines when the L2 static cache is removed and only a single-level static cache is used, as shown in the third row, highlighting the importance of the proposed multi-level caching design. Finally, replacing the learnable recache gate results in a further drop in performance, demonstrating the necessity of adaptive cache refreshing.
+
+\begin{table}[t]
+    \centering
+        \caption{Ablation studies. \emph{w/o Contrast} removes the contrastive learning objective during training. \emph{w/o L2 cache} ablates the multi-level design by retaining only a single static cache level. \emph{Fixed step} replaces the learnable recache gate by forcing the refresh of the cache at fixed intervals. The refresh interval is set to match the average recaching interval of \dysta{} (first row).}
+    \label{tab:dysta-ablation}
+    \resizebox{\linewidth}{!}{
+    \begin{tabular}{cccccc}
+    \toprule
+         & \multicolumn{2}{c}{visual matching} && \multicolumn{2}{c}{variant aggregation}  \\
+         \cmidrule{2-3}
+         \cmidrule{5-6}
+         & PickCan & MoveNear & & PickCan & MoveNear \\
+         \midrule
+        \dysta{} & $\mathbf{92.7}$ & $\mathbf{88.8}$ & &$\mathbf{92.4}$ & ${81.0}$ \\ 
+        w/o Contrast & $91.3$ & $84.6$ & &$91.6$ & $\mathbf{82.7}$ \\
+        w/o L2 cache & $92.0$ & $85.0$ & & $91.5$ & $81.5$ \\
+        fixed step & $87.7$ & $81.7$ & & $85.3$ & $74.8$ \\
+    \bottomrule
+    \end{tabular}
+    }
+\end{table}
+
+\subsection{Visualizations}
+We visualize the attention between the image and static/dynamic tokens across timesteps in Figure~\ref{fig:attention}.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figs/vis.pdf}
+% \vspace{-15pt}
+    \caption{Attention map visualization across time. For each token, we compute its last-layer attention to image patches and upsample the result to the full image resolution to produce a heatmap. Heatmaps are averaged over tokens of the same type and displayed by row (e.g., the Dynamic row shows the average attention heatmap of all dynamic tokens).}
+    \label{fig:attention}
+\end{figure}
+Dynamic tokens consistently attend to movable objects, most notably the gripper (including its shadow) and the apple on the tabletop. This behavior aligns with their intended role of capturing temporally varying, action-relevant elements in the scene.
+
+L1 static tokens, which are designed to represent the most persistent visual information, primarily focus on background and ambient regions. Their attention heatmaps are often strongest in areas without salient foreground objects. We interpret this behavior as L1 static tokens of shallow layers functioning as sink tokens, capturing coarse, global scene context rather than object-specific details. Importantly, their attention patterns remain highly consistent across timesteps, reflecting strong temporal invariance.
+
+L2 static tokens exhibit intermediate behavior between L1 static and dynamic tokens. They attend more strongly to semi-static objects, such as the drawer, which typically remains stationary most of the time. At $t=0$ both drawer handles are highlighted, as either could potentially be moved. After the drawer is opened ($t>100$), the attention maps stabilize and remain focused on the drawer structure, indicating that these tokens capture object-level static information with moderate temporal persistence. The robotic arm is also highlighted at certain frames, which we attribute to its importance in the task and the need to preserve its appearance across timesteps.
+
+We further illustrate how static-dynamic assignments evolve along a trajectory in Appendix~\ref{app:time_evo}.
+
