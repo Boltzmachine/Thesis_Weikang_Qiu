@@ -1,0 +1,33 @@
+% One page per glyph, transparent background, for assembly inside PowerPoint.
+% Shares its definitions with roadmap.tex via pics.tex, so the deck and the
+% thesis figure can never drift apart.
+\documentclass[border=1pt, multi=tikzpicture]{standalone}
+\input{pics}
+
+\newcommand{\glyph}[2][3.2]{\begin{tikzpicture}\pic[scale=#1] at (0,0) {#2};\end{tikzpicture}}
+
+\begin{document}
+\glyph{pichyper}        % 1  HyBRiD
+\glyph{picatlas}        % 2  Neuro-attn
+\glyph{picmirror}       % 3  FA-EEG
+\glyph{picsmallworld}   % 4  SWA
+\glyph{picbalance}      % 5  PRISM-I
+\glyph{picfmri}         % 6  Brain Instruction Tuning
+\glyph{pictext}         % 7  structured text
+\glyph{picobjects}      % 8  PRISM-II
+\glyph{picitems}        % 9  D-Edit
+\glyph[2.0]{picmindworld} % 10 Mind World Model (wide glyph)
+\glyph{pictokens}       % 11 DySta
+\glyph{picrobot}        % 12 control
+\glyph{picgoal}         % 13 PHIL
+\glyph[4.4]{picbrain}   % 14 MIND
+\glyph[4.4]{picglobe}   % 15 WORLD
+
+% 16  the lossy channel itself: wide in, pinched at language, narrower out
+\begin{tikzpicture}
+  \filldraw[draw=otgray!45, fill=otgray!8, line width=0.9pt]
+    (-5,1.05) -- (-1.3,0.26) -- (1.3,0.26) -- (5,0.52) --
+    (5,-0.52) -- (1.3,-0.26) -- (-1.3,-0.26) -- (-5,-1.05) -- cycle;
+  \draw[otgray!55, line width=1.2pt, -{Stealth[length=2.6mm]}] (-4.75,0) -- (4.7,0);
+\end{tikzpicture}
+\end{document}

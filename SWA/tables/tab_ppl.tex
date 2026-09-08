@@ -1,0 +1,29 @@
+\begin{table*}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.0pt}
+\caption{\small  Comparison of \textbf{WikiText Perplexity ($\downarrow$)}. We evaluate Base pruning methods (Wanda and SparseGPT) and their variants augmented with FARMS, ATP, and SWA at sparsity 0.5/0.7. Results are averaged over three seeds and reported as mean$_{\pm \text{std}}$. The best result in each setting is \colorbox{gray!15}{\textbf{bolded}}. SWA reduces perplexity and achieves the best values across all the models and sparsity levels.}
+\begin{tabular}{ccc|llll|llll}
+\toprule
+\multirow{2}{*}{\textbf{Model}} & \multirow{2}{*}{\textbf{Size}} & \multirow{2}{*}{\textbf{Sparsity}} & \multicolumn{4}{c|}{\textbf{Wanda}} & \multicolumn{4}{c}{\textbf{SparseGPT}} \\
+ &  &  & Base & + FARMS & + ATP & \textbf{+ SWA} & Base & + FARMS & + ATP & \textbf{+ SWA} \\
+\midrule
+\multirow{4}{*}{\shortstack{Llama 3.2}} & \multirow{2}{*}{1B} & 0.5 & 36.25$_{\scriptstyle \pm 0.18}$ & 33.90$_{\scriptstyle \pm 0.02}$ & 24.95$_{\scriptstyle \pm 0.04}$ & \cellcolor{gray!15}\textbf{22.42$_{\scriptstyle \pm 0.05}$} & 21.54$_{\scriptstyle \pm 0.29}$ & 21.14$_{\scriptstyle \pm 0.56}$ & 20.56$_{\scriptstyle \pm 0.34}$ & \cellcolor{gray!15}\textbf{20.47$_{\scriptstyle \pm 0.15}$} \\
+ &  & 0.7 & 415.60$_{\scriptstyle \pm 32.1}$& 380.20$_{\scriptstyle \pm 20.1}$& 264.10$_{\scriptstyle \pm 21.7}$& \cellcolor{gray!15}\textbf{256.67$_{\scriptstyle \pm 18.00}$} & 157.20$_{\scriptstyle \pm 3.2}$& 136.80$_{\scriptstyle \pm 5.3}$& 106.60$_{\scriptstyle \pm 3.2}$& \cellcolor{gray!15}\textbf{105.00$_{\scriptstyle \pm 3.6}$} \\
+ & \multirow{2}{*}{3B} & 0.5 & 19.71$_{\scriptstyle \pm 0.02}$ & 16.45$_{\scriptstyle \pm 0.09}$ & 14.42$_{\scriptstyle \pm 0.02}$ & \cellcolor{gray!15}\textbf{13.32$_{\scriptstyle \pm 0.12}$} & 23.98$_{\scriptstyle \pm 2.15}$ & 15.92$_{\scriptstyle \pm 1.85}$ & 13.53$_{\scriptstyle \pm 0.08}$ & \cellcolor{gray!15}\textbf{11.27$_{\scriptstyle \pm 0.98}$} \\
+ &  & 0.7 & 177.80$_{\scriptstyle \pm 5.6}$ & 132.6$_{\scriptstyle \pm 5.3}$ & 125.1$_{\scriptstyle \pm 0.8}$ & \cellcolor{gray!15}\textbf{120.65$_{\scriptstyle \pm 2.31}$} & 70.70$_{\scriptstyle \pm 5.07}$ & 67.67$_{\scriptstyle \pm 2.93}$ & 51.51$_{\scriptstyle \pm 3.83}$ & \cellcolor{gray!15}\textbf{49.56$_{\scriptstyle \pm 0.92}$} \\
+\multirow{2}{*}{\shortstack{Llama 3}} & \multirow{2}{*}{8B} & 0.5 & 11.86$_{\scriptstyle \pm 0.02}$ & 11.12$_{\scriptstyle \pm 0.03}$ & 11.50$_{\scriptstyle \pm 0.05}$ & \cellcolor{gray!15}\textbf{10.14$_{\scriptstyle \pm 0.03}$} & 11.69$_{\scriptstyle \pm 0.13}$ & 11.02$_{\scriptstyle \pm 0.87}$ & 10.72$_{\scriptstyle \pm 0.15}$ & \cellcolor{gray!15}\textbf{10.15$_{\scriptstyle \pm 0.08}$} \\
+ &  & 0.7 & 140.50$_{\scriptstyle \pm 2.6}$ & 90.02$_{\scriptstyle \pm 3.00}$ & 85.93$_{\scriptstyle \pm 0.82}$ & \cellcolor{gray!15}\textbf{84.98$_{\scriptstyle \pm 0.20}$} & 55.94$_{\scriptstyle \pm 3.23}$ & 52.55$_{\scriptstyle \pm 1.98}$ & 40.40$_{\scriptstyle \pm 1.94}$ & \cellcolor{gray!15}\textbf{38.75$_{\scriptstyle \pm 1.29}$} \\
+\midrule
+\multirow{6}{*}{\shortstack{Qwen 3}} & \multirow{2}{*}{4B} & 0.5 & 21.91$_{\scriptstyle \pm 2.08}$ & 19.69$_{\scriptstyle \pm 0.16}$ & 18.88$_{\scriptstyle \pm 0.03}$ & \cellcolor{gray!15}\textbf{17.86$_{\scriptstyle \pm 0.49}$} & 20.52$_{\scriptstyle \pm 0.43}$ & 19.58$_{\scriptstyle \pm 0.41}$ & 20.44$_{\scriptstyle \pm 0.45}$ & \cellcolor{gray!15}\textbf{19.30$_{\scriptstyle \pm 0.77}$} \\
+ &  & 0.7 & 101.80$_{\scriptstyle \pm 3.9}$ & 90.49$_{\scriptstyle \pm 4.84}$ & 64.78$_{\scriptstyle \pm 1.21}$ & \cellcolor{gray!15}\textbf{63.65$_{\scriptstyle \pm 0.27}$} & 50.93$_{\scriptstyle \pm 1.62}$ & 44.30$_{\scriptstyle \pm 2.26}$ & 46.45$_{\scriptstyle \pm 0.91}$ & \cellcolor{gray!15}\textbf{40.24$_{\scriptstyle \pm 0.38}$} \\
+ & \multirow{2}{*}{8B} & 0.5 & 14.90$_{\scriptstyle \pm 0.48}$ & 13.20$_{\scriptstyle \pm 0.03}$ & 12.91$_{\scriptstyle \pm 0.06}$ & \cellcolor{gray!15}\textbf{11.90$_{\scriptstyle \pm 0.09}$} & 15.09$_{\scriptstyle \pm 0.07}$ & 12.61$_{\scriptstyle \pm 0.12}$ & 13.08$_{\scriptstyle \pm 0.09}$ & \cellcolor{gray!15}\textbf{12.10$_{\scriptstyle \pm 0.14}$} \\
+ &  & 0.7 & 71.10$_{\scriptstyle \pm 1.86}$ & 65.46$_{\scriptstyle \pm 1.51}$ & 57.31$_{\scriptstyle \pm 1.28}$ & \cellcolor{gray!15}\textbf{54.05$_{\scriptstyle \pm 1.62}$} & 30.05$_{\scriptstyle \pm 0.66}$ & 25.13$_{\scriptstyle \pm 1.07}$ & 28.93$_{\scriptstyle \pm 0.43}$ & \cellcolor{gray!15}\textbf{20.10$_{\scriptstyle \pm 0.14}$} \\
+ & \multirow{2}{*}{14B} & 0.5 & 11.43$_{\scriptstyle \pm 0.04}$ & 11.38$_{\scriptstyle \pm 0.04}$ & 10.79$_{\scriptstyle \pm 0.04}$ & \cellcolor{gray!15}\textbf{10.02$_{\scriptstyle \pm 0.03}$} & 11.51$_{\scriptstyle \pm 0.05}$ & 11.36$_{\scriptstyle \pm 0.02}$ & 10.92$_{\scriptstyle \pm 0.10}$ & \cellcolor{gray!15}\textbf{9.95$_{\scriptstyle \pm 0.13}$} \\
+ &  & 0.7 & 37.04$_{\scriptstyle \pm 0.52}$ & 35.62$_{\scriptstyle \pm 0.27}$ & 34.29$_{\scriptstyle \pm 0.65}$ & \cellcolor{gray!15}\textbf{33.71$_{\scriptstyle \pm 0.45}$} & 20.82$_{\scriptstyle \pm 0.35}$ & 20.18$_{\scriptstyle \pm 0.16}$ & 20.37$_{\scriptstyle \pm 0.23}$ & \cellcolor{gray!15}\textbf{18.90$_{\scriptstyle \pm 0.28}$} \\
+\bottomrule
+\end{tabular}
+\label{tab:ppl}
+\vspace{-0.5cm}
+
+\end{table*}

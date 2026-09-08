@@ -1,0 +1,28 @@
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{6pt}
+\caption{ \small Ablation study on hierarchical structural deletion. We report the absolute WikiText perplexity (PPL ↓) of SWA and the PPL increase of each ablated variant relative to SWA under sparsity 0.5 and 0.7. SWA(Layer) uses only layer-level scores, and SWA(Head) uses only head-level scores.}
+\label{tab:ablation_hier}
+\begin{tabular}{lcccc}
+\toprule
+\multirow{2}{*}{\textbf{Variant}} 
+& \multicolumn{2}{c}{\textbf{SparseGPT}} 
+& \multicolumn{2}{c}{\textbf{Wanda}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+& \textbf{0.5} & \textbf{0.7} 
+& \textbf{0.5} & \textbf{0.7} \\
+\midrule
+\textbf{SWA} 
+& \textbf{11.27} & \textbf{49.56} 
+& \textbf{13.32} & \textbf{120.65} \\
+SWA(Layer) 
+& $+3.31$ & $+11.37$ 
+& $+0.05$ & $+6.96$ \\
+SWA(Head) 
+& $+3.63$ & $+19.56$ 
+& $+0.24$ & $+46.51$ \\
+\bottomrule
+\end{tabular}
+\vspace{-0.5cm}
+\end{table}

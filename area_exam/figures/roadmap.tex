@@ -1,0 +1,395 @@
+\documentclass[border=10pt]{standalone}
+
+% --- packages ---
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, shapes.geometric, fit, backgrounds, calc}
+
+% --- palette -------------------------------------------------------------
+% The five OpenTikZ palette names, re-bound to the area-exam deck's part colours
+% so this figure matches the other 71 slides. Body code uses names only.
+%   otblue  = Part 1   otteal  = Part 2   otorange = Part 3
+%   otpurple = auxiliary / "travels back out" / slow loop   otgray = structure
+\definecolor{otblue}{HTML}{4472C4}
+\definecolor{otteal}{HTML}{1F8A44}
+\definecolor{otorange}{HTML}{C8243C}
+\definecolor{otpurple}{HTML}{6B4FA8}
+\definecolor{otgray}{HTML}{5A5A5A}
+
+% --- shared glyph paths ---------------------------------------------------
+\def\otbrainpath{(-0.40,0.02)
+  .. controls (-0.46,0.34) and (-0.22,0.50) .. (0,0.44)
+  .. controls (0.22,0.50) and (0.46,0.34) .. (0.40,0.02)
+  .. controls (0.46,-0.30) and (0.20,-0.46) .. (0,-0.40)
+  .. controls (-0.20,-0.46) and (-0.46,-0.30) .. (-0.40,0.02) -- cycle}
+
+% ==== icon pics ===========================================================
+\tikzset{
+  % --- a brain: outline + midline + two folds -----------------------------
+  picbrain/.pic={
+    \filldraw[draw=otgray!80, fill=otpurple!12, line width=0.9pt] \otbrainpath;
+    \draw[otgray!65, line width=0.7pt] (0,0.44) -- (0,-0.40);
+    \draw[otgray!55, line width=0.55pt] (-0.30,0.28) .. controls (-0.12,0.20) and (-0.12,0.10) .. (-0.30,0.06);
+    \draw[otgray!55, line width=0.55pt] (-0.32,-0.06) .. controls (-0.14,-0.12) and (-0.14,-0.22) .. (-0.28,-0.28);
+    \draw[otgray!55, line width=0.55pt] ( 0.30,0.28) .. controls ( 0.12,0.20) and ( 0.12,0.10) .. ( 0.30,0.06);
+    \draw[otgray!55, line width=0.55pt] ( 0.32,-0.06) .. controls ( 0.14,-0.12) and ( 0.14,-0.22) .. ( 0.28,-0.28);
+  },
+  % --- HyBRiD: a hyperedge (blob) spanning three of five regions ----------
+  % two overlapping hyperedges: K parallel heads, each spanning its own subset
+  pichyper/.pic={
+    \filldraw[draw=otblue!75, fill=otblue!22, line width=1pt, rounded corners=8pt]
+      (-0.36,0.30) -- (0.30,0.36) -- (0.02,-0.20) -- cycle;
+    \filldraw[draw=otorange!70, fill=otorange!16, line width=1pt, rounded corners=8pt]
+      (0.02,-0.20) -- (0.46,-0.06) -- (-0.34,-0.34) -- cycle;
+    \foreach \p in {(-0.36,0.30),(0.30,0.36),(0.02,-0.20),(-0.34,-0.34),(0.46,-0.06)}
+      \filldraw[draw=otblue!85!black, fill=white, line width=1.1pt] \p circle[radius=0.095];
+  },
+  % --- Neuro-attn: a brain parcellated by an atlas ------------------------
+  picatlas/.pic={
+    \begin{scope}
+      \clip \otbrainpath;
+      \fill[otblue!34] (-0.6,0.02) rectangle (0,0.6);
+      \fill[otblue!14] (0,0.02) rectangle (0.6,0.6);
+      \fill[otteal!24] (-0.6,-0.6) rectangle (0,0.02);
+      \fill[otorange!22] (0,-0.6) rectangle (0.6,0.02);
+      \draw[white, line width=0.9pt] (-0.6,0.02) -- (0.6,0.02);
+      \draw[white, line width=0.9pt] (0,0.6) -- (0,-0.6);
+    \end{scope}
+    \draw[otgray!80, line width=0.9pt] \otbrainpath;
+    \filldraw[draw=otblue!80!black, fill=white, line width=0.7pt] (-0.22,0.22) circle[radius=0.07];
+    \filldraw[draw=otblue!80!black, fill=white, line width=0.7pt] (0.20,-0.18) circle[radius=0.07];
+  },
+  % --- FA-EEG: two mirror-image traces about a dashed axis ----------------
+  picmirror/.pic={
+    \draw[otgray!45, dashed, line width=0.6pt] (0,0.46) -- (0,-0.46);
+    \draw[otblue!80!black, line width=1pt]
+      (-0.46,-0.10) .. controls (-0.36,0.34) and (-0.26,-0.36) .. (-0.16,0.10)
+                    .. controls (-0.10,0.32) .. (-0.05,-0.02);
+    \draw[otblue!80!black, line width=1pt]
+      ( 0.46,-0.10) .. controls ( 0.36,0.34) and ( 0.26,-0.36) .. ( 0.16,0.10)
+                    .. controls ( 0.10,0.32) .. ( 0.05,-0.02);
+    \draw[otgray!55, line width=0.5pt, -{Stealth[length=1.3mm]}] (-0.30,-0.36) -- (-0.06,-0.36);
+    \draw[otgray!55, line width=0.5pt, -{Stealth[length=1.3mm]}] ( 0.30,-0.36) -- ( 0.06,-0.36);
+  },
+  % --- SWA: two clusters plus one long bridge (small-worldness) ----------
+  picsmallworld/.pic={
+    \foreach \a/\b in {-0.42/0.22,-0.20/0.34,-0.26/0.02}{
+      \foreach \c/\d in {-0.42/0.22,-0.20/0.34,-0.26/0.02}{
+        \draw[otpurple!55, line width=0.8pt] (\a,\b) -- (\c,\d);}}
+    \foreach \a/\b in {0.22/-0.06,0.44/0.10,0.34/-0.30}{
+      \foreach \c/\d in {0.22/-0.06,0.44/0.10,0.34/-0.30}{
+        \draw[otpurple!55, line width=0.8pt] (\a,\b) -- (\c,\d);}}
+    \draw[otorange!90, line width=1.4pt] (-0.20,0.34) -- (0.22,-0.06);
+    \foreach \p in {(-0.42,0.22),(-0.20,0.34),(-0.26,0.02),(0.22,-0.06),(0.44,0.10),(0.34,-0.30)}
+      \filldraw[draw=otpurple!80!black, fill=otpurple!28, line width=0.6pt] \p circle[radius=0.075];
+  },
+  % --- fMRI: a voxel grid with two active cells ---------------------------
+  picfmri/.pic={
+    \foreach \i in {0,1,2}{\foreach \j in {0,1,2}{
+      \draw[otgray!40, line width=0.4pt] (-0.42+0.28*\i,-0.42+0.28*\j) rectangle ++(0.28,0.28);}}
+    \fill[otteal!65] (-0.14,-0.14) rectangle ++(0.28,0.28);
+    \fill[otteal!32] (0.14,0.14) rectangle ++(0.28,0.28);
+    \fill[otteal!22] (-0.42,-0.42) rectangle ++(0.28,0.28);
+  },
+  % --- PRISM-I: which space is fMRI closer to? (a tilted balance) ---------
+  picbalance/.pic={
+    \draw[otgray!80, line width=1.3pt] (0,-0.30) -- (0,0.16);
+    \draw[otgray!80, line width=1.3pt] (-0.15,-0.34) -- (0.15,-0.34);
+    \draw[otgray!80, line width=1.3pt] (-0.46,0.00) -- (0.46,0.26);
+    \draw[otgray!70, line width=0.9pt] (-0.46,0.00) -- (-0.46,-0.06);
+    \filldraw[draw=otteal!80!black, fill=otteal!30, line width=1.1pt, rounded corners=1pt]
+      (-0.62,-0.36) rectangle (-0.30,-0.06);
+    \foreach \y in {-0.14,-0.23}{\draw[otteal!85!black, line width=1.1pt] (-0.57,\y) -- (-0.35,\y);}
+    \draw[otgray!70, line width=0.9pt] (0.46,0.26) -- (0.46,0.18);
+    \filldraw[draw=otgray!70, fill=otgray!12, line width=1.1pt, rounded corners=1pt]
+      (0.30,-0.12) rectangle (0.62,0.18);
+    \fill[otgray!55] (0.35,-0.06) -- (0.46,0.09) -- (0.57,-0.06) -- cycle;
+  },
+  % --- a page of text (the target space) ---------------------------------
+  pictext/.pic={
+    \filldraw[draw=otgray!65, fill=white, line width=0.7pt, rounded corners=2pt]
+      (-0.30,-0.42) rectangle (0.30,0.42);
+    \foreach \y in {0.26,0.12,-0.02,-0.16}{\draw[otteal!75!black, line width=0.9pt] (-0.20,\y) -- (0.20,\y);}
+    \draw[otteal!75!black, line width=0.9pt] (-0.20,-0.30) -- (0.04,-0.30);
+  },
+  % --- PRISM-II: object-centric reconstruction (objects kept apart) ------
+  % solid, not dashed: dash patterns disappear at the size this renders.
+  picobjects/.pic={
+    \filldraw[draw=otgray!70, fill=white, line width=1pt, rounded corners=2pt]
+      (-0.46,-0.36) rectangle (0.46,0.36);
+    \filldraw[draw=otteal!80!black, fill=otteal!45, line width=1pt]
+      (-0.21,0.04) circle[radius=0.21];
+    \filldraw[draw=otorange!80!black, fill=otorange!40, line width=1pt, rounded corners=1pt]
+      (0.06,-0.28) rectangle (0.38,0.10);
+  },
+  % --- D-Edit: one image, one prompt per item ----------------------------
+  picitems/.pic={
+    \fill[otteal!28] (-0.44,-0.32) rectangle (-0.08,0.32);
+    \fill[otorange!30] (-0.04,-0.32) rectangle (0.18,0.06);
+    \fill[otpurple!26] (0.22,-0.32) rectangle (0.44,0.32);
+    \fill[otgray!10] (-0.04,0.10) rectangle (0.18,0.32);
+    \draw[otgray!75, line width=1pt, rounded corners=2pt] (-0.46,-0.34) rectangle (0.46,0.34);
+    \foreach \x in {-0.06,0.20}{\draw[white, line width=1.6pt] (\x,-0.34) -- (\x,0.34);}
+  },
+  % --- Mind World Model: EEG drives the prediction of the next frame -----
+  picmindworld/.pic={
+    \draw[otorange!85!black, line width=1pt]
+      (-0.86,0.00) .. controls (-0.78,0.26) and (-0.70,-0.26) .. (-0.62,0.04)
+                   .. controls (-0.54,0.30) and (-0.46,-0.30) .. (-0.38,0.02)
+                   .. controls (-0.32,0.20) .. (-0.26,-0.04);
+    \draw[otgray!70, line width=0.7pt, -{Stealth[length=1.5mm]}] (-0.20,0.00) -- (-0.02,0.00);
+    \filldraw[draw=otgray!60, fill=otgray!10, line width=0.7pt, rounded corners=1.5pt]
+      (0.04,-0.22) rectangle (0.38,0.22);
+    \filldraw[draw=otorange!80!black, fill=otorange!14, line width=0.8pt, rounded corners=1.5pt]
+      (0.46,-0.26) rectangle (0.86,0.26);
+    \draw[otgray!70, line width=0.7pt, -{Stealth[length=1.4mm]}] (0.40,0.00) -- (0.44,0.00);
+    \fill[otgray!35] (0.09,-0.17) -- (0.18,-0.02) -- (0.27,-0.17) -- cycle;
+    \fill[otorange!45] (0.53,-0.20) -- (0.64,-0.01) -- (0.75,-0.20) -- cycle;
+  },
+  % --- DySta: one static row reused, dynamic row recomputed --------------
+  pictokens/.pic={
+    \foreach \i in {0,1,2,3}{
+      \filldraw[draw=otorange!80!black, fill=otorange!35, line width=0.9pt, rounded corners=1pt]
+        (-0.46+0.24*\i,0.10) rectangle ++(0.18,0.18);}
+    \draw[otgray!55, dashed, line width=0.8pt] (-0.54,0.02) -- (0.54,0.02);
+    \foreach \i in {0,1,2,3}{
+      \filldraw[draw=otgray!70, fill=white, line width=0.9pt, rounded corners=1pt]
+        (-0.46+0.24*\i,-0.30) rectangle ++(0.18,0.18);}
+    \draw[otorange!80!black, line width=0.7pt, -{Stealth[length=1.3mm]}]
+      (0.30,0.19) .. controls (0.52,0.19) and (0.52,0.19) .. (0.52,0.10);
+  },
+  % --- a robot arm (the embodied end) ------------------------------------
+  picrobot/.pic={
+    \fill[otgray!65] (-0.42,-0.44) rectangle (-0.16,-0.34);
+    \draw[otgray!70, line width=1.5pt, line cap=round] (-0.29,-0.34) -- (-0.29,-0.06);
+    \draw[otgray!70, line width=1.5pt, line cap=round] (-0.29,-0.06) -- (0.06,0.24);
+    \draw[otorange!85!black, line width=1.5pt, line cap=round] (0.06,0.24) -- (0.36,0.06);
+    \draw[otorange!85!black, line width=1.1pt, line cap=round] (0.36,0.06) -- (0.48,0.16);
+    \draw[otorange!85!black, line width=1.1pt, line cap=round] (0.36,0.06) -- (0.46,-0.06);
+    \filldraw[draw=otgray!80, fill=white, line width=1pt] (-0.29,-0.06) circle[radius=0.07];
+    \filldraw[draw=otgray!80, fill=white, line width=1pt] (0.06,0.24) circle[radius=0.07];
+  },
+  % --- PHIL: a sparse goal, a planned path -------------------------------
+  picgoal/.pic={
+    \draw[otpurple!85, line width=1.3pt] (0.30,0.18) circle[radius=0.22];
+    \fill[otpurple!85] (0.30,0.18) circle[radius=0.09];
+    \draw[otpurple!85, line width=1.3pt, line cap=round, line join=round]
+      (-0.50,-0.28) -- (-0.20,-0.06) -- (-0.02,-0.28) -- (0.30,0.18);
+    \filldraw[draw=otpurple!85!black, fill=white, line width=1.1pt] (-0.50,-0.28) circle[radius=0.10];
+  },
+  % --- the world -----------------------------------------------------------
+  picglobe/.pic={
+    \filldraw[draw=otteal!80!black, fill=otteal!10, line width=0.9pt] (0,0) circle[radius=0.40];
+    \draw[otteal!80!black, line width=0.6pt] (-0.40,0) -- (0.40,0);
+    \draw[otteal!80!black, line width=0.6pt] (-0.31,0.25) -- (0.31,0.25);
+    \draw[otteal!80!black, line width=0.6pt] (-0.31,-0.25) -- (0.31,-0.25);
+    \draw[otteal!80!black, line width=0.6pt] (0,0.40) .. controls (-0.24,0.12) and (-0.24,-0.12) .. (0,-0.40);
+    \draw[otteal!80!black, line width=0.6pt] (0,0.40) .. controls ( 0.24,0.12) and ( 0.24,-0.12) .. (0,-0.40);
+  },
+}
+
+\begin{document}
+% ==== parameters (edit these) ============================================
+\def\colw{9.4}        % width of one part column (cm)
+\def\colgap{2.3}      % gap between part columns (cm)
+\def\rowa{0}          % y of row A inside a column
+\def\rowb{-2.4}      % y of row B
+\def\rowc{-4.75}      % y of row C
+\def\rowbb{-3.55}     % y of the two Part 3 branches
+\def\bandy{6.9}       % y of the premise band
+\def\cardw{2.6}       % width of a small (three-across) card
+\def\cardh{2.3}       % height of a row-A card
+\def\iconup{0.30}     % icon offset above a card's centre
+\def\labdn{-0.48}     % label offset below a card's centre
+% labels
+\def\partonetitle{PART 1 \textbf{The Foundation}}
+\def\parttwotitle{PART 2 \textbf{The Bridge}}
+\def\partthreetitle{PART 3 \textbf{The Embodiment}}
+\def\partonesub{Models for Brain Signals}
+\def\parttwosub{From Signals to Representations}
+\def\partthreesub{From Representations to Interactions}
+% =========================================================================
+
+\begin{tikzpicture}[
+    >={Stealth[length=2.2mm]},
+    font=\sffamily,
+    card/.style={
+      rounded corners=4pt, line width=0.8pt, align=center,
+      inner sep=6pt, font=\sffamily\fontsize{12}{14}\selectfont,
+    },
+    p1/.style={card, draw=otblue!75!black, fill=otblue!10},
+    p2/.style={card, draw=otteal!75!black, fill=otteal!10},
+    p3/.style={card, draw=otorange!75!black, fill=otorange!08},
+    ghost/.style={card, draw=otpurple!70, fill=otpurple!07, dashed},
+    bar/.style={card, draw=otgray!45, fill=white, font=\sffamily\fontsize{13}{15}\selectfont},
+    hub/.style={card, draw=otblue!60!black, fill=otblue!06, line width=1pt,
+                font=\sffamily\fontsize{13}{15}\selectfont, text=otgray!20!black},
+    clab/.style={font=\sffamily\fontsize{12}{14}\selectfont\bfseries, text=otgray!25!black, align=center},
+    csub/.style={font=\sffamily\fontsize{10.5}{12}\selectfont, text=otgray!85, align=center},
+    link/.style={draw=otgray!75, line width=1pt, ->},
+    backlink/.style={draw=otpurple!85, line width=1pt, ->, dashed},
+    elab/.style={font=\sffamily\fontsize{10.5}{12}\selectfont, text=otgray!95, inner sep=2pt, midway, right, xshift=3pt},
+    sub/.style={font=\sffamily\fontsize{11}{13}\selectfont, text=otgray!85},
+    group/.style={draw=otgray!35, rounded corners=6pt, line width=0.8pt,
+                  inner sep=14pt, fill=otgray!4},
+  ]
+
+  % ---------- column origins ----------
+  \def\cA{0}
+  \pgfmathsetmacro{\cB}{\colw+\colgap}
+  \pgfmathsetmacro{\cC}{2*(\colw+\colgap)}
+
+  % ================= PART 1 : discover -> build in -> travel back out =====
+  \node[p1, minimum width=\cardw cm, minimum height=\cardh cm] (hybrid) at (\cA-2.9,\rowa) {};
+    \pic[scale=1.05] at ([yshift=\iconup cm]hybrid.center) {pichyper};
+    \node[clab] at ([yshift=\labdn cm]hybrid.center) {HyBRiD};
+
+  \node[p1, minimum width=\cardw cm, minimum height=\cardh cm] (neuro) at (\cA,\rowa) {};
+    \pic[scale=1.05] at ([yshift=\iconup cm]neuro.center) {picatlas};
+    \node[clab] at ([yshift=\labdn cm]neuro.center) {Neuro-attn};
+
+  \node[p1, minimum width=\cardw cm, minimum height=\cardh cm] (faeeg) at (\cA+2.9,\rowa) {};
+    \pic[scale=1.05] at ([yshift=\iconup cm]faeeg.center) {picmirror};
+    \node[clab] at ([yshift=\labdn cm]faeeg.center) {FA-EEG};
+
+  % the hub: the prior itself. HyBRiD writes into it, the other two read from it.
+  \node[hub, minimum width=8.4cm, minimum height=1cm] (foundation) at (\cA,\rowb)
+    {\textbf{neural priors} --- how the brain is organised};
+
+  \node[ghost, minimum width=8.4cm, minimum height=1.4cm] (backout) at (\cA,\rowc) {};
+    \pic[scale=1.1] at ([xshift=-3.2cm]backout.center) {picsmallworld};
+    \node[clab, anchor=west, text=otpurple!35!black] at ([xshift=-2.5cm,yshift=0cm]backout.center) {SWA};
+
+  % HyBRiD discovers a prior; the other two have one built in. Opposite directions.
+  \draw[link] (hybrid.south) -- ([xshift=-2.9cm]foundation.north)
+    node[elab]{ML $\to$ prior};
+  \draw[link] (foundation.north) -- (neuro.south)
+    node[elab]{prior $\to$ ML};
+  \draw[link] ([xshift=2.9cm]foundation.north) -- (faeeg.south);
+  \draw[backlink] (foundation.south) -- (backout.north)
+    node[elab, text=otpurple]{the prior travels back out};
+
+  % ================= PART 2 : which space, then bridge to it ==============
+  \node[p2, minimum width=4.05cm, minimum height=\cardh cm] (prism1) at (\cB-2.18,\rowa) {};
+    \pic[scale=1.15] at ([yshift=\iconup cm]prism1.center) {picbalance};
+    \node[clab] at ([yshift=\labdn cm]prism1.center) {PRISM --- I};
+
+  \node[p2, minimum width=4.05cm, minimum height=\cardh cm] (encoder) at (\cB+2.18,\rowa) {};
+    \pic[scale=1.05] at ([yshift=\iconup cm]encoder.center) {picfmri};
+    \node[clab] at ([yshift=\labdn cm]encoder.center) {Brain Instruction\\Tuning};
+
+  \node[p2, minimum width=8.4cm, minimum height=1.6cm] (space) at (\cB,\rowb) {};
+    \pic[scale=1.0] at ([xshift=-3.3cm]space.center) {pictext};
+    \node[anchor=west, font=\sffamily\fontsize{13}{15}\selectfont, align=left, text=otgray!20!black]
+      at ([xshift=-2.5cm,yshift=0.02cm]space.center)
+      {\textcolor{otteal!70!black}{\bfseries obj}\; dog \quad
+       \textcolor{otteal!70!black}{\bfseries attr}\; fluffy \quad
+       \textcolor{otteal!70!black}{\bfseries rel}\; on grass};
+
+  \node[p2, minimum width=4.05cm, minimum height=1.4cm] (prism2) at (\cB-2.18,\rowc) {};
+    \pic[scale=1.05] at ([xshift=-1.45cm]prism2.center) {picobjects};
+    \node[clab, anchor=west] at ([xshift=-0.95cm,yshift=0cm]prism2.center) {PRISM --- II};
+
+  \node[p2, minimum width=4.05cm, minimum height=1.4cm] (dedit) at (\cB+2.18,\rowc) {};
+    \pic[scale=1.05] at ([xshift=-1.45cm]dedit.center) {picitems};
+    \node[clab, anchor=west] at ([xshift=-0.95cm,yshift=0cm]dedit.center) {D-Edit};
+
+  \draw[link] (prism1.south)  -- ([xshift=-2.18cm]space.north) node[elab]{which space?};
+  \draw[link] (encoder.south) -- ([xshift=2.18cm]space.north);
+  \draw[link] ([xshift=-2.18cm]space.south) -- (prism2.north);
+  \draw[link] (prism2.east) -- (dedit.west);
+
+  % ================= PART 3 : two branches off the mind side ==============
+  % DySta *is* the controller, so there is no separate control node. PHIL takes
+  % its goal straight from the neural signal, never from DySta, and hands
+  % nothing on to an executor -- it is a parallel slow loop, not a stage.
+  \node[p3, minimum width=8.4cm, minimum height=\cardh cm] (mwm) at (\cC,\rowa) {};
+    \pic[scale=1.55] at ([yshift=\iconup cm]mwm.center) {picmindworld};
+    \node[clab] at ([yshift=\labdn cm]mwm.center) {Mind World Model};
+
+  \node[p3, minimum width=4.05cm, minimum height=2.1cm] (dysta) at (\cC-2.18,\rowbb) {};
+    \pic[scale=1.0] at ([yshift=0.46cm]dysta.center) {pictokens};
+    \node[clab] at ([yshift=-0.16cm]dysta.center) {DySta};
+    \node[csub, align=center] at ([yshift=-0.62cm]dysta.center) {VLA control\\the fast loop};
+
+  \node[ghost, minimum width=4.05cm, minimum height=2.1cm] (phil) at (\cC+2.18,\rowbb) {};
+    \pic[scale=0.95] at ([yshift=0.46cm]phil.center) {picgoal};
+    \node[clab, text=otpurple!35!black] at ([yshift=-0.16cm]phil.center) {PHIL};
+    \node[csub, align=center] at ([yshift=-0.62cm]phil.center) {a path to the goal\\the slow loop};
+
+  \draw[link] ([xshift=-2.18cm]mwm.south) -- (dysta.north)
+    node[elab, text=otorange]{step-by-step actions};
+  \draw[backlink] ([xshift=2.18cm]mwm.south) -- (phil.north)
+    node[elab, text=otpurple]{a goal, not a trajectory};
+
+  % ================= part boundaries + headers ============================
+  \begin{scope}[on background layer]
+    \node[group, fit=(hybrid)(neuro)(faeeg)(foundation)(backout)]      (gA) {};
+    \node[group, fit=(prism1)(encoder)(space)(prism2)(dedit)]          (gB) {};
+    \node[group, fit=(mwm)(dysta)(phil)]                              (gC) {};
+  \end{scope}
+  \foreach \g/\c/\t/\s in {%
+      gA/otblue/{\partonetitle}/{\partonesub},
+      gB/otteal/{\parttwotitle}/{\parttwosub},
+      gC/otorange/{\partthreetitle}/{\partthreesub}}
+    {%
+      \node[fill=\c, text=white, inner xsep=11pt, inner ysep=6pt, align=left,
+            anchor=south west, font=\sffamily\fontsize{13.5}{15.5}\selectfont, rounded corners=3pt]
+        (\g h) at ([yshift=4pt]\g.north west)
+        {\t\\[1.5pt]\textcolor{white!88}{\fontsize{10.5}{12}\selectfont\s}};
+    }
+  \draw[link, line width=1.3pt] (gA.east) -- (gB.west)
+    node[midway, above, font=\sffamily\fontsize{10.5}{12}\selectfont, text=otgray, align=center]{signals\\$\rightarrow$ semantics};
+  \draw[link, line width=1.3pt] (gB.east) -- (gC.west)
+    node[midway, above, font=\sffamily\fontsize{10.5}{12}\selectfont, text=otgray, align=center]{semantics\\$\rightarrow$ action};
+
+  % ================= premise band: a lossy channel ========================
+  \coordinate (bC) at (\cB,\bandy);
+  \coordinate (f1) at ($(bC)+(-5.0,0)$);
+  \coordinate (f2) at ($(bC)+(-1.3,0)$);
+  \coordinate (f3) at ($(bC)+(1.3,0)$);
+  \coordinate (f4) at ($(bC)+(5.0,0)$);
+
+  % the pipe: wide in, pinched at language, narrower out
+  \filldraw[draw=otgray!45, fill=otgray!8, line width=0.9pt]
+    ($(f1)+(0,1.05)$) -- ($(f2)+(0,0.26)$) -- ($(f3)+(0,0.26)$) -- ($(f4)+(0,0.52)$) --
+    ($(f4)+(0,-0.52)$) -- ($(f3)+(0,-0.26)$) -- ($(f2)+(0,-0.26)$) -- ($(f1)+(0,-1.05)$) -- cycle;
+  \draw[otgray!55, line width=1.2pt, ->] ($(f1)+(0.2,0)$) -- ($(f4)+(-0.25,0)$);
+  \filldraw[draw=otorange, fill=white, line width=1.3pt, rounded corners=3pt]
+    ($(f2)+(-0.12,-0.58)$) rectangle ($(f3)+(0.12,0.58)$);
+  \node[font=\sffamily\fontsize{17}{19}\selectfont\bfseries, text=otorange] at (bC) {language};
+
+  % information that does not survive the pinch
+  \foreach \dx/\dy/\s in {-0.90/-1.02/0.20, -0.42/-1.34/0.26, 0.08/-0.98/0.30,
+                          0.54/-1.44/0.22, 1.00/-1.06/0.25}{
+    \filldraw[draw=otorange!55, fill=otorange!22, line width=0.6pt, rounded corners=1pt]
+      ($(bC)+(\dx,\dy)$) rectangle ++(\s,\s);}
+  \node[font=\sffamily\fontsize{10.5}{12}\selectfont\itshape, text=otorange!55!black, anchor=north]
+    at ($(bC)+(0.35,-1.80)$) {what the words leave out};
+
+  \pic[scale=1.7] at ($(f1)+(-1.5,0)$) {picbrain};
+  \node[font=\sffamily\fontsize{21}{23}\selectfont\bfseries, text=otgray!15!black] at ($(f1)+(-1.5,-1.35)$) {MIND};
+  \pic[scale=1.7] at ($(f4)+(1.5,0)$) {picglobe};
+  \node[font=\sffamily\fontsize{21}{23}\selectfont\bfseries, text=otgray!15!black] at ($(f4)+(1.5,-1.35)$) {WORLD};
+
+  \node[sub, anchor=north] at ($(bC)+(0,-2.50)$)
+    {the channel is lossy in both directions --- measured in RepQA};
+  \node[font=\sffamily\fontsize{13}{15}\selectfont\bfseries, text=otgray!15!black, anchor=north]
+    at ($(bC)+(0,-2.96)$)
+    {So: build the path that does not route through language};
+
+  % fan out from the premise into the three parts
+  \coordinate (hub) at ($(bC)+(0,-3.52)$);
+  \foreach \g in {gA,gB,gC}{
+    \draw[otgray!45, line width=0.9pt, -{Stealth[length=2mm]}, rounded corners=8pt]
+      (hub) -| ($(\g.north)+(2.6,0.16)$);}
+
+  % ================= closing bar: the bypass the three parts build =========
+  \coordinate (byL) at ($(gA.south west)+(0.4,-0.75)$);
+  \coordinate (byR) at ($(gC.south east)+(-0.4,-0.75)$);
+  \draw[-{Stealth[length=5mm,width=4mm]}, line width=3.5pt, otgray!30] (byL) -- (byR);
+  \node[font=\sffamily\fontsize{13}{15}\selectfont\bfseries, text=otgray!15!black, fill=white, inner sep=5pt]
+    at ($(byL)!0.5!(byR)$)
+    {the direct path: brain signals $\rightarrow$ semantics $\rightarrow$ action, never through language};
+
+\end{tikzpicture}
+\end{document}

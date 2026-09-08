@@ -28,6 +28,8 @@ We train \alg with a hyperparameter configuration of $T = 128$,  $t_{\tau} = 32$
 
 \begin{table*}[!htb]
 \centering
+\caption{The number of expanded graph nodes of \alg with respect to \sail. We can observe that out of all baselines, \sail performs best. \alg outperforms \sail by $58.5 \%$ on average over all datasets, with a maximal search effort reduction of $82.3 \%$ in the \textit{Gaps+Forest} dataset.}
+\label{tab:table-1}
 \resizebox{\columnwidth}{!}{%
 
 \begin{tabular}{ccccccccccccccc} \toprule
@@ -53,9 +55,6 @@ Multiple Bugtraps   & \frame{\includegraphics[width=0.6cm, height=0.6cm]{figures
 % Multiple Bugtraps   & \frame{\includegraphics[width=0.6cm, height=0.6cm]{figures/mb1.png}}  & \frame{\includegraphics[width=0.6cm, height=0.6cm]{figures/mb2.png}}  & \frame{\includegraphics[width=0.6cm, height=0.6cm]{figures/mb3.png}} 	&1.000	&1.002	&2.088	&1.743	&1.353	&1.288	&2.088	&1.829 &0.353 & & \textbf{0.382}  \\ \bottomrule
 \end{tabular}
 }
-\caption{The number of expanded graph nodes of \alg with respect to \sail. We can observe that out of all baselines, \sail performs best. \alg outperforms \sail by $58.5 \%$ on average over all datasets, with a maximal search effort reduction of $82.3 \%$ in the \textit{Gaps+Forest} dataset.}
-\label{tab:table-1}
-
 \end{table*}
 
 %\jure{Could we add squares/boxes around Graph Examples (as in Fig 4). I think then it will be much clearer that these are same things as in Fig 4).}
@@ -115,6 +114,8 @@ In this experiment, our goal is to demonstrate the general applicability of \alg
 
 \begin{table*}[!htb]
 \centering
+\caption{Comparison of \alg with baseline approaches on $4$ groups of datasets: citation networks, biological networks, abstract syntax trees, and road networks. "$-$" denotes being out of a 4-day's training time limit. We can observe that, on average across all datasets, \alg outperforms the best baseline per dataset by $13.4 \%$. Discounting the OGBG datasets, this number becomes $19.5 \%$.}
+\label{tab:table-2}
 \resizebox{\columnwidth}{!}{
 
 \begin{tabular}{c|c|ccc|ccccccc} 
@@ -135,8 +136,6 @@ In this experiment, our goal is to demonstrate the general applicability of \alg
 \bottomrule
 \end{tabular}
 }
-\caption{Comparison of \alg with baseline approaches on $4$ groups of datasets: citation networks, biological networks, abstract syntax trees, and road networks. "$-$" denotes being out of a 4-day's training time limit. We can observe that, on average across all datasets, \alg outperforms the best baseline per dataset by $13.4 \%$. Discounting the OGBG datasets, this number becomes $19.5 \%$.}
-\label{tab:table-2}
 \end{table*}
 
 
@@ -178,6 +177,8 @@ In our final experiment, we use \alg to plan collision-free paths in a practical
 \xhdr{Video demo} We provide a video demonstration of \alg running in \textit{room adversarial}: \url{https://cutt.ly/eniu5ax}.
 \begin{table*}[!htb]
 \centering
+\caption{Results of \alg in the context of planning for indoor UAV flight. \alg outperforms all baselines in both the \textit{room simple} and \textit{room adversarial} environments while remaining close performance-wise to the optimal number of expansions.}
+\label{tab:table-3}
 \resizebox{0.7\columnwidth}{!}{%
 
 \begin{tabular}{cccccccc|c} \toprule
@@ -186,8 +187,6 @@ Room simple   & 1.124 & 76.052  & 1.000 & 291.888 & 0.973 & 1.286 & \textbf{0.78
 Room adversarial  & 2.022 & 67.215   & 1.000 & 238.768 & 0.944 & 1.583 & \textbf{0.895} & 0.853                  \\ \bottomrule
 \end{tabular}
 }
-\caption{Results of \alg in the context of planning for indoor UAV flight. \alg outperforms all baselines in both the \textit{room simple} and \textit{room adversarial} environments while remaining close performance-wise to the optimal number of expansions.}
-\label{tab:table-3}
 \end{table*}
 
 \xhdr{Discussion} As we can observe in Table \ref{tab:table-3}, \alg outperforms all baselines in both environments. Interestingly, \alg expands only approximately $0.3\%$ more nodes in the simple room than least possible and $4.9\%$ more in the adversarial room case. The same figures for the greedy method ($h_{euc}$) are $27.8\%$  and $17.2 \%$, respectively. These results indicate that \alg is capable of learning planning strategies that are close to optimal in both \textit{simple} and \textit{adversarial} graphs, while the performance of naive heuristics degrades.

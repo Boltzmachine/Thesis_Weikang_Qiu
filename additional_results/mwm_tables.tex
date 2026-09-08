@@ -1,0 +1,49 @@
+% Mind World Models -- results tables, exported from deck/dissertation.pptx slide 37.
+% Requires booktabs + multirow (both already loaded in macros.tex).
+
+\begin{table}[t]
+    \centering
+    \caption{World model: next-frame prediction on held-out episodes. The mind model is
+    supervised only through the world model's next-frame prediction error.
+    $\Delta_\mathrm{act}$ is the degradation when the EEG segment is replaced by a
+    negative sample, in units of $10^{-3}$; it is $0$ by construction for the
+    randomly initialised encoder.}
+    \label{tab:mwm_world}
+    \begin{tabular}{llccc}
+    \toprule
+        Split & Encoder & $L_1\downarrow$ & $\cos\uparrow$ & $\Delta_\mathrm{act}\uparrow$ \\
+    \midrule
+        \multirow{3}{*}{Within-subject}
+            & Ours        & $\mathbf{0.50}$ & $\mathbf{0.88}$ & $\mathbf{7.9}$ \\
+            & LAWM        & $0.65$ & $0.85$ & $2.1$ \\
+            & Random init & $0.73$ & $0.83$ & $0.0$ \\
+    \midrule
+        \multirow{3}{*}{Cross-subject}
+            & Ours        & $\mathbf{0.49}$ & $\mathbf{0.89}$ & $\mathbf{5.7}$ \\
+            & LAWM        & $0.55$ & $0.87$ & $2.9$ \\
+            & Random init & $0.72$ & $0.84$ & $0.0$ \\
+    \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{table}[t]
+    \centering
+    \caption{Motor-imagery transfer on seven benchmarks, measured by F1 ($\%$).
+    Bold marks the best result in each row.}
+    \label{tab:mwm_motor_imagery}
+    \begin{tabular}{lccc}
+    \toprule
+        Dataset & CSBrain & CBraMod & Ours (WM) \\
+    \midrule
+        Pre-training EEG & $>9{,}000$\,h & $>9{,}000$\,h & $\mathbf{61}$\,\textbf{h} \\
+    \midrule
+        PhysioNet-MI    & $59.90$ & $61.99$ & $\mathbf{63.30}$ \\
+        FineMI          & $18.58$ & $19.72$ & $\mathbf{20.00}$ \\
+        Kaya5F          & $38.03$ & $39.04$ & $\mathbf{41.89}$ \\
+        Weibo2014       & $16.76$ & $18.45$ & $\mathbf{18.61}$ \\
+        Forenzo2024     & $30.74$ & $30.64$ & $\mathbf{31.91}$ \\
+        Jeong2020       & $15.44$ & $15.32$ & $\mathbf{16.01}$ \\
+        Forenzo2024Reg  & $21.33$ & $19.77$ & $\mathbf{22.07}$ \\
+    \bottomrule
+    \end{tabular}
+\end{table}

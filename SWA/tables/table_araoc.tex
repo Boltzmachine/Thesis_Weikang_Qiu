@@ -1,0 +1,65 @@
+\begin{table*}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{6pt}
+
+\caption{\small ARAOC task mismatch rate at sparsity 0.5. We report mismatch rate (Not M $\downarrow$) across six tasks. Results are averaged over five runs and reported as mean$_{\pm \text{std}}$. The best result in each setting is \colorbox{gray!15}{\textbf{bolded}}.}
+
+\begin{tabular}{l|cccccc}
+\toprule
+\textbf{Method} 
+& \textbf{Move} 
+& \textbf{Change Color} 
+& \textbf{Copy} 
+& \textbf{Mirror} 
+& \textbf{Fill Internal} 
+& \textbf{Scale} \\
+\midrule
+
+Qwen3 8B (Non-Pruned) 
+& 36.00$_{\scriptstyle \pm 4.11}$
+& 23.14$_{\scriptstyle \pm 4.61}$
+& 12.18$_{\scriptstyle \pm 4.12}$
+& 84.66$_{\scriptstyle \pm 3.20}$
+& 6.07$_{\scriptstyle \pm 1.99}$
+& 83.33$_{\scriptstyle \pm 5.87}$ \\
+\midrule
+
+SparseGPT 
+& 44.21$_{\scriptstyle \pm 9.20}$
+& 48.87$_{\scriptstyle \pm 10.40}$
+& 60.99$_{\scriptstyle \pm 10.67}$
+& 94.76$_{\scriptstyle \pm 9.21}$
+& 34.25$_{\scriptstyle \pm 4.67}$
+& 88.91$_{\scriptstyle \pm 8.03}$ \\
+
+SparseGPT + FARMS 
+& 46.22$_{\scriptstyle \pm 8.21}$
+& 50.77$_{\scriptstyle \pm 15.85}$
+& 56.60$_{\scriptstyle \pm 12.80}$
+& 96.66$_{\scriptstyle \pm 10.76}$
+& 33.11$_{\scriptstyle \pm 5.11}$
+& 88.06$_{\scriptstyle \pm 8.95}$ \\
+
+SparseGPT + ATP 
+& 43.08$_{\scriptstyle \pm 9.01}$
+& 47.78$_{\scriptstyle \pm 8.66}$
+& 56.77$_{\scriptstyle \pm 12.48}$
+& 93.55$_{\scriptstyle \pm 9.63}$
+& 32.65$_{\scriptstyle \pm 5.81}$
+& 89.48$_{\scriptstyle \pm 7.47}$ \\
+
+SparseGPT + \textbf{SWA} 
+& \cellcolor{gray!15}\textbf{41.41$_{\scriptstyle \pm 9.39}$}
+& \cellcolor{gray!15}\textbf{47.07$_{\scriptstyle \pm 9.68}$}
+& \cellcolor{gray!15}\textbf{56.11$_{\scriptstyle \pm 11.62}$}
+& \cellcolor{gray!15}\textbf{91.28$_{\scriptstyle \pm 8.99}$}
+& \cellcolor{gray!15}\textbf{30.69$_{\scriptstyle \pm 4.17}$}
+& \cellcolor{gray!15}\textbf{86.20$_{\scriptstyle \pm 8.17}$} \\
+
+\bottomrule
+\end{tabular}
+\vspace{-0.5cm}
+
+\label{tab:araoc_split}
+\end{table*}

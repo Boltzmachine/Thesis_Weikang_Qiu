@@ -1,6 +1,11 @@
 \chapter{Learning Graph Search Heuristics}
 \label{chapter:phil}
 
+Planning is crucial for embodied AIs. First, a robot needs to walk from the start point to the goal point, while avoiding collisions with all the furnitures or obstacles in the scene. Further, the robot also needs to plan over abstract states---where it stands, what it holds, whether a task is complete---rather than positions alone. Learned world models make this tractable: by encoding experience into latent states and predicting reachability between them, they induce a graph in which nodes are states and edges carry predicted step counts. Long-horizon planning becomes a search over this graph.
+
+
+This motivates PHIL, which learns a graph neural network heuristic from this structure and plugs directly into existing search algorithms (e.g., A*).
+
 \input{PHIL/000intro}
 \input{PHIL/002preliminaries}
 \input{PHIL/001related_work}

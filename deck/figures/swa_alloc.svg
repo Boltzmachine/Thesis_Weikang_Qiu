@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1350" height="960" viewBox="0 0 450 320" font-family="Calibri, 'PingFang SC', 'Helvetica Neue', sans-serif">
+<rect width="450.0" height="320.0" fill="#FFFFFF"/>
+<text x="6" y="24" font-size="12.5" font-weight="bold" fill="#00356B">哪些头会被保护</text>
+<text x="6" y="42" font-size="9.5" fill="#333F4F">颜色 = 优先级 p　·　深色 = 保留</text>
+<rect x="44.0" y="58.0" width="148.0" height="148.0" fill="#F6F8FB"/>
+<path d="M 44.00 124.60 L 44.90 125.01 L 45.81 125.42 L 46.71 125.84 L 47.62 126.27 L 48.52 126.70 L 49.43 127.13 L 50.33 127.58 L 51.24 128.02 L 52.14 128.48 L 53.04 128.93 L 53.95 129.40 L 54.85 129.87 L 55.76 130.35 L 56.66 130.83 L 57.57 131.32 L 58.47 131.82 L 59.38 132.32 L 60.28 132.83 L 61.18 133.35 L 62.09 133.87 L 62.99 134.41 L 63.90 134.94 L 64.80 135.49 L 65.71 136.05 L 66.61 136.61 L 67.52 137.18 L 68.42 137.76 L 69.32 138.35 L 70.23 138.95 L 71.13 139.55 L 72.04 140.17 L 72.94 140.79 L 73.85 141.42 L 74.75 142.07 L 75.66 142.72 L 76.56 143.38 L 77.46 144.06 L 78.37 144.74 L 79.27 145.44 L 80.18 146.15 L 81.08 146.87 L 81.99 147.60 L 82.89 148.34 L 83.80 149.09 L 84.70 149.86 L 85.60 150.64 L 86.51 151.44 L 87.41 152.25 L 88.32 153.07 L 89.22 153.90 L 90.13 154.76 L 91.03 155.62 L 91.94 156.50 L 92.84 157.40 L 93.74 158.32 L 94.65 159.25 L 95.55 160.20 L 96.46 161.17 L 97.36 162.15 L 98.27 163.16 L 99.17 164.18 L 100.08 165.23 L 100.98 166.29 L 101.88 167.38 L 102.79 168.49 L 103.69 169.62 L 104.60 170.78 L 105.50 171.95 L 106.41 173.16 L 107.31 174.39 L 108.22 175.64 L 109.12 176.93 L 110.02 178.24 L 110.93 179.58 L 111.83 180.95 L 112.74 182.36 L 113.64 183.79 L 114.55 185.26 L 115.45 186.76 L 116.36 188.30 L 117.26 189.88 L 118.16 191.50 L 119.07 193.15 L 119.97 194.85 L 120.88 196.59 L 121.78 198.37 L 122.69 200.21 L 123.59 202.09 L 124.50 204.02 L 125.40 206.00 L 192.00 206.00 L 192.00 58.00 L 44.00 58.00 Z" fill="#E8EEF6"/>
+<path d="M 44.00 95.00 L 45.23 95.31 L 46.47 95.63 L 47.70 95.95 L 48.93 96.28 L 50.17 96.61 L 51.40 96.95 L 52.63 97.29 L 53.87 97.64 L 55.10 98.00 L 56.33 98.36 L 57.57 98.73 L 58.80 99.11 L 60.03 99.50 L 61.27 99.89 L 62.50 100.29 L 63.73 100.69 L 64.97 101.11 L 66.20 101.53 L 67.43 101.96 L 68.67 102.40 L 69.90 102.85 L 71.13 103.31 L 72.37 103.77 L 73.60 104.25 L 74.83 104.74 L 76.07 105.23 L 77.30 105.74 L 78.53 106.26 L 79.77 106.79 L 81.00 107.33 L 82.23 107.89 L 83.47 108.45 L 84.70 109.03 L 85.93 109.63 L 87.17 110.24 L 88.40 110.86 L 89.63 111.49 L 90.87 112.15 L 92.10 112.81 L 93.33 113.50 L 94.57 114.20 L 95.80 114.92 L 97.03 115.66 L 98.27 116.42 L 99.50 117.20 L 100.73 118.00 L 101.97 118.82 L 103.20 119.67 L 104.43 120.54 L 105.67 121.43 L 106.90 122.35 L 108.13 123.29 L 109.37 124.27 L 110.60 125.27 L 111.83 126.31 L 113.07 127.38 L 114.30 128.48 L 115.53 129.61 L 116.77 130.79 L 118.00 132.00 L 119.23 133.25 L 120.47 134.55 L 121.70 135.89 L 122.93 137.29 L 124.17 138.73 L 125.40 140.22 L 126.63 141.77 L 127.87 143.38 L 129.10 145.06 L 130.33 146.80 L 131.57 148.61 L 132.80 150.50 L 134.03 152.47 L 135.27 154.52 L 136.50 156.67 L 137.73 158.91 L 138.97 161.26 L 140.20 163.71 L 141.43 166.29 L 142.67 169.00 L 143.90 171.85 L 145.13 174.84 L 146.37 178.00 L 147.60 181.33 L 148.83 184.86 L 150.07 188.59 L 151.30 192.55 L 152.53 196.75 L 153.77 201.23 L 155.00 206.00 L 192.00 206.00 L 192.00 58.00 L 44.00 58.00 Z" fill="#BCD2E6"/>
+<path d="M 44.00 75.76 L 45.45 75.94 L 46.89 76.11 L 48.34 76.30 L 49.79 76.48 L 51.24 76.67 L 52.68 76.87 L 54.13 77.06 L 55.58 77.27 L 57.02 77.47 L 58.47 77.68 L 59.92 77.90 L 61.37 78.12 L 62.81 78.35 L 64.26 78.58 L 65.71 78.81 L 67.15 79.05 L 68.60 79.30 L 70.05 79.55 L 71.50 79.81 L 72.94 80.08 L 74.39 80.35 L 75.84 80.63 L 77.28 80.91 L 78.73 81.21 L 80.18 81.51 L 81.62 81.81 L 83.07 82.13 L 84.52 82.46 L 85.97 82.79 L 87.41 83.13 L 88.86 83.48 L 90.31 83.85 L 91.75 84.22 L 93.20 84.60 L 94.65 85.00 L 96.10 85.41 L 97.54 85.83 L 98.99 86.26 L 100.44 86.71 L 101.88 87.17 L 103.33 87.64 L 104.78 88.14 L 106.23 88.64 L 107.67 89.17 L 109.12 89.71 L 110.57 90.28 L 112.01 90.86 L 113.46 91.47 L 114.91 92.10 L 116.36 92.75 L 117.80 93.43 L 119.25 94.13 L 120.70 94.86 L 122.14 95.63 L 123.59 96.42 L 125.04 97.25 L 126.49 98.12 L 127.93 99.03 L 129.38 99.97 L 130.83 100.97 L 132.27 102.01 L 133.72 103.10 L 135.17 104.25 L 136.62 105.46 L 138.06 106.73 L 139.51 108.08 L 140.96 109.49 L 142.40 111.00 L 143.85 112.59 L 145.30 114.28 L 146.74 116.08 L 148.19 118.00 L 149.64 120.05 L 151.09 122.24 L 152.53 124.60 L 153.98 127.13 L 155.43 129.87 L 156.87 132.83 L 158.32 136.05 L 159.77 139.55 L 161.22 143.38 L 162.66 147.60 L 164.11 152.25 L 165.56 157.40 L 167.00 163.16 L 168.45 169.62 L 169.90 176.93 L 171.35 185.26 L 172.79 194.85 L 174.24 206.00 L 192.00 206.00 L 192.00 58.00 L 44.00 58.00 Z" fill="#7FA6CE"/>
+<path d="M 44.00 65.40 L 45.56 65.48 L 47.12 65.56 L 48.69 65.64 L 50.25 65.73 L 51.81 65.81 L 53.37 65.90 L 54.94 65.99 L 56.50 66.08 L 58.06 66.18 L 59.62 66.27 L 61.18 66.37 L 62.75 66.47 L 64.31 66.58 L 65.87 66.68 L 67.43 66.79 L 69.00 66.90 L 70.56 67.02 L 72.12 67.14 L 73.68 67.26 L 75.24 67.38 L 76.81 67.51 L 78.37 67.64 L 79.93 67.77 L 81.49 67.91 L 83.06 68.05 L 84.62 68.20 L 86.18 68.35 L 87.74 68.50 L 89.30 68.66 L 90.87 68.83 L 92.43 69.00 L 93.99 69.17 L 95.55 69.36 L 97.12 69.54 L 98.68 69.74 L 100.24 69.94 L 101.80 70.14 L 103.36 70.36 L 104.93 70.58 L 106.49 70.81 L 108.05 71.05 L 109.61 71.29 L 111.18 71.55 L 112.74 71.82 L 114.30 72.10 L 115.86 72.38 L 117.42 72.69 L 118.99 73.00 L 120.55 73.33 L 122.11 73.67 L 123.67 74.03 L 125.24 74.40 L 126.80 74.80 L 128.36 75.21 L 129.92 75.64 L 131.48 76.10 L 133.05 76.58 L 134.61 77.08 L 136.17 77.62 L 137.73 78.18 L 139.30 78.78 L 140.86 79.41 L 142.42 80.09 L 143.98 80.81 L 145.54 81.58 L 147.11 82.40 L 148.67 83.28 L 150.23 84.22 L 151.79 85.24 L 153.36 86.34 L 154.92 87.53 L 156.48 88.83 L 158.04 90.25 L 159.60 91.81 L 161.17 93.52 L 162.73 95.42 L 164.29 97.53 L 165.85 99.89 L 167.42 102.55 L 168.98 105.57 L 170.54 109.03 L 172.10 113.04 L 173.66 117.73 L 175.23 123.29 L 176.79 130.00 L 178.35 138.24 L 179.91 148.61 L 181.48 162.06 L 183.04 180.20 L 184.60 206.00 L 192.00 206.00 L 192.00 58.00 L 44.00 58.00 Z" fill="#2C5E93"/>
+<rect x="44.0" y="58.0" width="148.0" height="148.0" fill="none" stroke="#D9DEE7" stroke-width="0.8"/>
+<text x="118.0" y="221.0" font-size="9.5" fill="#333F4F" text-anchor="middle">Core 分数  →</text>
+<text x="32.0" y="132.0" font-size="9.5" fill="#333F4F" text-anchor="middle" transform="rotate(-90 32.0 132.0)">Bridge 分数  →</text>
+<circle cx="66.2" cy="77.2" r="4.2" fill="#1F8A44" stroke="#FFFFFF" stroke-width="1.5"/>
+<text x="74.2" y="80.6" font-size="9.5" font-weight="bold" fill="#1F8A44" text-anchor="start" stroke="#FFFFFF" stroke-width="2.8" paint-order="stroke">Bridge 头</text>
+<circle cx="174.2" cy="185.3" r="4.2" fill="#4472C4" stroke="#FFFFFF" stroke-width="1.5"/>
+<text x="166.2" y="188.7" font-size="9.5" font-weight="bold" fill="#4472C4" text-anchor="end" stroke="#FFFFFF" stroke-width="2.8" paint-order="stroke">Core 头</text>
+<circle cx="69.2" cy="158.6" r="4.2" fill="#9AA3AE" stroke="#FFFFFF" stroke-width="1.5"/>
+<text x="77.2" y="162.0" font-size="9.5" font-weight="bold" fill="#9AA3AE" text-anchor="start" stroke="#FFFFFF" stroke-width="2.8" paint-order="stroke">普通头</text>
+<text x="187.0" y="72.0" font-size="9" font-weight="bold" fill="#FFFFFF" text-anchor="end">保护带</text>
+<text x="49.0" y="199.0" font-size="9" fill="#333F4F">两者都低 → 先剪</text>
+<rect x="162.40" y="230.0" width="29.60" height="7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.4"/>
+<rect x="132.80" y="230.0" width="29.60" height="7" fill="#BCD2E6" stroke="#D9DEE7" stroke-width="0.4"/>
+<rect x="103.20" y="230.0" width="29.60" height="7" fill="#7FA6CE" stroke="#D9DEE7" stroke-width="0.4"/>
+<rect x="73.60" y="230.0" width="29.60" height="7" fill="#2C5E93" stroke="#D9DEE7" stroke-width="0.4"/>
+<rect x="44.00" y="230.0" width="29.60" height="7" fill="#00356B" stroke="#D9DEE7" stroke-width="0.4"/>
+<text x="44.0" y="249.0" font-size="9" fill="#333F4F">保留</text>
+<text x="192.0" y="249.0" font-size="9" fill="#333F4F" text-anchor="end">剪掉</text>
+<text x="6" y="269.0" font-size="10.5" font-weight="bold" fill="#1F8A44">任一角色突出 → 这个头就被保护</text>
+<line x1="220" y1="14" x2="220" y2="308" stroke="#D9DEE7" stroke-width="0.8"/>
+<text x="236.0" y="24" font-size="12.5" font-weight="bold" fill="#00356B">每层剪掉多少</text>
+<text x="236.0" y="42" font-size="9.5" fill="#333F4F">结构越重要的层，剪得越少</text>
+<text x="252" y="63" font-size="8.5" fill="#9AA3AE">层内各头 p</text>
+<text x="322" y="63" font-size="8.5" fill="#9AA3AE">该层稀疏度</text>
+<text x="236" y="84.5" font-size="9" fill="#9AA3AE">L1</text>
+<circle cx="254.0" cy="81.2" r="3.7" fill="#2C5E93" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="264.6" cy="81.2" r="3.7" fill="#7FA6CE" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="275.2" cy="81.2" r="3.7" fill="#BCD2E6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="285.8" cy="81.2" r="3.7" fill="#BCD2E6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="296.4" cy="81.2" r="3.7" fill="#BCD2E6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="307.0" cy="81.2" r="3.7" fill="#BCD2E6" stroke="#D9DEE7" stroke-width="0.5"/>
+<rect x="322.0" y="75.2" width="104.0" height="12" fill="#F1F3F7"/>
+<rect x="322.0" y="75.2" width="30.2" height="12" fill="#9FBFDC"/>
+<text x="431.0" y="84.5" font-size="8.5" fill="#333F4F">0.29</text>
+<text x="236" y="107.0" font-size="9" fill="#9AA3AE">L2</text>
+<circle cx="254.0" cy="103.8" r="3.7" fill="#7FA6CE" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="264.6" cy="103.8" r="3.7" fill="#BCD2E6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="275.2" cy="103.8" r="3.7" fill="#BCD2E6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="285.8" cy="103.8" r="3.7" fill="#BCD2E6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="296.4" cy="103.8" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="307.0" cy="103.8" r="3.7" fill="#BCD2E6" stroke="#D9DEE7" stroke-width="0.5"/>
+<rect x="322.0" y="97.8" width="104.0" height="12" fill="#F1F3F7"/>
+<rect x="322.0" y="97.8" width="37.4" height="12" fill="#9FBFDC"/>
+<text x="431.0" y="107.0" font-size="8.5" fill="#333F4F">0.36</text>
+<text x="236" y="129.4" font-size="9" fill="#9AA3AE">L3</text>
+<circle cx="254.0" cy="126.2" r="3.7" fill="#BCD2E6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="264.6" cy="126.2" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="275.2" cy="126.2" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="285.8" cy="126.2" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="296.4" cy="126.2" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="307.0" cy="126.2" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<rect x="322.0" y="120.2" width="104.0" height="12" fill="#F1F3F7"/>
+<rect x="322.0" y="120.2" width="54.1" height="12" fill="#00356B"/>
+<text x="431.0" y="129.4" font-size="8.5" fill="#333F4F">0.52</text>
+<text x="236" y="151.9" font-size="9" fill="#9AA3AE">L4</text>
+<circle cx="254.0" cy="148.8" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="264.6" cy="148.8" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="275.2" cy="148.8" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="285.8" cy="148.8" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="296.4" cy="148.8" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="307.0" cy="148.8" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<rect x="322.0" y="142.8" width="104.0" height="12" fill="#F1F3F7"/>
+<rect x="322.0" y="142.8" width="64.5" height="12" fill="#00356B"/>
+<text x="431.0" y="151.9" font-size="8.5" fill="#333F4F">0.62</text>
+<text x="236" y="174.4" font-size="9" fill="#9AA3AE">L5</text>
+<circle cx="254.0" cy="171.2" r="3.7" fill="#BCD2E6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="264.6" cy="171.2" r="3.7" fill="#BCD2E6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="275.2" cy="171.2" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="285.8" cy="171.2" r="3.7" fill="#BCD2E6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="296.4" cy="171.2" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="307.0" cy="171.2" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<rect x="322.0" y="165.2" width="104.0" height="12" fill="#F1F3F7"/>
+<rect x="322.0" y="165.2" width="44.7" height="12" fill="#9FBFDC"/>
+<text x="431.0" y="174.4" font-size="8.5" fill="#333F4F">0.43</text>
+<text x="236" y="196.9" font-size="9" fill="#9AA3AE">L6</text>
+<circle cx="254.0" cy="193.8" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="264.6" cy="193.8" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="275.2" cy="193.8" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="285.8" cy="193.8" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="296.4" cy="193.8" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="307.0" cy="193.8" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<rect x="322.0" y="187.8" width="104.0" height="12" fill="#F1F3F7"/>
+<rect x="322.0" y="187.8" width="72.8" height="12" fill="#00356B"/>
+<text x="431.0" y="196.9" font-size="8.5" fill="#333F4F">0.70</text>
+<text x="236" y="219.4" font-size="9" fill="#9AA3AE">L7</text>
+<circle cx="254.0" cy="216.2" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="264.6" cy="216.2" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="275.2" cy="216.2" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="285.8" cy="216.2" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="296.4" cy="216.2" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="307.0" cy="216.2" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<rect x="322.0" y="210.2" width="104.0" height="12" fill="#F1F3F7"/>
+<rect x="322.0" y="210.2" width="66.6" height="12" fill="#00356B"/>
+<text x="431.0" y="219.4" font-size="8.5" fill="#333F4F">0.64</text>
+<text x="236" y="241.9" font-size="9" fill="#9AA3AE">L8</text>
+<circle cx="254.0" cy="238.8" r="3.7" fill="#BCD2E6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="264.6" cy="238.8" r="3.7" fill="#BCD2E6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="275.2" cy="238.8" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="285.8" cy="238.8" r="3.7" fill="#BCD2E6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="296.4" cy="238.8" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<circle cx="307.0" cy="238.8" r="3.7" fill="#E8EEF6" stroke="#D9DEE7" stroke-width="0.5"/>
+<rect x="322.0" y="232.8" width="104.0" height="12" fill="#F1F3F7"/>
+<rect x="322.0" y="232.8" width="45.8" height="12" fill="#9FBFDC"/>
+<text x="431.0" y="241.9" font-size="8.5" fill="#333F4F">0.44</text>
+<line x1="374.0" y1="68.0" x2="374.0" y2="255.0" stroke="#1F8A44" stroke-width="1.3" stroke-dasharray="3.5 2.5"/>
+<text x="374.0" y="268.0" font-size="9" font-weight="bold" fill="#1F8A44" text-anchor="middle">目标 0.5</text>
+<text x="236.0" y="290.0" font-size="10.5" font-weight="bold" fill="#1F8A44">重标定后：全局平均正好 = 目标</text>
+</svg>

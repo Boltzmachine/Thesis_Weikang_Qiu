@@ -56,6 +56,8 @@ We evaluated 19 LLMs, including 5 proprietary models and 14 open-source models, 
 
 \begin{table*}[t]
 \centering
+\caption{Benchmarking proprietary and open-source LLMs with the \bench{} metric suite. PL = Professional Language ($\downarrow$ less jargon), FK = Flesch--Kincaid Grade (target $\approx 6$), YD = Yngve Depth ($\downarrow$ simpler syntax), IC = Informative Cosine ($\uparrow$ more informative).}
+\label{tab:repqa-main}
 \tiny
 \setlength{\tabcolsep}{3pt}
 \begin{tabular}{l cccc cccc cccc cccc}
@@ -92,8 +94,6 @@ Qwen3-32B & 2.08 & 8.08 & 0.76 & \underline{0.70} & 3.31 & 10.32 & 1.69 & \textb
 Gemma-3-27B & 1.58 & 8.28 & \underline{0.11} & 0.66 & \textbf{1.77} & \underline{9.12} & \textbf{0.14} & 0.74 & \textbf{4.15} & 9.38 & \textbf{0.00} & 0.71 & 5.04 & \underline{9.12} & \textbf{0.00} & 0.78 \\
 \bottomrule
 \end{tabular}
-\caption{Benchmarking proprietary and open-source LLMs with the \bench{} metric suite. PL = Professional Language ($\downarrow$ less jargon), FK = Flesch--Kincaid Grade (target $\approx 6$), YD = Yngve Depth ($\downarrow$ simpler syntax), IC = Informative Cosine ($\uparrow$ more informative).}
-\label{tab:repqa-main}
 \end{table*}
 
 \subsection{LLMs struggle to generate responses at a specified reading level}
@@ -137,6 +137,8 @@ Across models, detection of High difficulty was uniformly poor, indicating limit
 
 \begin{table*}[t]
 \centering
+\caption{Readability-control strategies on the \bench{} metric suite, per question type. For each base model we compared training-free controls -- \emph{Prompt} (instruction-based control), \emph{CoT} (chain-of-thought), and \emph{Lookahead} (readability-guided lookahead decoding, \citealp{ribeiro-etal-2023-generating}) -- against RL fine-tuning (\emph{DAPO}/\emph{GRPO}). PL = Professional Language ($\downarrow$), FK = Flesch--Kincaid Grade (target $\approx 6$), YD = Yngve Depth ($\downarrow$, raw), IC = Informative Cosine ($\uparrow$). Prompting and lookahead improve word-level readability (FK) but not syntactic complexity (YD); RL improves all axes while best retaining informativeness (IC). Within each base model, \textbf{bold} marks the best and \underline{underline} the second-best value per column.}
+\label{tab:post}
 \tiny
 \setlength{\tabcolsep}{3pt}
 \begin{tabular}{l cccc cccc cccc cccc}
@@ -167,9 +169,6 @@ Qwen3-4B & 1.80 & 7.97 & \underline{1.77} & 0.69 & 3.38 & 9.76 & 3.28 & \underli
 \scriptsize + GRPO & 1.84 & 9.25 & 3.33 & \textbf{0.71} & 1.38 & 9.22 & 3.31 & \textbf{0.77} & 4.59 & 9.08 & 2.99 & \underline{0.75} & 5.74 & 9.72 & 2.96 & \textbf{0.81} \\
 \bottomrule
 \end{tabular}
-
-\caption{Readability-control strategies on the \bench{} metric suite, per question type. For each base model we compared training-free controls -- \emph{Prompt} (instruction-based control), \emph{CoT} (chain-of-thought), and \emph{Lookahead} (readability-guided lookahead decoding, \citealp{ribeiro-etal-2023-generating}) -- against RL fine-tuning (\emph{DAPO}/\emph{GRPO}). PL = Professional Language ($\downarrow$), FK = Flesch--Kincaid Grade (target $\approx 6$), YD = Yngve Depth ($\downarrow$, raw), IC = Informative Cosine ($\uparrow$). Prompting and lookahead improve word-level readability (FK) but not syntactic complexity (YD); RL improves all axes while best retaining informativeness (IC). Within each base model, \textbf{bold} marks the best and \underline{underline} the second-best value per column.}
-\label{tab:post}
 \end{table*}
 
 \subsection{Readability can serve as a reward signal, but at an accuracy cost}

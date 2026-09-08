@@ -1,0 +1,43 @@
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+
+\caption{\small Relationship between DRE-Bench performance and small-world organization.
+We report the mean per-token negative log-likelihood over the answer tokens (NLL/token; lower is better) and SWI of the head-head functional graph on DRE-Bench Level 1 and Level 2 tasks. Results are averaged over three seeds and reported as mean$_{\pm \text{std}}$. Across models, lower NLL is associated with higher SWI.}
+
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Model} 
+& \multicolumn{2}{c}{\textbf{Level 1}} 
+& \multicolumn{2}{c}{\textbf{Level 2}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+& \textbf{NLL/token} $\downarrow$
+& \textbf{SWI} $\uparrow$
+& \textbf{NLL/token} $\downarrow$
+& \textbf{SWI} $\uparrow$ \\
+\midrule
+Qwen3 14B 
+& 0.0822$_{\scriptstyle \pm 0.01}$ & 1.8160$_{\scriptstyle \pm 0.27}$
+& 0.2410$_{\scriptstyle \pm 0.03}$ & 1.7020$_{\scriptstyle \pm 0.12}$ \\
+Qwen3 8B 
+& 0.0949$_{\scriptstyle \pm 0.01}$ & 1.5850$_{\scriptstyle \pm 0.28}$
+& 0.2814$_{\scriptstyle \pm 0.02}$ & 1.6000$_{\scriptstyle \pm 0.07}$\\
+Llama3 8B 
+& 0.0980$_{\scriptstyle \pm 0.01}$ & 1.3750$_{\scriptstyle \pm 0.19}$
+& 0.2993$_{\scriptstyle \pm 0.02}$ & 1.5935$_{\scriptstyle \pm 0.11}$ \\
+Qwen3 4B 
+& 0.1142$_{\scriptstyle \pm 0.02}$ & 1.2180$_{\scriptstyle \pm 0.26}$
+& 0.3397$_{\scriptstyle \pm 0.05}$ & 1.2722$_{\scriptstyle \pm 0.18}$ \\
+Llama3.2 3B 
+& 0.1377$_{\scriptstyle \pm 0.07}$ & 1.1933$_{\scriptstyle \pm 0.33}$
+& 0.3412$_{\scriptstyle \pm 0.10}$ & 1.2100$_{\scriptstyle \pm 0.17}$ \\
+Llama3.2 1B 
+& 0.1689$_{\scriptstyle \pm 0.20}$ & 0.9188$_{\scriptstyle \pm 0.49}$
+& 0.5800$_{\scriptstyle \pm 0.26}$ & 0.9344$_{\scriptstyle \pm 0.18}$ \\
+\bottomrule
+\end{tabular}
+\vspace{-0.5cm}
+
+\label{tab:dre_perf_swi_levels}
+\end{table}

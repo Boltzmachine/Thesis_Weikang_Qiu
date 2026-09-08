@@ -1,0 +1,35 @@
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{3.0pt}
+\caption{\small 
+We report the small-world index (SWI $\uparrow$) of head-head functional graphs after applying SparseGPT and its variants at sparsity 0.5. 
+ SWA (Head) and SWA (Layer) denote head-only and layer-only allocation strategies, respectively. 
+\textbf{Higher SWI indicates better preservation} of small-world functional organization under pruning. Results are averaged over three seeds and reported as mean$_{\pm \text{std}}$.
+The best result for each model is \colorbox{gray!15}{\textbf{bolded}}.
+}
+\resizebox{0.8\linewidth}{!}{
+
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Model} 
+& \textbf{SparseGPT} 
+& \textbf{+ FARMS} 
+& \textbf{+ ATP} 
+& \textbf{+ SWA (Head)} 
+& \textbf{+ SWA (Layer)} 
+& \textbf{+ SWA} \\
+\midrule
+Qwen3 14B     & 0.1748$_{\scriptstyle \pm 0.06}$ & 0.1732$_{\scriptstyle \pm 0.06}$ & 0.1631$_{\scriptstyle \pm 0.09}$ & 0.1710$_{\scriptstyle \pm 0.09}$ & 0.1832$_{\scriptstyle \pm 0.08}$ & \colorbox{gray!15}{\textbf{0.1982}$_{\scriptstyle \pm 0.07}$} \\
+Qwen3 8B      & 0.1470$_{\scriptstyle \pm 0.05}$ & 0.1560$_{\scriptstyle \pm 0.06}$ & 0.1418$_{\scriptstyle \pm 0.06}$ & 0.1545$_{\scriptstyle \pm 0.07}$ & 0.1606$_{\scriptstyle \pm 0.04}$ & \colorbox{gray!15}{\textbf{0.1775}$_{\scriptstyle \pm 0.05}$} \\
+Qwen3 4B      & 0.1148$_{\scriptstyle \pm 0.10}$ & 0.1200$_{\scriptstyle \pm 0.09}$ & 0.1198$_{\scriptstyle \pm 0.05}$ & 0.1330$_{\scriptstyle \pm 0.08}$ & 0.1327$_{\scriptstyle \pm 0.05}$ & \colorbox{gray!15}{\textbf{0.1431}$_{\scriptstyle \pm 0.06}$} \\
+\midrule
+Llama3 8B    & 0.1285$_{\scriptstyle \pm 0.05}$ & 0.1420$_{\scriptstyle \pm 0.07}$ & 0.1227$_{\scriptstyle \pm 0.08}$ & 0.1341$_{\scriptstyle \pm 0.07}$ & 0.1420$_{\scriptstyle \pm 0.08}$ & \colorbox{gray!15}{\textbf{0.1599}$_{\scriptstyle \pm 0.06}$} \\
+Llama3.2 3B  & 0.0772$_{\scriptstyle \pm 0.05}$ & 0.0880$_{\scriptstyle \pm 0.02}$ & 0.0898$_{\scriptstyle \pm 0.04}$ & 0.0877$_{\scriptstyle \pm 0.06}$ & 0.1005$_{\scriptstyle \pm 0.04}$ & \colorbox{gray!15}{\textbf{0.1126}$_{\scriptstyle \pm 0.04}$} \\
+Llama3.2 1B  & 0.0558$_{\scriptstyle \pm 0.04}$ & 0.0520$_{\scriptstyle \pm 0.05}$ & 0.0524$_{\scriptstyle \pm 0.05}$ & 0.0559$_{\scriptstyle \pm 0.03}$ & 0.0661$_{\scriptstyle \pm 0.03}$ & \colorbox{gray!15}{\textbf{0.0700}$_{\scriptstyle \pm 0.04}$} \\
+\bottomrule
+\end{tabular}
+}
+\label{tab:swi_pruning_preservation}
+
+\end{table}

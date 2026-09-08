@@ -1,0 +1,43 @@
+% Held-out subject 8 (trained on 1-7, no finetuning).
+% Rows selected from Parts/part1.tex, Table tab:subj8 -- the datasets where
+% MindLLM leads. VG-QA and the TallyQA RMSE row are omitted.
+% Rendered large on purpose: this lands ~420pt wide on the slide, so the type
+% has to be set at slide size, not shrunk with \resizebox.
+\documentclass[border=6pt]{standalone}
+
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{amssymb}
+\usepackage{anyfontsize}
+\usepackage[table]{xcolor}
+
+\definecolor{hdr}{HTML}{1F3864}
+\definecolor{best}{HTML}{1F8A44}
+\definecolor{rulec}{HTML}{4A4A4A}
+
+\sisetup{
+  table-format=2.2,
+  table-number-alignment=center,
+  detect-weight=true,
+  detect-inline-weight=math,
+  detect-all=true,
+}
+
+\begin{document}
+\fontsize{18}{22}\selectfont
+\setlength{\tabcolsep}{9pt}
+\renewcommand{\arraystretch}{1.25}
+\arrayrulecolor{rulec}
+\begin{tabular}{llSS S}
+\toprule
+& & {\textcolor{hdr}{MindBridge}} & {\textcolor{hdr}{UniBrain}} & {\textcolor{hdr}{\bfseries MindLLM}} \\
+\midrule
+COCO-QA  & Acc. & 35.88 & 24.95 & \bfseries 38.96 \\
+VQA-v2   & Acc. & 42.80 & 40.16 & \bfseries 46.04 \\
+A-OKVQA  & Acc. & 44.55 & 28.71 & \bfseries 45.54 \\
+ST-VQA   & ANLS     &  9.33 &  9.30 & \bfseries 13.63 \\
+OK-VQA   & Acc. & 21.94 & 17.09 & \bfseries 25.44 \\
+TallyQA  & Acc. & 38.92 & 32.51 & \bfseries 42.29 \\
+\bottomrule
+\end{tabular}
+\end{document}

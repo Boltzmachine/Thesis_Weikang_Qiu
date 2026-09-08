@@ -1,7 +1,9 @@
 % !TEX root = Disseration.tex
 \documentclass[12pt]{yalephd}
-% See here for more detailed guidelines on dissertation format
-% https://gsas.yale.edu/sites/default/files/formatdissertation.pdf
+% Current formatting requirements (University Registrar, 2026):
+% https://registrar.yale.edu/student-records/dissertations/dissertation-submission/dissertation-formatting-guide
+% yalephd.cls encodes the *old* (2000) rules; yalefmt.tex, loaded at the end of
+% this preamble, overrides everything the class gets wrong.
 
 
 \usepackage{graphicx}
@@ -28,6 +30,9 @@
 \definecolor{YaleBlue}{rgb}{0.0,0.22,0.444}
 \usepackage{natbib}
 \input{macros}
+% Yale format layer -- margins, spacing, pagination, title/copyright/abstract/
+% lay-summary pages, heading sizes.  Must come last: it overrides the class.
+\input{yalefmt}
 
 \begin{document}
 
@@ -36,35 +41,50 @@
 % defines \unit itself. Left disabled rather than deleted.
 % \newcommand{\unit}[1]{\ensuremath{\, \mathrm{#1}}}
 
-\titleformat{\chapter}[display]
-    {\fontfamily{ptm}\huge\bfseries}{\chaptertitlename\ \thechapter}{5pt}{\centering\singlespacing\huge}% NEW
-\titlespacing*{\chapter}{0pt}{50pt}{30pt}% NEW
-
 	% Dissertation Title: Subtitle
+	% Capitalize the first letter of every word except conjunctions and
+	% prepositions; a subtitle follows a colon on the same line.
 	\title{Machine Learning Models that Connect Mind and World}
-	% Full Name of Author (as it should appear on the diploma)
+	% Legal name as it appears on the Yale student record.  Must match on the
+	% title page, the copyright page, and the abstract page.
 	\author{Weikang Qiu}
 	%
-	% where there is an advisory committee, only the chairperson is listed
+	% Where there is an advisory committee, only the chairperson is listed.
 	\advisor{Prof. Rex Ying}
-	% Month and Year Degree is to be awarded
-    % (not the month where the dissertation is submitted)
+	% Optional: printed only if non-empty.  Set it only if the committee chair
+	% is a different person from the dissertation director.
+	\committeechair{}
+	% Month and year the degree is AWARDED (not the submission month); no comma.
 	\date{September 2026}
+	% Year of PhD conferral -- printed on the abstract and copyright pages.
+	\conferralyear{2026}
+	% For a DECEMBER degree the copyright year is the following year; uncomment
+	% and set it in that case.  Otherwise it follows \conferralyear.
+	% \copyrightyear{2027}
 
-%	\singlespace
+    %-----------------------------------------------------------------------
+    % Front matter.  Required order (Registrar): title, copyright, abstract,
+    % lay summary, table of contents, remaining front matter, body.
+    % Title = i and copyright = ii, both counted but unprinted; the abstract
+    % prints "iii".
+    %-----------------------------------------------------------------------
+    \pagenumbering{roman}
+    \setcounter{page}{1}
 
-    \input{abstract}
-	
-    \maketitle
-    \makecopyright
-	
+    \maketitle       % page i  -- number counted, not printed
+    \makecopyright   % page ii -- number counted, not printed
+
+    \input{abstract}     % page iii
+    \input{laysummary}   % page iv
+
+    \tableofcontents
+
     \input{acknowledgements}
-	
-    \tableofcontents % 
-    \listoffigures   % The standard LaTeX form works well.
-    \listoftables    % 
-    
-    \mainmatter      % Reset the pagenumbering options
+
+    \listoffigures
+    \listoftables
+
+    \mainmatter      % restart at arabic 1
 
 	\include{Introduction}
 
@@ -75,11 +95,11 @@
     \input{Parts/part3.tex}
 
 
-    \setstretch{1.0}
-
     % Start the bibliography on its own page and give hyperref a real anchor
     % there, so the TOC "Bibliography" link points at the bibliography rather
     % than the last float on the preceding page.
+    % Spacing (single within an entry, double between entries) is set by the
+    % \thebibliography patch in yalefmt.tex.
     \clearpage
     \phantomsection
     \addcontentsline{toc}{chapter}{Bibliography} % To get an entry in the TOC.

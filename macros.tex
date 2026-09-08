@@ -145,17 +145,26 @@
 
 % A part-divider page that carries a short introductory paragraph on the SAME
 % page as the part title (the book class would otherwise push the intro onto
-% the following page). Usage: \partwithintro{Part title}{Intro paragraph...}
+% the following page). Usage:
+%   \partwithintro[part:label]{Part title}{Intro paragraph...}
+% The optional label has to be set INSIDE the group: \refstepcounter assigns
+% \@currentlabel locally, so a \label written after the call would pick up the
+% preceding chapter's number instead of the part's.
 \makeatletter
-\newcommand{\partwithintro}[2]{%
+\newcommand{\partwithintro}[3][]{%
   \begingroup
     % Suppress the automatic \vfil\newpage that book.cls fires right after the
     % part title, so the introduction can share the part page.
     \renewcommand\@endpart{}%
-    \part{#1}%
+    \part{#2}%
+    \def\yale@partlabel{#1}%
+    \ifx\yale@partlabel\@empty\else\label{#1}\fi
   \endgroup
   \vskip 2.5em
-  \begin{quote}#2\end{quote}%
+  % \bodyspacing (yalefmt.tex) restores double spacing: this blurb is the
+  % author's own prose, not a block quotation, and `quote' is used only for
+  % its indentation -- but yalefmt single-spaces every quote environment.
+  \begin{quote}\bodyspacing #3\end{quote}%
   \vfil            % balances the \null\vfil book.cls put before the title,
   \newpage         % centering the title+intro block vertically on the page.
 }

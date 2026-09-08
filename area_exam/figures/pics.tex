@@ -1,0 +1,226 @@
+% --- packages ---
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, shapes.geometric, fit, backgrounds, calc}
+
+% --- palette -------------------------------------------------------------
+% The five OpenTikZ palette names, re-bound to the area-exam deck's part colours
+% so this figure matches the other 71 slides. Body code uses names only.
+%   otblue  = Part 1   otteal  = Part 2   otorange = Part 3
+%   otpurple = auxiliary / "travels back out" / slow loop   otgray = structure
+\definecolor{otblue}{HTML}{4472C4}
+\definecolor{otteal}{HTML}{1F8A44}
+\definecolor{otorange}{HTML}{C8243C}
+\definecolor{otpurple}{HTML}{6B4FA8}
+\definecolor{otgray}{HTML}{5A5A5A}
+\definecolor{otyellow}{HTML}{E0A800}
+
+% --- shared glyph paths ---------------------------------------------------
+\def\otbrainpath{(-0.40,0.02)
+  .. controls (-0.46,0.34) and (-0.22,0.50) .. (0,0.44)
+  .. controls (0.22,0.50) and (0.46,0.34) .. (0.40,0.02)
+  .. controls (0.46,-0.30) and (0.20,-0.46) .. (0,-0.40)
+  .. controls (-0.20,-0.46) and (-0.46,-0.30) .. (-0.40,0.02) -- cycle}
+
+% ==== icon pics ===========================================================
+\tikzset{
+  % --- a brain: outline + midline + two folds -----------------------------
+  picbrain/.pic={
+    \filldraw[draw=otgray!80, fill=otpurple!12, line width=0.9pt] \otbrainpath;
+    \draw[otgray!65, line width=0.7pt] (0,0.44) -- (0,-0.40);
+    \draw[otgray!55, line width=0.55pt] (-0.30,0.28) .. controls (-0.12,0.20) and (-0.12,0.10) .. (-0.30,0.06);
+    \draw[otgray!55, line width=0.55pt] (-0.32,-0.06) .. controls (-0.14,-0.12) and (-0.14,-0.22) .. (-0.28,-0.28);
+    \draw[otgray!55, line width=0.55pt] ( 0.30,0.28) .. controls ( 0.12,0.20) and ( 0.12,0.10) .. ( 0.30,0.06);
+    \draw[otgray!55, line width=0.55pt] ( 0.32,-0.06) .. controls ( 0.14,-0.12) and ( 0.14,-0.22) .. ( 0.28,-0.28);
+  },
+  % --- HyBRiD: a hyperedge (blob) spanning three of five regions ----------
+  % two overlapping hyperedges: K parallel heads, each spanning its own subset
+  pichyper/.pic={
+    \filldraw[draw=otblue!75, fill=otblue!22, line width=1pt, rounded corners=8pt]
+      (-0.36,0.30) -- (0.30,0.36) -- (0.02,-0.20) -- cycle;
+    \filldraw[draw=otorange!70, fill=otorange!16, line width=1pt, rounded corners=8pt]
+      (0.02,-0.20) -- (0.46,-0.06) -- (-0.34,-0.34) -- cycle;
+    \foreach \p in {(-0.36,0.30),(0.30,0.36),(0.02,-0.20),(-0.34,-0.34),(0.46,-0.06)}
+      \filldraw[draw=otblue!85!black, fill=white, line width=1.1pt] \p circle[radius=0.095];
+  },
+  % --- Neuro-attn: a brain parcellated by an atlas ------------------------
+  picatlas/.pic={
+    \begin{scope}
+      \clip \otbrainpath;
+      \fill[otblue!34] (-0.6,0.02) rectangle (0,0.6);
+      \fill[otblue!14] (0,0.02) rectangle (0.6,0.6);
+      \fill[otteal!24] (-0.6,-0.6) rectangle (0,0.02);
+      \fill[otorange!22] (0,-0.6) rectangle (0.6,0.02);
+      \draw[white, line width=0.9pt] (-0.6,0.02) -- (0.6,0.02);
+      \draw[white, line width=0.9pt] (0,0.6) -- (0,-0.6);
+    \end{scope}
+    \draw[otgray!80, line width=0.9pt] \otbrainpath;
+    \filldraw[draw=otblue!80!black, fill=white, line width=0.7pt] (-0.22,0.22) circle[radius=0.07];
+    \filldraw[draw=otblue!80!black, fill=white, line width=0.7pt] (0.20,-0.18) circle[radius=0.07];
+  },
+  % --- FA-EEG: two mirror-image traces about a dashed axis ----------------
+  picmirror/.pic={
+    \draw[otgray!45, dashed, line width=0.6pt] (0,0.46) -- (0,-0.46);
+    \draw[otblue!80!black, line width=1pt]
+      (-0.46,-0.10) .. controls (-0.36,0.34) and (-0.26,-0.36) .. (-0.16,0.10)
+                    .. controls (-0.10,0.32) .. (-0.05,-0.02);
+    \draw[otblue!80!black, line width=1pt]
+      ( 0.46,-0.10) .. controls ( 0.36,0.34) and ( 0.26,-0.36) .. ( 0.16,0.10)
+                    .. controls ( 0.10,0.32) .. ( 0.05,-0.02);
+    \draw[otgray!55, line width=0.5pt, -{Stealth[length=1.3mm]}] (-0.30,-0.36) -- (-0.06,-0.36);
+    \draw[otgray!55, line width=0.5pt, -{Stealth[length=1.3mm]}] ( 0.30,-0.36) -- ( 0.06,-0.36);
+  },
+  % --- SWA: two clusters plus one long bridge (small-worldness) ----------
+  picsmallworld/.pic={
+    \foreach \a/\b in {-0.42/0.22,-0.20/0.34,-0.26/0.02}{
+      \foreach \c/\d in {-0.42/0.22,-0.20/0.34,-0.26/0.02}{
+        \draw[otpurple!55, line width=0.8pt] (\a,\b) -- (\c,\d);}}
+    \foreach \a/\b in {0.22/-0.06,0.44/0.10,0.34/-0.30}{
+      \foreach \c/\d in {0.22/-0.06,0.44/0.10,0.34/-0.30}{
+        \draw[otpurple!55, line width=0.8pt] (\a,\b) -- (\c,\d);}}
+    \draw[otorange!90, line width=1.4pt] (-0.20,0.34) -- (0.22,-0.06);
+    \foreach \p in {(-0.42,0.22),(-0.20,0.34),(-0.26,0.02),(0.22,-0.06),(0.44,0.10),(0.34,-0.30)}
+      \filldraw[draw=otpurple!80!black, fill=otpurple!28, line width=0.6pt] \p circle[radius=0.075];
+  },
+  % --- fMRI: a voxel grid with two active cells ---------------------------
+  % Brain Instruction Tuning: the brain is asked something and answers
+  picfmri/.pic={
+    \begin{scope}[shift={(-0.30,0)}, scale=0.72]
+      \filldraw[draw=otteal!75!black, fill=otteal!16, line width=1.1pt] \otbrainpath;
+      \draw[otteal!70!black, line width=0.8pt] (0,0.44) -- (0,-0.40);
+    \end{scope}
+    \filldraw[draw=otteal!80!black, fill=white, line width=1pt, rounded corners=2.5pt]
+      (0.02,0.02) rectangle (0.62,0.40);
+    \fill[otteal!80!black] (0.10,0.02) -- (0.10,-0.10) -- (0.22,0.02) -- cycle;
+    \foreach \y in {0.30,0.20,0.10}{
+      \draw[otteal!80!black, line width=1pt] (0.10,\y) -- (0.54,\y);}
+    \filldraw[draw=otgray!65, fill=otgray!12, line width=1pt, rounded corners=2.5pt]
+      (0.02,-0.42) rectangle (0.62,-0.14);
+    \foreach \y in {-0.22,-0.32}{
+      \draw[otgray!70, line width=1pt] (0.10,\y) -- (0.46,\y);}
+  },
+  % --- PRISM-I: which space is fMRI closer to? (a tilted balance) ---------
+  picbalance/.pic={
+    \draw[otgray!80, line width=1.3pt] (0,-0.30) -- (0,0.16);
+    \draw[otgray!80, line width=1.3pt] (-0.15,-0.34) -- (0.15,-0.34);
+    \draw[otgray!80, line width=1.3pt] (-0.46,0.00) -- (0.46,0.26);
+    \draw[otgray!70, line width=0.9pt] (-0.46,0.00) -- (-0.46,-0.06);
+    \filldraw[draw=otteal!80!black, fill=otteal!30, line width=1.1pt, rounded corners=1pt]
+      (-0.62,-0.36) rectangle (-0.30,-0.06);
+    \foreach \y in {-0.14,-0.23}{\draw[otteal!85!black, line width=1.1pt] (-0.57,\y) -- (-0.35,\y);}
+    \draw[otgray!70, line width=0.9pt] (0.46,0.26) -- (0.46,0.18);
+    \filldraw[draw=otgray!70, fill=otgray!12, line width=1.1pt, rounded corners=1pt]
+      (0.30,-0.12) rectangle (0.62,0.18);
+    \fill[otgray!55] (0.35,-0.06) -- (0.46,0.09) -- (0.57,-0.06) -- cycle;
+  },
+  % --- a page of text (the target space) ---------------------------------
+  % the structured space: one object, its attribute, its relation
+  pictext/.pic={
+    \draw[otteal!70!black, line width=1.1pt] (0,0.20) -- (-0.30,-0.18);
+    \draw[otteal!70!black, line width=1.1pt] (0,0.20) -- (0.30,-0.18);
+    \filldraw[draw=otteal!85!black, fill=otteal!55, line width=1.1pt]
+      (0,0.20) circle[radius=0.16];
+    \filldraw[draw=otteal!85!black, fill=otteal!25, line width=1.1pt]
+      (-0.30,-0.30) circle[radius=0.13];
+    \filldraw[draw=otteal!85!black, fill=white, line width=1.1pt]
+      (0.30,-0.30) circle[radius=0.13];
+  },
+  % --- PRISM-II: object-centric reconstruction (objects kept apart) ------
+  % solid, not dashed: dash patterns disappear at the size this renders.
+  picobjects/.pic={
+    \filldraw[draw=otgray!70, fill=white, line width=1pt, rounded corners=2pt]
+      (-0.46,-0.36) rectangle (0.46,0.36);
+    \filldraw[draw=otteal!80!black, fill=otteal!45, line width=1pt]
+      (-0.21,0.04) circle[radius=0.21];
+    \filldraw[draw=otorange!80!black, fill=otorange!40, line width=1pt, rounded corners=1pt]
+      (0.06,-0.28) rectangle (0.38,0.10);
+  },
+  % --- D-Edit: one image, one prompt per item ----------------------------
+  picitems/.pic={
+    \fill[otteal!28] (-0.44,-0.32) rectangle (-0.08,0.32);
+    \fill[otorange!30] (-0.04,-0.32) rectangle (0.18,0.06);
+    \fill[otpurple!26] (0.22,-0.32) rectangle (0.44,0.32);
+    \fill[otgray!10] (-0.04,0.10) rectangle (0.18,0.32);
+    \draw[otgray!75, line width=1pt, rounded corners=2pt] (-0.46,-0.34) rectangle (0.46,0.34);
+    \foreach \x in {-0.06,0.20}{\draw[white, line width=1.6pt] (\x,-0.34) -- (\x,0.34);}
+  },
+  % --- Mind World Model: EEG drives the prediction of the next frame -----
+  % Mind World Model: EEG becomes an action; the action predicts the next frame
+  picmindworld/.pic={
+    % EEG -> the action the mind model emits
+    \draw[otorange!85!black, line width=1.2pt]
+      (-1.02,0.22) .. controls (-0.94,0.44) and (-0.86,0.00) .. (-0.78,0.26)
+                   .. controls (-0.70,0.48) and (-0.62,0.04) .. (-0.54,0.24)
+                   .. controls (-0.49,0.38) .. (-0.44,0.16);
+    \draw[otgray!75, line width=0.9pt, -{Stealth[length=1.4mm]}] (-0.38,0.22) -- (-0.24,0.22);
+    \filldraw[draw=otpurple!85!black, fill=otpurple!24, line width=1.1pt, rounded corners=2pt]
+      (-0.19,0.06) rectangle (0.07,0.38);
+    % the action enters the transition
+    \draw[otpurple!85, line width=1pt, -{Stealth[length=1.4mm]}] (-0.06,0.02) -- (-0.06,-0.12);
+    % current frame -> predicted next frame
+    \filldraw[draw=otgray!70, fill=otgray!14, line width=1.1pt, rounded corners=2pt]
+      (-1.02,-0.46) rectangle (-0.56,-0.16);
+    \draw[otgray!75, line width=1pt, -{Stealth[length=1.6mm]}] (-0.50,-0.31) -- (0.38,-0.31);
+    \filldraw[draw=otorange!85!black, fill=white, line width=1.1pt, rounded corners=2pt,
+              dash pattern=on 2pt off 1.6pt]
+      (0.44,-0.46) rectangle (0.90,-0.16);
+  },
+  % --- DySta: one static row reused, dynamic row recomputed --------------
+  % DySta: one static block reused across steps, dynamic tokens recomputed
+  pictokens/.pic={
+    % the recache gate: a switch that decides whether the static block refreshes
+    \filldraw[draw=otgray!70, fill=white, line width=1pt, rounded corners=1.5pt]
+      (-0.46,0.24) rectangle (-0.10,0.48);
+    \draw[otorange!85!black, line width=1.2pt] (-0.40,0.30) -- (-0.16,0.42);
+    \filldraw[draw=otgray!70, fill=otgray!30, line width=0.7pt] (-0.40,0.30) circle[radius=0.045];
+    \filldraw[draw=otgray!70, fill=otgray!30, line width=0.7pt] (-0.16,0.30) circle[radius=0.045];
+    \draw[otgray!70, line width=0.9pt, -{Stealth[length=1.3mm]}] (-0.28,0.22) -- (-0.28,0.10);
+    % static: one wide block, computed once and reused
+    \filldraw[draw=otblue!80!black, fill=otblue!25, line width=1.1pt, rounded corners=1.5pt]
+      (-0.56,-0.34) rectangle (0.00,0.06);
+    \foreach \y in {-0.21,-0.08,0.05}{
+      \draw[otblue!55, line width=0.5pt] (-0.56,\y) -- (0.00,\y);}
+    \foreach \x in {-0.42,-0.28,-0.14}{
+      \draw[otblue!55, line width=0.5pt] (\x,-0.34) -- (\x,0.06);}
+    % dynamic: one narrow column per step
+    \foreach \i in {0,1,2}{
+      \filldraw[draw=otyellow!85!black, fill=otyellow!40, line width=1.1pt, rounded corners=1pt]
+        (0.10+0.18*\i,-0.34) rectangle ++(0.11,0.40);}
+  },
+  % --- a robot arm (the embodied end) ------------------------------------
+  picrobot/.pic={
+    \fill[otgray!65] (-0.42,-0.44) rectangle (-0.16,-0.34);
+    \draw[otgray!70, line width=1.5pt, line cap=round] (-0.29,-0.34) -- (-0.29,-0.06);
+    \draw[otgray!70, line width=1.5pt, line cap=round] (-0.29,-0.06) -- (0.06,0.24);
+    \draw[otorange!85!black, line width=1.5pt, line cap=round] (0.06,0.24) -- (0.36,0.06);
+    \draw[otorange!85!black, line width=1.1pt, line cap=round] (0.36,0.06) -- (0.48,0.16);
+    \draw[otorange!85!black, line width=1.1pt, line cap=round] (0.36,0.06) -- (0.46,-0.06);
+    \filldraw[draw=otgray!80, fill=white, line width=1pt] (-0.29,-0.06) circle[radius=0.07];
+    \filldraw[draw=otgray!80, fill=white, line width=1pt] (0.06,0.24) circle[radius=0.07];
+  },
+  % --- PHIL: a sparse goal, a planned path -------------------------------
+  % PHIL: the heuristic keeps the frontier narrow -- few nodes opened
+  picgoal/.pic={
+    \fill[otpurple!14] (-0.52,-0.30) -- (-0.14,-0.02) -- (0.20,0.34) -- (0.40,0.24)
+                       -- (0.06,-0.16) -- (-0.36,-0.42) -- cycle;
+    \foreach \x in {-0.44,-0.14,0.16,0.46}{
+      \foreach \y in {-0.36,-0.06,0.24}{
+        \fill[otgray!35] (\x,\y) circle[radius=0.045];}}
+    \foreach \p in {(-0.44,-0.36),(-0.14,-0.06),(0.16,0.24)}{
+      \filldraw[draw=otpurple!85!black, fill=otpurple!45, line width=0.9pt]
+        \p circle[radius=0.075];}
+    \filldraw[draw=otpurple!85!black, fill=white, line width=1.2pt]
+      (-0.44,-0.36) circle[radius=0.10];
+    \draw[otpurple!90, line width=1.3pt] (0.46,0.24) circle[radius=0.15];
+    \fill[otpurple!90] (0.46,0.24) circle[radius=0.06];
+  },
+  % --- the world -----------------------------------------------------------
+  picglobe/.pic={
+    \filldraw[draw=otteal!80!black, fill=otteal!10, line width=0.9pt] (0,0) circle[radius=0.40];
+    \draw[otteal!80!black, line width=0.6pt] (-0.40,0) -- (0.40,0);
+    \draw[otteal!80!black, line width=0.6pt] (-0.31,0.25) -- (0.31,0.25);
+    \draw[otteal!80!black, line width=0.6pt] (-0.31,-0.25) -- (0.31,-0.25);
+    \draw[otteal!80!black, line width=0.6pt] (0,0.40) .. controls (-0.24,0.12) and (-0.24,-0.12) .. (0,-0.40);
+    \draw[otteal!80!black, line width=0.6pt] (0,0.40) .. controls ( 0.24,0.12) and ( 0.24,-0.12) .. (0,-0.40);
+  },
+}
+

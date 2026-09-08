@@ -1,0 +1,417 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% yalefmt.tex --- Yale GSAS dissertation format layer
+%
+% Brings the document in line with the CURRENT (2026) University Registrar
+% requirements:
+%   https://registrar.yale.edu/student-records/dissertations/
+%           dissertation-submission/dissertation-formatting-guide
+%
+% yalephd.cls dates from 2000 and encodes the *old* rules (1.5in binding
+% margin, no lay summary, abstract before the title page, page numbers in the
+% top-right header, single spacing).  The class is vendored and must not be
+% edited, so every deviation is corrected here instead.  This file is
+% \input from Disseration.tex as the last thing before \begin{document}.
+%
+% Requirement -> implementation map is in the section headers below.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{etoolbox}
+\usepackage{ragged2e}
+% Long DOIs/arXiv URLs in the bibliography would otherwise stick ~5pt into the
+% right margin; xurl lets them break at any character.  (The 1-2pt that ordinary
+% punctuation hangs into the margin is microtype's character protrusion, which
+% is deliberate optical alignment, not an overrun.)
+\usepackage{xurl}
+% NB do NOT add \Urlmuskip stretch on top of this -- tried it, and it makes URLs
+% break one character per line.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 0.  TOGGLES --- the three places where the guide leaves room for judgment.
+%     Flip any of these to \togglefalse{...} / \toggletrue{...} and rebuild.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% (a) "Double spacing: body of text".  TRUE  = setspace's \doublespacing
+%     (baselines 1.667x font size; the universally accepted LaTeX reading).
+%     FALSE = \setstretch{2.0}, which reproduces Word's "double" exactly
+%     (~29pt baselines at 12pt) and matches Yale's own example PDFs, at the
+%     cost of roughly 20% more pages.
+\newtoggle{yale@latexdouble}\toggletrue{yale@latexdouble}
+
+% (b) "Use 10 to 12 point size."  Read strictly this caps headings too.
+%     TRUE  = nothing larger than \large (14.4pt): chapter and part titles
+%             \large bold, sections \large bold, subsections body size.  One
+%             step above the body instead of the usual four.
+%     FALSE = the traditional LaTeX cascade (\huge chapter titles, \Huge part
+%             titles).  This is what almost every accepted dissertation
+%             actually looks like, and heading size is not something the
+%             Registrar has historically enforced.
+%     NOTE: a fully literal reading of "10 to 12 point" would put headings at
+%     \normalsize.  Swap the two \large's in section 4 below for \normalsize
+%     if you want that.
+\newtoggle{yale@strictheadings}\toggletrue{yale@strictheadings}
+
+% (c) "Text of abstract ... is double spaced, left justified, and indented".
+%     TRUE  = flush left / ragged right, as in Yale's Example: Abstract Page.
+%     FALSE = normal LaTeX justification.
+%     Affects the abstract and lay summary only; the body stays justified.
+\newtoggle{yale@raggedfront}\toggletrue{yale@raggedfront}
+
+% (d) "Use same font type throughout, including with headers, footnotes, and
+%     page numbers."  \usepackage{times} (Disseration.tex) restyles only the
+%     text; math stays in Computer Modern, so every symbol in the merged
+%     chapters is set in a different face from the prose around it.
+%     TRUE  = load newtx, putting text AND math in Times.  Verified to build
+%             clean here, but it restyles every equation in the dissertation --
+%             review the maths before submitting.
+%     FALSE = leave it as it is.  The rule's own examples (headers, footnotes,
+%             page numbers) are about document furniture rather than notation,
+%             and Times-text-with-CM-math is what almost every accepted LaTeX
+%             dissertation does, so this is off by default.
+\newtoggle{yale@timesmath}\togglefalse{yale@timesmath}
+% Loaded here, not in Disseration.tex, because newtxmath must come AFTER
+% amssymb/amsfonts/mathtools (all pulled in by macros.tex) -- placing it any
+% earlier fails with "Command `\Bbbk' already defined".
+\iftoggle{yale@timesmath}{\usepackage{newtxtext,newtxmath}}{}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 1.  MARGINS --- "1 inch margin on all sides"
+%
+% yalephd.cls set a 1.5in left margin (the old binding allowance) and derived
+% \topmargin/\textheight by hand.  geometry replaces all of that.
+% footskip is chosen so the page number's baseline lands 0.6in above the
+% bottom edge: inside the 1in margin, comfortably clear of the 0.5in limit.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\geometry{letterpaper,top=1in,bottom=1in,left=1in,right=1in,
+          headheight=14.5pt,headsep=0pt,footskip=0.4in}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 2.  PAGE NUMBERS --- "bottom right corner of each page; 0.5 inch from any
+%     edge", and no running head (the class put the number in a top-right
+%     header, which the guide forbids).
+%
+% `plain' is redefined as well as the custom style, because book.cls forces
+% \thispagestyle{plain} on every chapter/part/TOC opening page.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\yalepagenumberfoot}{%
+  \fancyhf{}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+  \fancyfoot[R]{\thepage}%
+}
+\fancypagestyle{yale}{\yalepagenumberfoot}
+\fancypagestyle{plain}{\yalepagenumberfoot}    % chapter/TOC opening pages
+\fancypagestyle{headings}{\yalepagenumberfoot} % in case anything asks for it
+\pagestyle{yale}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 3.  SPACING
+%     "Double spacing: body of text"
+%     "Single spacing: table of contents, block quotations, bibliographic
+%      references, captions, footnotes, list of tables, list of figures or
+%      illustrations, and lengthy tables"
+%     "Single spacing within each entry but double space between each entry"
+%
+% setspace already single-spaces floats (hence table bodies and captions) and
+% footnotes on its own.  What it does not cover -- the TOC/LOF/LOT, quotes,
+% longtable, and the bibliography -- is handled below.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\iftoggle{yale@latexdouble}{\doublespacing}{\setstretch{2.0}}
+
+% Remember the body stretch so a passage that must stay double spaced can ask
+% for it back after something has switched to single spacing (see \bodyspacing
+% in \partwithintro, macros.tex).
+\makeatletter
+\edef\yale@bodystretch{\baselinestretch}
+\newcommand{\bodyspacing}{\setstretch{\yale@bodystretch}}
+\makeatother
+
+% NB \setstretch{1}, not setspace's \singlespacing: the latter also emits a
+% \vskip \baselineskip "correction for coming into singlespace", which inside
+% an \AtBeginEnvironment hook shows up as a stray ~15pt gap at the top of every
+% quote, longtable and bibliography.
+\newcommand{\yalesinglespace}{\setstretch{1}}
+
+\AtBeginEnvironment{quote}{\yalesinglespace}
+\AtBeginEnvironment{quotation}{\yalesinglespace}
+\AtBeginEnvironment{verse}{\yalesinglespace}
+\AtBeginEnvironment{longtable}{\yalesinglespace}
+
+% setspace single-spaces floats by patching \@xfloat, which the float package's
+% [H] placement and wrapfig bypass entirely -- an [H] table or an algorithm in a
+% wrapfigure would otherwise come out double spaced.  Hooking the environments
+% themselves covers both routes and is idempotent for ordinary floats.
+\AtBeginEnvironment{figure}{\yalesinglespace}
+\AtBeginEnvironment{table}{\yalesinglespace}
+\AtBeginEnvironment{algorithm}{\yalesinglespace}
+\AtBeginEnvironment{wrapfigure}{\yalesinglespace}
+\AtBeginEnvironment{wraptable}{\yalesinglespace}
+
+\makeatletter
+\let\yale@tableofcontents\tableofcontents
+\renewcommand{\tableofcontents}{\begingroup\yalesinglespace\yale@tableofcontents\endgroup}
+\let\yale@listoffigures\listoffigures
+\renewcommand{\listoffigures}{\begingroup\yalesinglespace\yale@listoffigures\endgroup}
+\let\yale@listoftables\listoftables
+\renewcommand{\listoftables}{\begingroup\yalesinglespace\yale@listoftables\endgroup}
+\makeatother
+
+% Bibliography: single spacing inside an entry, a double-spaced blank line
+% between entries.  \bibsep is natbib's inter-entry skip; one single-spaced
+% \baselineskip of extra lead brings consecutive baselines to ~2x.
+\makeatletter
+\let\yale@thebibliography\thebibliography
+\renewcommand{\thebibliography}[1]{%
+  \yale@thebibliography{#1}%
+  \yalesinglespace
+  \setlength{\itemsep}{\baselineskip}%
+  \setlength{\parsep}{0pt}%
+}
+\makeatother
+
+% Captions: single spaced AND pinned to body size.  Pinning the size matters:
+% several merged chapters open a float with \tiny or \scriptsize, which without
+% `normalsize' here would drag the caption down to 6-8pt, well under the guide's
+% 10-12pt floor.
+\captionsetup{font={normalsize,stretch=1.0}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 4.  HEADINGS --- "Use 10 to 12 point size", "use same font type throughout,
+%     including with headers".
+%
+% Under \yale@strictheadings nothing exceeds \large (14.4pt at a 12pt base) and
+% the hierarchy is carried by weight and shape rather than size.  \part is
+% patched at the book.cls level rather than through titlesec, because
+% \partwithintro (macros.tex) hooks \@endpart and titlesec would displace it.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \makeatletter must be OUTSIDE the \iftoggle: the branch bodies are tokenized
+% when \iftoggle reads them, so an @ inside them is fixed at that moment.  Put
+% inside the branch, it would silently turn \@part into \@ followed by "part".
+\makeatletter
+\iftoggle{yale@strictheadings}{%
+  \titleformat{\chapter}[display]
+    {\normalfont\centering\bfseries}{\chaptertitlename\ \thechapter}{6pt}
+    {\singlespacing\large}
+  \titlespacing*{\chapter}{0pt}{50pt}{30pt}
+  \titleformat{\section}{\normalfont\large\bfseries}{\thesection}{1em}{}
+  \titleformat{\subsection}{\normalfont\normalsize\bfseries}{\thesubsection}{1em}{}
+  % \subsubsection and \paragraph are already \normalsize in book.cls, i.e.
+  % already inside 10-12pt, so they are left alone.
+  % \part: same body as book.cls, with \huge/\Huge brought down to \large.
+  % Redefined at the book.cls level rather than through titlesec because
+  % \partwithintro (macros.tex) hooks \@endpart, which titlesec does not call.
+  \def\@part[#1]#2{%
+    \ifnum \c@secnumdepth >-2\relax
+      \refstepcounter{part}%
+      \addcontentsline{toc}{part}{\thepart\hspace{1em}#1}%
+    \else
+      \addcontentsline{toc}{part}{#1}%
+    \fi
+    \markboth{}{}%
+    {\centering
+     \interlinepenalty \@M
+     \normalfont
+     \singlespacing
+     \ifnum \c@secnumdepth >-2\relax
+       \large\bfseries \partname\nobreakspace\thepart
+       \par
+       \vskip 20\p@
+     \fi
+     \large \bfseries #2\par}%
+    \@endpart}
+}{%
+  % Traditional LaTeX cascade -- what Disseration.tex used before.
+  \titleformat{\chapter}[display]
+    {\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{5pt}
+    {\centering\singlespacing\huge}
+  \titlespacing*{\chapter}{0pt}{50pt}{30pt}
+}
+\makeatother
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 5.  METADATA --- year of conferral.
+%
+% The class hardcoded \the\year (the *compile* year) into the copyright page
+% and the abstract.  Both must instead carry the year the degree is conferred,
+% and per the guide a December degree copyrights to the FOLLOWING year.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatletter
+\def\conferralyear#1{\gdef\yale@confyear{#1}}
+\def\yale@confyear{\the\year}
+% Defaults to the conferral year; set explicitly for a December degree.
+\def\copyrightyear#1{\gdef\yale@copyyear{#1}}
+\let\yale@copyyear\relax
+\def\yale@thecopyyear{\ifx\yale@copyyear\relax\yale@confyear\else\yale@copyyear\fi}
+% Optional -- printed on the title page only if non-empty.
+\def\committeechair#1{\gdef\yale@chair{#1}}
+\def\yale@chair{}
+\makeatother
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 6.  TITLE PAGE --- reproduces Yale's "Example: Title Page".
+%
+% Measured from that PDF (letter, 1in margins, y from the top of the sheet):
+%   title block   y=147   (75pt below the top margin), single spaced
+%   [equal gap 190pt]
+%   "A Dissertation ... Doctor of Philosophy"  y=352-425, single spaced
+%   [equal gap 191pt]
+%   "by" / author  y=616-630
+%   [30pt -- one blank double-spaced line]
+%   "Dissertation Director:" / "Committee Chair:"  y=660-674
+%   [30pt]
+%   "Month Year"   y=704
+% The two large gaps are equal, which is exactly \vfill ... \vfill.
+%
+% Everything is centered, at body size, and NOT bold -- the class used
+% \LARGE\bf for the title, which the guide forbids ("Do not use bold or all
+% caps"; "Font and point size are same as body of text").
+% book.cls's titlepage environment is deliberately not used: it resets the
+% page counter, which is what forced the old \addtocounter{page}{1} hack.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatletter
+% Distance from the top margin to the title, tuned so the title's cap height
+% lands 75pt below the margin as it does in Yale's Example: Title Page.
+\newlength{\yale@titletopskip}\setlength{\yale@titletopskip}{57\p@}
+\renewcommand{\maketitle}{%
+  \cleardoublepage
+  \thispagestyle{empty}%
+  \begin{singlespace}
+  \begin{center}
+    \null\vskip \yale@titletopskip
+    \@title\par
+    % \vfill (order fill), not \vfil: the output routine's own \@textbottom is
+    % fil-order glue and would otherwise eat a third of the free space, leaving
+    % the block stranded in the upper half of the page.
+    \vfill
+    A Dissertation\\
+    Presented to the Faculty of the Graduate School\\
+    of\\
+    Yale University\\
+    in Candidacy for the Degree of\\
+    Doctor of Philosophy\par
+    \vfill
+    by\\
+    \@author\par
+    \vskip \baselineskip
+    Dissertation Director: \@dvisor\par
+    \ifx\yale@chair\@empty\else Committee Chair: \yale@chair\par\fi
+    \vskip \baselineskip
+    \@date\par
+    \ifdraft Draft of \today\par\fi
+    \vspace*{16\p@}%  starred: survives the page break, so the last line sits
+                   %  16pt above the bottom margin as in Yale's example
+  \end{center}
+  \end{singlespace}
+  \clearpage
+}
+\makeatother
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 7.  COPYRIGHT PAGE --- "Typed 3 inches below top margin and on 2 lines";
+%     "Do not include the word 'Copyright'"; no printed page number.
+%     The class printed "Copyright (c) <compile year> by ..." 4in down.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatletter
+\renewcommand{\makecopyright}{%
+  \clearpage
+  \thispagestyle{empty}%
+  \begingroup
+    \singlespacing
+    \setlength{\parindent}{0pt}%
+    % \centerline rather than a center environment: the list leading a center
+    % environment adds would push the notice ~50pt below where it belongs.
+    % Subtracting one \baselineskip cancels the leading TeX puts above the
+    % first line, so the line itself starts 3in below the top margin.
+    \vspace*{\dimexpr 3in-\baselineskip\relax}%
+    \centerline{\copyright\ \yale@thecopyyear\ by \@author}%
+    \centerline{All rights reserved.}%
+  \endgroup
+  \clearpage
+}
+\makeatother
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 8.  ABSTRACT --- reproduces Yale's "Example: Abstract Page".
+%
+%     Abstract                      (centered, body size, not bold)
+%     <full title>                  (centered, single spaced, may wrap)
+%     <author>
+%     <year of conferral>
+%     <text: double spaced, flush left, first line of each para indented>
+%
+% Numbered "iii".  The class put the abstract inside a `titlepage', i.e. on an
+% unnumbered page emitted *before* the title page; both are corrected here and
+% in the front-matter sequence in Disseration.tex.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatletter
+% Shared skeleton for the abstract and the lay summary.
+\newenvironment{yale@frontsection}[1]{%
+  \clearpage
+  \phantomsection
+  \begin{center}
+    \begin{singlespace}#1\end{singlespace}
+  \end{center}
+  \iftoggle{yale@raggedfront}{\RaggedRight}{}%
+  \setlength{\parindent}{0.5in}%
+}{\par\clearpage}
+
+\renewenvironment{abstract}{%
+  \begin{yale@frontsection}{%
+    Abstract\par\vspace{\baselineskip}
+    \@title\par\vspace{\baselineskip}
+    \@author\par\vspace{\baselineskip}
+    \yale@confyear
+  }%
+}{\end{yale@frontsection}}
+
+\newenvironment{laysummary}{%
+  \begin{yale@frontsection}{Lay Summary}%
+}{\end{yale@frontsection}}
+\makeatother
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 9.  FRONT-MATTER HELPERS
+%
+% \frontmatterheading gives the acknowledgments (and any other unnumbered
+% front-matter section) a heading in the same style as the abstract's, plus a
+% TOC entry.  The old acknowledgements.tex rolled its own \bf \large centered
+% heading, which is both bold and oversized.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\frontmatterheading}[1]{%
+  \clearpage
+  \phantomsection
+  \addcontentsline{toc}{chapter}{#1}%
+  \begin{center}
+    \begin{singlespace}#1\end{singlespace}
+  \end{center}
+}
+
+% Give the two lists TOC entries as well, so every front-matter page is
+% reachable from the table of contents.
+\makeatletter
+\pretocmd{\yale@listoffigures}{\cleardoublepage\phantomsection
+  \addcontentsline{toc}{chapter}{\listfigurename}}{}{}
+\pretocmd{\yale@listoftables}{\cleardoublepage\phantomsection
+  \addcontentsline{toc}{chapter}{\listtablename}}{}{}
+\makeatother
+
+% EOF
