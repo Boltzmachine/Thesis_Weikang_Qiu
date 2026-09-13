@@ -79,22 +79,7 @@ For the acceleration experiments, we include 7 tasks across 3 categories in the 
 \item \textbf{Drawer Opening.} The robot is instructed to open a specified drawer. We report the success rate of successfully opening the drawer.
 \end{itemize}
 
-For the multi-frame integration experiments, we evaluate three tasks that require memory or temporal reasoning:
-\begin{itemize}
-\item \textbf{Sequential Heat.} The robot is instructed to heat the vegetables one at a time. The model must remember which vegetables have already been heated.
-\item \textbf{Pour Twice.} The robot is instructed to pour from the bottle twice. The model must keep track of whether the first pour has already been completed.
-\item \textbf{Press Buttons.} The robot is instructed to press a sequence of buttons. The model must remember which buttons have already been pressed and determine the next button to press.
-\end{itemize}
-
-
-For each task, we vary both the object's location and the robotic arm's starting position. The demonstrations of tasks are illustrated in Figure~\ref{fig:real} and Figure~\ref{fig:memory_examples}. 
-
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{figs/real_demo_mem.jpg}
-    \caption{In real-world evaluations with the Cobot Magic robot for multi-frame integration, each task is evaluated over 20 episodes.}
-    \label{fig:real}
-\end{figure}
+For each task, we vary both the object's location and the robotic arm's starting position. The demonstrations of tasks are illustrated in Figure~\ref{fig:real}.
 
 \section{Architecture Details}
 \label{app:arch}
@@ -243,12 +228,6 @@ Table~\ref{tab:interval} summarizes the recaching threshold settings and the res
     \end{tabular}
 
 \end{table}
-
-\section{Real-World Experiments on Multi-Frame Integration}
-\label{app:real_mem}
-We summarize the results of real-world experiments on multi-frame integration in Table~\ref{tab:real_mem}. We found that our method outperforms baselines, with an average absolute improvement of $23.3\%$.
-
-\input{DYSTA/tables/real_mem}
 
 \section{Computational and Acceleration Analysis}
 \label{app:complexity}

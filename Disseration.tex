@@ -7,6 +7,7 @@
 
 
 \usepackage{graphicx}
+\usepackage{import}
 % Chapters under PHIL/ reference their images as figures/xxx.png
 \graphicspath{{./}{PHIL/}{HYBRID/}{MINDLLM/}{PRISM/}{DEDIT/}{REPQA/}{DYSTA/}}
 \usepackage{lscape}
@@ -22,7 +23,7 @@
 \usepackage{longtable}
 \usepackage[pagebackref=true]{hyperref}
 \usepackage{hyperref}
-\usepackage[dvipsnames]{xcolor}
+\usepackage[table,dvipsnames]{xcolor}
 \hypersetup{hidelinks}
 \usepackage{setspace}
 \usepackage{titlesec}
@@ -105,7 +106,7 @@
     \addcontentsline{toc}{chapter}{Bibliography} % To get an entry in the TOC.
 
     \bibliographystyle{plainnat}
-    \bibliography{bibfile}
+    \bibliography{bibfile,SWA/ref_dissertation}
 
 
 

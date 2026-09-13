@@ -703,35 +703,6 @@ We use $128$ as the number of fMRI tokens. We use a $4$-layer MLP in the fMRI en
 %     \end{tabular}
 % \end{table}
 
-\section{Computational Complexity and Runtime Analysis}
-\label{app:complexity}
-In the neuroscience-informed attention, the complexity of the dot product between queries and keys is $O(dNN_q)$. The complexity of the aggregation of values is $O(NN_q)$, which is negligible. The MLP maps the hidden representation of dimension $N_q$ to $L \times d$, therefore its complexity is $dLN_q$. Therefore, the complexity of the fMRI encoder is $O(dNN_q + dLN_q) = O(dN_q(L + N)) = O(dN_qN)$ given that $L \ll N$.
-
-Table~\ref{tab:computation} summarizes the computational complexity and runtime comparison of different models. Despite its superior performance, our model introduces only a marginal increase in encoder-side computational cost compared to other baselines. Notably, the majority of inference time and complexity arises from the LLM component, which is shared across all models. This highlights that the design choices in the encoder, while crucial for performance, do not significantly affect runtime.
-
-\begin{table}[htbp]
-    \centering
-        \caption{Computational complexity and runtime of each encoder and the LLM. For the first 4 lines, we only time the encoder part, excluding the LLM. The runtime of the LLM forward pass is reported separately in the last row.}
-    \label{tab:computation}
-    \vskip 0.1in
-    \begin{tabular}{cccll}
-    \toprule
-    Module	&Forward Pass (ms/sample)	&Complexity	&Notation Explanation	&Approximate Values\\
-    \midrule
-UMBRAE	&$0.0109$	&$O(dN + dN_q^2)$& \begin{tabular}{l}$d$: hidden size\\$N$: number of voxels\\$N_q$: number of query tokens\end{tabular}	& \begin{tabular}{l}$d = 100$\\$N = 15000$\\$N_q = 200$\end{tabular}\\
-\midrule
-MindBridge &$0.0048$ & $O(dN)$ & \begin{tabular}{l}$d$: hidden size\\$N$: number of voxels\end{tabular} & \begin{tabular}{l}$d = 1000$\\$N = 15000$\end{tabular}\\
-\midrule
-UniBrain &$0.0175$ & $O(dGK+dN_q^2)$ & \begin{tabular}{l}$d$: hidden size\\$G$: number of groups\\$K$: voxels in each group\\$N_q$: number of query tokens\end{tabular} & \begin{tabular}{l}$d = 1000$\\$G = 500$\\$K = 30$\\$N_q = 200$\end{tabular}\\
-\midrule
-MindLLM &$0.0181$ & $O(dN_qN)$ & \begin{tabular}{l}$d$: hidden size\\$N$: number of voxels\\$N_q$: number of query tokens\end{tabular} & \begin{tabular}{l}$d = 100$\\$N = 15000$\\$N_q = 100$\end{tabular}\\
-\midrule
-\midrule
-LLM &$0.0621$ & - & - & -\\
-     \bottomrule
-    \end{tabular}
-\end{table}
-
 \section{Qualitative Analysis}
 \label{app:qual}
 

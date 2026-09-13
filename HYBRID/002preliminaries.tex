@@ -2,12 +2,12 @@
 \label{sec:hybrid-prelims}
 % \subsection{Problem Definition \& Notations}
 \paragraph{Input} 
- Our dataset is a collection of human subject's features and their phenotypic outcomes, which is represented by the pair $(X, Y)$ for each subject. $X \in \mathbb{R}^{N \times d}$ represents the features for each subject, where $N$ is the number of brain regions and $d$ is the feature size. Consistent with previous works \citep{kan2022brain,li2021braingnn}, the features are Pearson correlations derived from fMRI time series. $Y \in \mathbb{R}$ denotes the phenotypic outcome, such as the intelligent quotient. Section \ref{sec:hybrid-experiments} and Appendix \ref{app:dataset} will elaborate more details about datasets and preprocessing procedures. 
+ Our dataset is a collection of human subject's features and their phenotypic outcomes, which is represented by the pair $(X, Y)$ for each subject. $X \in \mathbb{R}^{N \times d}$ represents the features for each subject, where $N$ is the number of brain regions and $d$ is the feature size. Consistent with previous works \citep{kan2022brain,li2021braingnn}, the features are Pearson correlations derived from fMRI time series. $Y \in \mathbb{R}$ denotes the phenotypic outcome, such as the intelligent quotient. Full implementation details and hyperparameter settings are provided in \cite{qiu2023learning}.
  
  %For how to obtain features of regions from raw data, see for more details.
 
 \paragraph{Goal}
-Based on the input $X$, \mname{} aims to learn a weighted hypergraph of the brain, where regions are nodes. To achieve this, \mname{} identifies a collection of hyperedges $H = (\boldsymbol{h}^1, \boldsymbol{h}^2, \cdots, \boldsymbol{h}^K)$, and assigns weights $\boldsymbol{w} = [w^1, w^2, \cdots, w^K]^T$ for all hyperedges. These hyperedges and their weights, which represent strengths of hyperedges, are expected to be the most informative towards $Y$ yet the least redundant. 
+Based on the input $X$, \hybrid{} aims to learn a weighted hypergraph of the brain, where regions are nodes. To achieve this, \hybrid{} identifies a collection of hyperedges $H = (\boldsymbol{h}^1, \boldsymbol{h}^2, \cdots, \boldsymbol{h}^K)$, and assigns weights $\boldsymbol{w} = [w^1, w^2, \cdots, w^K]^T$ for all hyperedges. These hyperedges and their weights, which represent strengths of hyperedges, are expected to be the most informative towards $Y$ yet the least redundant. 
 
 \paragraph{Representation of Hyperedges}
 As mentioned before, we use $H$ to denote the collection of hyperedge structures and $\boldsymbol{h}^k$ to denote the $k$-th hyperedge. To associate hyperedges with node memberships, we use the following representation for a hyperedge:
@@ -15,7 +15,3 @@ As mentioned before, we use $H$ to denote the collection of hyperedge structures
     \boldsymbol{h}^k = \boldsymbol{m}^k \odot X \in \mathbb{R}^{N\times d},
 \end{equation}
 where $\boldsymbol{m}^k \in \{0,1\}^N$ is a mask vector and $\odot$ denotes broadcasting element-wise multiplication. In other words, each $\boldsymbol{h}^k$ is a randomly row-zeroed version of $X$.
-
-% \subsection{Connectome-based predictive modeling} 
-% \label{sec:cpm}
-% The connectome-based predictive modeling (CPM, \cite{shen2017using,finn2015functional}) has shown tremendous promise in recent years in detecting imaging biomarkers. \citep{rosenberg2015predicting, dubois2018resting, rosenberg2020functional, rosenberg2016neuromarker}. Such a model, based chiefly on functional MRI data, can measure the significance of the input edge weights, which is revealed by a correlation coefficient that reflects the correlation between the edge weights and the cognition score. One could expect a large correlation coefficient to indicate the high quality of edge weights. We utilize the CPM as an evaluation model to evaluate the quality of our learned hyperedges. More details of the CPM can be found in Appendix \ref{sec:app_cpm}.

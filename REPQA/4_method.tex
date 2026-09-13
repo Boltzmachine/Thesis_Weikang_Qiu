@@ -1,6 +1,6 @@
 \section{Methods}\label{sec:methods}
 
-In this section, we detail the construction of \bench, the evaluation metrics, the readability-enhancement strategies we benchmarked, the study design behind our three research questions, and the experimental setup.
+In this section, we detail the construction of \repqa, the evaluation metrics, the readability-enhancement strategies we benchmarked, the study design behind our three research questions, and the experimental setup.
 
 \subsection{Dataset construction}\label{sec:dataset_curation}
 
@@ -108,7 +108,7 @@ The remaining two fine-tune the base model with readability as a verifiable rewa
 
 \subsection{Study design}\label{sec:questions}
 
-Using \bench, we studied LLMs' ability to adapt, assess, and optimize readability. The prompts can be found in Supplementary Section~\ref{app:prompt}.
+Using \repqa, we studied LLMs' ability to adapt, assess, and optimize readability. The prompts can be found in Supplementary Section~\ref{app:prompt}.
 We posed three research questions.
 
 \paragraph{RQ1: Can LLMs generate responses at a specified reading level?}
@@ -121,7 +121,7 @@ In addition, we evaluated LLMs' readability-understanding capability: LLMs were 
 \paragraph{RQ2: Can LLMs determine what readability is needed for a given question?}
 Oversimplifying medical content omits qualifiers and loses information, while overly technical language reduces accessibility. Thus, selecting an appropriate reading level for each question is critical.
 We investigated whether an LLM can infer the target level from the question alone (without user metadata).
-Concretely, we extended each question in \bench into three variants that differ in required medical knowledge, and evaluated the accuracy of the models' predictions.
+Concretely, we extended each question in \repqa into three variants that differ in required medical knowledge, and evaluated the accuracy of the models' predictions.
 
 \paragraph{RQ3: Can readability serve as a reward signal?}
 Reinforcement learning has shown promise for steering LLMs toward preferred behaviors. We studied whether readability can act as a useful reward to drive responses toward a requested level without sacrificing content quality.

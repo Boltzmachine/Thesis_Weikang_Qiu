@@ -147,7 +147,7 @@ where $n$ is the number of samples and $B$ is the beta function. Based on the di
 \section{Computational Complexity}
 \label{app:complexity}
 Suppose we have $N$ regions as $N$ nodes and $K$ hyperedges. For the \textsc{Constructor}, the unignorable computation is from the mask operation. The computational complexity of this step for each hyperedge is $O(Nd)$ since it does a pairwise multiplication operation of a matrix of size $N \times d$. Given that there are $K$ hyperedges, the total complexity is $O(NKd)$. For the \textsc{Weighter}, the computation is from the dim reduction operation and the linear head. The dim reduction operation is an MLP. In this work, the hidden dimensions are a fraction of the original feature dimension. Therefore, the complexity of the dim-reduction MLP is $O(d^2)$. The linear head only contributes $O(d)$, which is neglectable. 
-As a result, the computational complexity of the whole model is $O(NKd + d^2) = O(N^2K)$ since the feature dimension is equal to the number of regions (See Appendix \ref{app:dataset} for features we used). This complexity is just at the same scale as that of MLPs even though we are addressing a more challenging task: identifying high-order relationships in an exponential space.
+As a result, the computational complexity of the whole model is $O(NKd + d^2) = O(N^2K)$ since the feature dimension is equal to the number of regions. This complexity is just at the same scale as that of MLPs even though we are addressing a more challenging task: identifying high-order relationships in an exponential space.
 
 \section{Dataset details}
 \label{app:dataset}
@@ -211,7 +211,7 @@ See Table \ref{tab:software} for the software we used and the versions.
 \end{table}
 
 \paragraph{Hyperparameter Choices}
-The hyperparameters selection is shown in Table \ref{tab:hyper}. Some crucial hyperparameters ablation experiments can be found in Appendix \ref{app:ablation}.
+The hyperparameters selection is shown in Table \ref{tab:hyper}.
 
 \begin{table}
     \centering
@@ -282,7 +282,7 @@ Brain activities during resting states are not driven by external tasks, leading
 %     model & train & validation & test \\
 %     \midrule
 %     BrainNetTF & $0.967$ & $0.484$ & $0.334$ \\
-%     \mname{} (Ours)   & $0.984$ & $0.491$ & $0.223$ \\
+%     \hybrid{} (Ours)   & $0.984$ & $0.491$ & $0.223$ \\
 %     \bottomrule
 %     \end{tabular}
 % \end{table}
@@ -321,7 +321,7 @@ Brain activities during resting states are not driven by external tasks, leading
         $l_2$ hypergraph &  $\underline{0.987}$ & $0.825$  & $\underline{0.897}$ &&  $\underline{0.412}$ & $\underline{0.631}$ & $\underline{0.494}$ && $\underline{0.276}$ & $\underline{0.499}$ & $\underline{0.351}$ && $0.233$ & $\underline{0.470}$ & $0.310$ \\
         HGCN & $0.625$ & $\mathbf{1.000}$ & $0.769$  && $0.196$ & $0.477$ & $0.278$ && $0.188$ & $0.379$  & $0.251$ && $0.277$ & $0.364$ & $\underline{0.314}$  \\
         \shline
-         \mname{} (Ours) & $\mathbf{1.000}$ & $\mathbf{1.000}$ & $\mathbf{1.000}$ && $\mathbf{0.595}$  & $\mathbf{0.680}$ & $\mathbf{0.631}$ && $\mathbf{0.504}$&$\mathbf{0.604}$ & $\mathbf{0.549}$ && $\mathbf{0.428}$ & $\mathbf{0.393}$ & $\mathbf{0.401}$ \\
+         \hybrid{} (Ours) & $\mathbf{1.000}$ & $\mathbf{1.000}$ & $\mathbf{1.000}$ && $\mathbf{0.595}$  & $\mathbf{0.680}$ & $\mathbf{0.631}$ && $\mathbf{0.504}$&$\mathbf{0.604}$ & $\mathbf{0.549}$ && $\mathbf{0.428}$ & $\mathbf{0.393}$ & $\mathbf{0.401}$ \\
          \bottomrule    
     \end{tabular}
     }
@@ -360,9 +360,9 @@ We report the goodness of fit of our model and the state-of-the-art baseline in 
         Model & FIQ & VIQ & PIQ \\
     \midrule
 %         BrainNetTF & $0.097$  &	$0.089$ & $0.055$ \\
-% \mname{} (ours) & $0.057$ &	$0.071$ &	$0.046$ \\
+% \hybrid{} (ours) & $0.057$ &	$0.071$ &	$0.046$ \\
         BrainNetTF & $5.917$  &	$5.429$ & $3.355$ \\
-\mname{} (ours) & $\mathbf{3.477}$ &	$\mathbf{4.331}$ &	$\mathbf{2.806}$ \\
+\hybrid{} (ours) & $\mathbf{3.477}$ &	$\mathbf{4.331}$ &	$\mathbf{2.806}$ \\
 \bottomrule
     \end{tabular}
     \caption{Performance of the model and baselines (MSE) in fitting the target on the ABIDE dataset. }
@@ -377,10 +377,10 @@ We report the goodness of fit of our model and the state-of-the-art baseline in 
 Model &	SST 1 &	EN-back 1 &	MID 1 &	Rest 1 &	SST 2 &	EN-back 2 &	MID 2 &	Rest 2 \\
 \midrule
 % BrainNetTF &	0.0189 &	0.0225 &	0.0188& 	0.0204& 	0.0101& 	0.0111& 	0.0118& 	0.0123 \\
-% \mname{} (ours) & 	0.0169& 	0.0221& 	0.0209& 	0.0241& 	0.0099& 	0.0105& 	0.0089& 	0.0076 \\
+% \hybrid{} (ours) & 	0.0169& 	0.0221& 	0.0209& 	0.0241& 	0.0099& 	0.0105& 	0.0089& 	0.0076 \\
 
 BrainNetTF & 1.153 & 1.373 & $\mathbf{1.147}$ & $\mathbf{1.244}$ & 0.616 & 0.677 & 0.720 & 0.750\\
-\mname{} (ours) &  $\mathbf{1.031}$& 	 $\mathbf{1.348}$&  $1.275$& 	 $1.470$& 	 $\mathbf{0.604}$& 	 $\mathbf{0.641}$&  $\mathbf{0.543}$& 	 $\mathbf{0.464}$ \\
+\hybrid{} (ours) &  $\mathbf{1.031}$& 	 $\mathbf{1.348}$&  $1.275$& 	 $1.470$& 	 $\mathbf{0.604}$& 	 $\mathbf{0.641}$&  $\mathbf{0.543}$& 	 $\mathbf{0.464}$ \\
 \bottomrule
     \end{tabular}
     \caption{Performance of the model and baselines (MSE) in fitting the target on the ABCD dataset.}
@@ -470,7 +470,7 @@ In our optimization objective \ref{equ:ib2}, $\beta$ acts as a trade-off paramet
 
 \section{Runtime Comparison}
 \label{app:runtime}
-Figure \ref{fig:runtime} summarizes the per-batch training time of all deep learning models. We find that \mname{} is the most efficient one, with $87\%$ faster than the second one (BrainNetTF) and at least $1255\%$ faster than the GNN-based ones.
+Figure \ref{fig:runtime} summarizes the per-batch training time of all deep learning models. We find that \hybrid{} is the most efficient one, with $87\%$ faster than the second one (BrainNetTF) and at least $1255\%$ faster than the GNN-based ones.
 
 \begin{figure}[H]
     \centering
@@ -509,7 +509,7 @@ We visualize the region importance of the resting state in Figure \ref{fig:rest_
 % Sensory Integration: The presence of primary sensory areas (like the Calcarine, associated with vision) and association areas suggests that sensory information is being integrated with higher-order cognitive processes, perhaps as the subject views and responds to emotional images or words.
 % \section{Limitations}
 % \label{app:limitations}
-% \mname{} only considers static high-order relations. Given that ABCD tasks are dynamic, including temporal changes and interactions, it will be interesting to study the evolution of these high-order relationships.
+% \hybrid{} only considers static high-order relations. Given that ABCD tasks are dynamic, including temporal changes and interactions, it will be interesting to study the evolution of these high-order relationships.
 
 
 \section{Discussion of the Possible Methods to Interpret Hyperedges}

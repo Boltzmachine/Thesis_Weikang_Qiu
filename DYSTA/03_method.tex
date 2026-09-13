@@ -51,11 +51,11 @@ A key challenge is deciding when cached static tokens should be refreshed. Naive
     g_l(\bs{Z}_{t-\Delta}, \bs{Z}_t) \in [0, 1],\quad \Delta=1,2,\cdots, 
 \end{equation}
 
-which predicts the probability that static tokens should be recomputed given the current observation and a cached reference from $\Delta$ timesteps earlier. During training, we use the Gumbel-softmax trick \cite{jang2016categorical,maddison2016concrete} to allow end-to-end differentiable binary decisions. At inference time, static tokens are refreshed if the probability is greater than a threshold, i.e., $g_l > \delta_l$; otherwise, the previous cache is reused. It is also worth noting that if the higher-level cache (e.g., L1) should be refreshed, the lower-level cache (e.g., L2) should also be refreshed during both training and inference. Additional details of the architecture of the recache gate could be found in Appendix~\ref{app:arch}.
+which predicts the probability that static tokens should be recomputed given the current observation and a cached reference from $\Delta$ timesteps earlier. During training, we use the Gumbel-softmax trick \cite{jang2016categorical,maddison2016concrete} to allow end-to-end differentiable binary decisions. At inference time, static tokens are refreshed if the probability is greater than a threshold, i.e., $g_l > \delta_l$; otherwise, the previous cache is reused. It is also worth noting that if the higher-level cache (e.g., L1) should be refreshed, the lower-level cache (e.g., L2) should also be refreshed during both training and inference.
 
 
 \noindent\textbf{Computational and Acceleration Analysis}
-Let $N$ be the total number of tokens per observation, $r$ the fraction of cached static tokens, and $T$ the number of observations in the context. Our static-dynamic disentanglement reduces the effective context length from $NT$ to $NT - rN(T-1)$, and reduces the FLOPs of the LLM backbone by a factor of $1-r$. The recache gate adds only negligible overhead ($\approx 1.27\%$). A full derivation and wall-clock latency breakdown are provided in Appendix~\ref{app:complexity}.
+Let $N$ be the total number of tokens per observation, $r$ the fraction of cached static tokens, and $T$ the number of observations in the context. Our static-dynamic disentanglement reduces the effective context length from $NT$ to $NT - rN(T-1)$, and reduces the FLOPs of the LLM backbone by a factor of $1-r$. The recache gate adds only negligible overhead ($\approx 1.27\%$).
 
 \begin{figure}[t]
     \centering
@@ -97,7 +97,7 @@ The full training objective is
 \begin{equation}
     \mathcal{L} = \mathcal{L}_\text{Task} + \sum_l \alpha_l  \mathcal{L}^l_\text{InfoNCE} + \beta \mathcal{L}_\text{gate},
 \end{equation}
-where $\alpha_l$ and $\beta$ weight the auxiliary regularization terms. A sensitivity analysis for these coefficients is provided in Appendix~\ref{app:sense}.
+where $\alpha_l$ and $\beta$ weight the auxiliary regularization terms.
 
 \subsection{LIBERO-Memory Benchmark}
 
@@ -121,4 +121,4 @@ Each trial consists of three subtasks, each intentionally designed to require th
 
 This task design requires the model to retain \emph{episodic memory}, integrating information about what happened, where it occurred, and when it took place \cite{tulving1972episodic,clayton1998episodic}. First, the robot must remember the initial spatial layout in order to return the first can to its original position (where). Second, it must track the elapsed time since the can was placed on the stove to determine when to remove it (when). Third, it must remember which can has already been heated in order to correctly select the remaining one for the final step (what).
 
-These requirements prevent the task from being solved using only the current observation or a short observation history. We use Robosuite \cite{zhu2025robosuitemodularsimulationframework} as the simulation framework to produce the dataset. The layout and the oracle demonstrations are programmatically generated. More details can be found in Appendix \ref{app:dataset_memory}.
+These requirements prevent the task from being solved using only the current observation or a short observation history. We use Robosuite \cite{zhu2025robosuitemodularsimulationframework} as the simulation framework to produce the dataset. The layout and the oracle demonstrations are programmatically generated.

@@ -25,8 +25,12 @@
 \newcommand{\update}[1]{{{\textcolor{ForestGreen}{[Update: #1]}}}}
 
 % Shorthands
+% Model names: because this dissertation collects several papers, each paper's
+% name macro is called after the model itself (\phil, \hybrid, \mindllm,
+% \prism, \repqa, \dysta) rather than the generic \alg/\mname/\modelname/
+% \bench/\name/\method the individual papers used.
 \newcommand{\etal}{\textit{et al.}\xspace}
-\newcommand{\alg}{\textsc{PHIL}\xspace}
+\newcommand{\phil}{\textsc{PHIL}\xspace}
 \newcommand{\sail}[0]{\textsc{SaIL}\xspace}
 \newcommand{\VS}{\mathcal{V}}
 \newcommand{\xhdr}[1]{{\noindent\bfseries #1}.}
@@ -73,7 +77,7 @@
 \newcommand{\shline}{\addlinespace[3pt]\hline\addlinespace[3pt]}
 
 % Names
-\newcommand{\mname}{\textsc{HyBRiD}}
+\newcommand{\hybrid}{\textsc{HyBRiD}}
 \newcommand{\multiheadname}{\textit{multi-head drop-bottleneck}}
 \newcommand{\avgimp}{$12.1\%$}
 
@@ -100,7 +104,7 @@
 \usepackage[most]{tcolorbox}
 
 % Names and marks
-\newcommand{\mindllm}{MindLLM}  % the paper's \name, renamed to avoid a clash
+\newcommand{\mindllm}{MindLLM}  % the paper's \name
 \newcommand{\cmark}{\ding{51}}
 \newcommand{\xmark}{\ding{55}}
 \newcommand{\tdag}{\textsuperscript{\textdagger}}
@@ -118,17 +122,27 @@
 % skipped: no algorithm environment is used, and they would clash with the
 % algorithm2e loaded for the PHIL chapter.
 
-\newcommand{\modelname}{\textbf{{PRISM}}\xspace}
+\newcommand{\prism}{\textbf{{PRISM}}\xspace}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% D-Edit chapter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The paper spelled the name out in full; \dedit gives it the same treatment as
+% the other chapters (see the note on model names at the top of this file).
+
+\newcommand{\dedit}{D-Edit\xspace}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RepQA chapter (from the npj Digital Medicine paper preamble)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \bench is the only macro from that preamble the chapter actually uses; the
+% \repqa (the paper's \bench) is the only macro from that preamble the chapter
+% actually uses; the
 % rest (\model, \Set, \Mat, \vpara, \reb, \xm, \xp, prop/problem theorems) and
 % its heavy packages (commath, listings, subfigure, threeparttable, lineno) go
 % unused, so they are not merged. \rex/\htl already exist above.
-\newcommand{\bench}{\textsc{RepQA}\xspace}
+\newcommand{\repqa}{\textsc{RepQA}\xspace}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % DySta chapter (from the NeurIPS 2026 paper preamble)
@@ -136,8 +150,8 @@
 % Every package that preamble loads is already loaded above or in
 % Disseration.tex, except `listings` (and its PDDL definition), which only the
 % appendix needs, and `dblfloatfix`, which only matters in two-column mode.
-% The paper's generic \method is renamed \dysta for the same reason \mindllm
-% was: a name that plain would collide with the next merged paper.
+% The paper's generic \method is renamed \dysta, following the convention
+% noted at the top of this file.
 
 \newcommand{\dysta}{DySta\xspace}
 \newcommand{\bs}[1]{\boldsymbol{#1}}

@@ -9,11 +9,10 @@
 \usepackage{amsfonts}       % blackboard math symbols
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
-\usepackage{xcolor}         % colors
+\usepackage[table]{xcolor}  % colors and table cell backgrounds
 \usepackage{amsmath}
 \usepackage{cleveref}
 \usepackage{multirow}
-\usepackage[table]{xcolor}
 \usepackage{graphicx}      % for \includegraphics
 \usepackage{wrapfig}
 \newcommand{\yy}[1]{\textcolor{orange}{[Yujun:\ #1]}}
@@ -43,12 +42,7 @@ Understanding what internal structures distinguish more capable large language m
 \input{04experiments}
 \input{05relatedworks}
 
-\vspace{-0.3cm}
-
-\section{Conclusion}
-\vspace{-0.3cm}
-
-In this work, we studied whether LLMs exhibit internal structural organization related to intelligence-like reasoning performance. By constructing functional graphs over attention heads using activation similarity, we found that attention heads form small-world structures whose SWI correlates with performance on fluid intelligence benchmarks across models. We further derived core and bridge scores to assign graph-level structure to local head roles, and used pruning as a validation of their functional importance. Preserving structurally important components improves robustness under sparsity, suggesting that small-world organization captures performance-relevant internal structure in LLMs. Overall, our results point to small-world functional organization as a measurable structural principle for understanding, comparing, and improving LLM reasoning capability.
+\input{06conclusion}
 
 \bibliographystyle{plain}
 \bibliography{ref}  
@@ -59,75 +53,7 @@ In this work, we studied whether LLMs exhibit internal structural organization r
 \appendix
 
 
-\section{Experiment Details}
-\label{app:expdetails}
-\subsection{SWI Analysis Details}
-\label{sec:swi_analysis_details}
-
-We use DRE-Bench~\cite{yang2025truly} for activation collection and SWI analysis. DRE-Bench is designed to evaluate the fluid intelligence of LLMs, defined as the ability to reason abstractly and generalize latent rules to novel situations. It consists of abstract reasoning tasks organized across four cognitive levels, with dynamically generated task variants that test the same underlying latent rule.
-
-DRE-Bench contains four levels of increasing cognitive complexity. Level 1, \textit{Attribute}, evaluates basic rule types over object attributes, including size, count, and shape. Level 2, \textit{Spatial}, evaluates spatial reasoning rules such as movement, rotation, and symmetry. Level 3, \textit{Sequential}, evaluates multi-step reasoning, including category learning, sorting, and planning. Level 4, \textit{Conceptual}, evaluates high-level abstract reasoning involving scientific concepts such as gravity, reflection, and expansion.
-For our SWI analysis, we randomly sample $N=400$ questions as calibration inputs for constructing attention-head functional graphs, with 200 questions from Level 1 and 200 questions from Level 2. Because DRE-Bench generates multiple variants for the same latent rules, different random samples change the concrete task instances while preserving the reasoning rules being tested. Empirically, SWI estimates remain stable across random samples. We focus on these two levels because current open-source models can produce meaningful answers on them, whereas Level 3 and Level 4 are substantially harder and often yield unreliable generations for activation-based analysis. For each model, we collect attention-head activations on the sampled questions, compute pairwise head similarity, construct the head--head functional graph, and compute SWI.
-
-
-We construct graphs at a fixed edge density $\delta=0.25$. Specifically, after ranking all head pairs by SVCCA similarity, we retain the top-$K_\delta$ pairs with $K_\delta=\lfloor \delta |\mathcal{P}| \rfloor$. We choose $\delta=0.25$ based on a density sweep: within each model family, the relationship between SWI and model performance remains stable across a range of densities, while $\delta=0.25$ provides the most consistent operating point for comparing SWI across different model families. For SVCCA, we apply SVD to each head activation matrix and retain the principal directions that explain $\tau=99\%$ of the variance before applying CCA. We use this threshold for all models and all reported SWI results. All experiments are conducted on a cluster equipped with NVIDIA RTX PRO 6000 GPUs and AMD EPYC 9655 processors.
-
-\subsection{Pruning Evaluation Details}
-\label{sec:pruning_eval_details}
-
-We evaluate SWA by integrating it with two representative post-training pruning methods, SparseGPT \cite{frantar2023sparsegpt} and Wanda \cite{sun2023simple}, and compare it with existing layer-wise sparsity allocation methods, including FARMS \cite{hu2025eigenspectrum} and ATP \cite{huang2025determining}.
-
-\paragraph{SparseGPT.}
-SparseGPT is a one-shot post-training pruning method designed for GPT-style LLMs. It formulates pruning as a layer-wise sparse reconstruction problem, where each compressed layer is optimized to preserve the input-output behavior of the corresponding dense layer on calibration data. SparseGPT uses second-order information to select pruning masks and update the remaining weights, enabling accurate unstructured and semi-structured sparsification without fine-tuning. In our experiments, we use SparseGPT as a base pruning method and replace its uniform sparsity setting with the sparsity allocations produced by SWA and competing allocation baselines.
-
-\paragraph{Wanda.}
-Wanda is a post-training pruning method that estimates weight importance using both weight magnitude and input activation statistics. For a linear layer with weight matrix $W$ and input activations $X$, Wanda scores each weight by $|W_{ij}|\cdot \|X_j\|_2$ and prunes weights with lower scores on a per-output basis. Unlike SparseGPT, Wanda does not update the remaining weights after pruning and can be performed with a single forward pass over calibration data. We use Wanda as a second base pruning method to test whether SWA generalizes beyond reconstruction-based pruning.
-
-\paragraph{FARMS.}
-FARMS is an eigenspectrum-based layer-wise allocation method that addresses aspect-ratio bias in heavy-tailed self-regularization analysis. Instead of estimating the heavytailness of the empirical spectral density (ESD) from the full weight matrix, FARMS samples submatrices with a fixed aspect ratio and computes the average ESD over these submatrices. This provides a more comparable estimate of layer quality across heterogeneous weight matrices and improves layer-wise sparsity allocation in LLM pruning. We use FARMS as a strong layer-wise allocation baseline.
-
-\paragraph{ATP.}
-ATP determines layer-wise sparsity rates from the perspective of reconstruction error propagation. It argues that pruning earlier layers more aggressively can increase reconstruction error in later layers, leading to ``reconstruction error explosion.'' To mitigate this effect, ATP assigns lower sparsity to earlier layers and higher sparsity to later layers using a monotonically increasing arithmetic progression, where only the common difference needs to be searched. We use ATP as a theoretically motivated layer-wise sparsity allocation baseline.
-
-
-\subsection{ARAOC Benchmark}
-
-We use the Abstraction and Reasoning on Atom Operation Corpus (ARAOC) \cite{wu2025understanding} to evaluate whether SWA preserves intelligence-related reasoning ability after pruning. ARAOC is derived from the Abstraction and Reasoning Challenge (ARC), where each task requires a model to infer a transformation rule from input--output grid examples and apply it to a new input. The benchmark decomposes ARC-style transformations into six atomic operations: \textit{Move}, \textit{Change Color}, \textit{Copy}, \textit{Mirror}, \textit{Fill Internal}, and \textit{Scale}. For each operation, ARAOC constructs 100 tasks, each containing three input--output training pairs and one test pair, resulting in 600 tasks in total.
-
-We report \textbf{Not M} following the ARAOC evaluation protocol. \textbf{Not M} measures the percentage of predictions whose output-grid shape does not match the ground-truth shape; lower Not M indicates better format and structural consistency. We use ARAOC as a held-out reasoning benchmark because it tests abstract rule induction over atomic grid transformations and is not used for activation collection or SWI construction.
-
-
-
-\section{Justification of Using SVCCA}
-\label{app:svcca_justification}
-
-In functional brain networks, connectivity between regions of interest (ROIs) is commonly estimated using Pearson correlation between ROI activity time series \cite{biswal1995functional, fox2005human}. This is natural because each ROI is represented by a scalar activity signal at each time point. In our setting, however, an attention head produces a $d$-dimensional activation vector. Therefore, constructing a functional graph over attention heads requires a multivariate analogue of correlation.
-
-Canonical Correlation Analysis (CCA) provides such a generalization. Given two centered representation matrices $X \in \mathbb{R}^{m \times d_x}$ and $Y \in \mathbb{R}^{m \times d_y}$ over $m$ examples, CCA finds linear projections $w_x$ and $w_y$ that maximize the correlation between the projected variables:
-\[
-\rho =
-\max_{w_x,w_y}
-\frac{
-w_x^\top \Sigma_{XY} w_y
-}{
-\sqrt{
-(w_x^\top \Sigma_{XX} w_x)
-(w_y^\top \Sigma_{YY} w_y)
-}
-}.
-\]
-When both representations are one-dimensional, CCA reduces to the absolute value of the Pearson correlation coefficient. For mean-centered one-dimensional signals, Pearson correlation is also equivalent to centered cosine similarity. Thus, CCA can be viewed as a natural multivariate extension of the correlation-based functional connectivity used in neuroscience.
-
-We use SVCCA \cite{raghu2017svcca} rather than vanilla CCA. SVCCA first applies SVD to each representation matrix and retains the leading directions that explain most of the variance. CCA is then applied to these reduced representations. This SVD step removes low-variance directions that may reflect noise, while the CCA step measures the shared correlated subspace between two heads.
-
-\paragraph{SVCCA versus CKA.}
-Centered Kernel Alignment (CKA) \cite{kornblith2019similarity} is also used to compare neural representations. CKA compares whether two representations induce similar pairwise relationships among examples, whereas SVCCA measures whether the two representation spaces contain linearly correlated directions. Since our goal is to construct a functional connectivity graph analogous to correlation-based brain networks, SVCCA provides a more direct multivariate counterpart to Pearson correlation.
-
-This distinction is important for attention heads across different layers. Two heads may encode similar functional information in different coordinate systems or latent subspaces. By searching for maximally correlated linear projections after SVD-based denoising, SVCCA compares shared representational structure without requiring coordinate-wise alignment. We therefore use SVCCA to define robust activation-based connectivity between attention heads.
-
-
-\section{Limitations}
-Our study analyzes small-world functional organization in pretrained LLMs under a fixed inference setting. This leaves open how such organization emerges and changes during training, post-training, or task adaptation, where factors such as data curriculum, optimization dynamics, instruction tuning, and reinforcement learning may reshape the functional graph over attention heads. Our current method measures the resulting organization after training, but does not model its temporal development. Extending SWI-based analysis to training checkpoints or adaptation trajectories would make it possible to study whether small-world organization develops progressively, whether it predicts later reasoning ability, and whether it can be directly encouraged during training.
+\input{07supplement}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

@@ -1,6 +1,23 @@
 \partwithintro[part:bridge]{The Bridge: From Signals to Representations}{%
-In Part~\ref{part:foundation}, we focused on modeling brain signals within the neural modality itself. In this part, we move beyond intra-modal modeling and investigate how to learn representations of brain activity that align with world-level semantics. While multimodal alignment has achieved remarkable progress in domains such as vision and language, brain signals remain substantially underexplored. Compared to image–text datasets, brain datasets are scarce, expensive to acquire, and highly variable across subjects. Therefore, building a reliable bridge from brain activity to semantic representations requires not only architectural designs grounded in cognitive principles but also carefully constructed datasets and proposed training paradigms that can operate under limited supervision and cross-subject variability}
+Part~\ref{part:foundation} focused on modeling brain signals. In this part, we investigate how to connect those signals to representations of the external world. We first ask which representation space provides a useful target for neural decoding. The comparison in \prism{} motivates a semantic bridge through language and demonstrates its use in visual reconstruction. We then introduce \mindllm{} to study how a shared language interface can support decoding across subjects and tasks. Finally, \dedit{} examines how semantic control can operate on individual items in an image. Together, these works address the choice of representation, the learning of a versatile neural decoder, and the control of visual content.}
+
+\chapter{Seeing Through the Brain: New Insights from Decoding Visual Stimuli with fMRI}
+\label{chapter:prism}
+
+We begin with the choice of representation space: which features of the external world should brain signals be aligned with? This chapter introduces \prism{}, which compares representations from vision, language, and vision-language models and finds stronger alignment with language model representations among the evaluated alternatives. This observation motivates using text as an intermediate space for visual reconstruction. By describing objects through their attributes and relationships and adapting a diffusion model to compose them into a scene, the framework improves reconstruction quality and semantic faithfulness. Within this part, \prism{} establishes the value of a structured semantic bridge and motivates the next chapter's broader question of how language can serve as a shared output format for neural decoding.
+
+\input{PRISM/main}
+
+\chapter{\mindllm{}: A Subject-Agnostic and Versatile Model for fMRI-to-Text Decoding}
+\label{chapter:mindllm}
+
+In \prism{}, language serves as an intermediate representation for a specific task: reconstructing the image a subject viewed. We now broaden the scope to investigate whether text can serve as a common output format for multiple decoding tasks, including questions about perception, memory, language, and reasoning. Supporting these tasks across subjects requires a model that accommodates differences in brain recordings and responds to different instructions. This chapter introduces \mindllm{}, which combines a subject-agnostic fMRI encoder with brain instruction tuning. The encoder handles differences in voxel number and spatial distribution, while instruction tuning connects fMRI recordings with diverse question annotations through shared stimulus images. The progression from \prism{} to \mindllm{} thus moves from demonstrating the value of language representations in visual reconstruction to learning a shared decoder across subjects and tasks.
 
 \input{MINDLLM/main.tex}
+
+\chapter{An Item is Worth a Prompt: Versatile Image Editing with Disentangled Control}
+\label{chapter:dedit}
+
+The preceding chapters establish how neural signals can be connected to semantic descriptions and visual reconstructions. We now consider how those representations can support precise control over visual content. The object-level structure studied in \prism{} suggests a useful unit of interaction: an individual item whose appearance or position can be changed while preserving the surrounding scene. This chapter studies that capability through \dedit{}, an image editing framework that assigns a separate learned prompt to each item and uses grouped cross-attention to control the interaction between prompts and image regions. It supports editing through text, reference images, and masks, as well as item removal. Within this part, \dedit{} extends the focus from decoding content to controlling it and prepares the transition to interactions in Part~\ref{part:embodiment}.
+
 \input{DEDIT/main}
-\input{PRISM/main}

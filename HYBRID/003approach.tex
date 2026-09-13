@@ -2,7 +2,7 @@
 \label{sec:hybrid-approach}
 \paragraph{Method Overview}
 
-\mname{} consists of a \textsc{Constructor} $\mathcal{F}_c$, a \textsc{Weighter} $\mathcal{F}_w$, and a \textsc{LinearHead} $\mathcal{F}_l$. At a high level, the \textsc{Constructor} $\mathcal{F}_c$ is responsible for identifying hyperedges $H$ from the data to construct the hypergraph. After that, the \textsc{Weighter} $\mathcal{F}_w$ calculates a weight for each hyperedge. Finally, based on all the weights $\boldsymbol{w}$, the \textsc{LinearHead} $\mathcal{F}_l$ predicts the label $Y$.
+\hybrid{} consists of a \textsc{Constructor} $\mathcal{F}_c$, a \textsc{Weighter} $\mathcal{F}_w$, and a \textsc{LinearHead} $\mathcal{F}_l$. At a high level, the \textsc{Constructor} $\mathcal{F}_c$ is responsible for identifying hyperedges $H$ from the data to construct the hypergraph. After that, the \textsc{Weighter} $\mathcal{F}_w$ calculates a weight for each hyperedge. Finally, based on all the weights $\boldsymbol{w}$, the \textsc{LinearHead} $\mathcal{F}_l$ predicts the label $Y$.
 An illustration of this pipeline is shown in Figure \ref{fig:pipeline}. The pipeline can be formulated as
 \begin{equation}
 % \vspace{-1em}
@@ -17,7 +17,7 @@ We will elaborate on the details of the architecture below.
     \centering
     \includegraphics[width=\linewidth]{figures/pipeline2.drawio.pdf}
     % \vskip 0.1in
-    \caption{Overview of the \mname{} pipeline when the total number of hyperedges $K=3$. Hyperedge are in distinct colors for clarity.  The \textsc{Constructor} identifies hyperedges in the hypergraph, where regions are nodes. The \textsc{Weighter} computes a weight for each hyperedge. These weights, representing strengths of hyperedges, are expected to be informative in terms of our target $Y$. There are two separate phases after obtaining weights of hyperedges: 1) Training. The model's parameters are trained under the supervision of $Y$; 2) Evaluation. The output weights, as well as pairwise weights, are fed into the CPM (see Appendix \ref{sec:app_cpm}).}
+    \caption{Overview of the \hybrid{} pipeline when the total number of hyperedges $K=3$. Hyperedge are in distinct colors for clarity.  The \textsc{Constructor} identifies hyperedges in the hypergraph, where regions are nodes. The \textsc{Weighter} computes a weight for each hyperedge. These weights, representing strengths of hyperedges, are expected to be informative in terms of our target $Y$. There are two separate phases after obtaining weights of hyperedges: 1) Training. The model's parameters are trained under the supervision of $Y$; 2) Evaluation. The output weights, as well as pairwise weights, are fed into the CPM \cite{shen2017using}.}
     \label{fig:pipeline}
     % \vskip -0.1in
 \end{figure*}
@@ -44,12 +44,9 @@ where $p^k_{\theta, i} \in [0,1], i=1,2,\cdots, N$ are learnable probabilities. 
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=\linewidth]{figures/architecture.drawio.pdf}
-    % \vskip 0.1in
+    \includegraphics[width=0.8\linewidth]{figures/architecture.drawio.pdf}
     \caption{Architecture details of the \textsc{Constructor} and the \textsc{Weighter}  when the number of nodes $N=6$ and the number of hyperedges $K=3$. At a high level, the \textsc{Constructor} learns the hyperedge structure by masking nodes. The \textsc{Weighter} computes the weight of each hyperedge based on the hyperedge's member nodes and their features.}
     \label{fig:enter-label}
-    % \vskip -0.1in
-    \vspace{-2em}
 \end{figure}
 
 In the vector $\boldsymbol{m}^k$, $0$ indicates nodes that are masked out, and $1$ indicates nodes that are not masked. Nodes that are not masked are considered to form a hyperedge together. We use $\boldsymbol{h}^k$ to represent the masked version of $X$
@@ -82,14 +79,14 @@ For all hyperedges, we obtain $K$ hyperedges in total, $\boldsymbol{w} = [w^1, w
     \hat{Y} = \mathcal{F}_l(\boldsymbol{w}) \in \mathbb{R}.
 \end{equation}
 
-In contrast to previous hypergraph construction methods \citep{jin2019robust,xiao2019multi}, which identify hyperedges by refining neighbors and simply aggregating node features, \mname{} makes these procedures learnable and thus is able to identify MIMR hyperedges in a data-driven way through expressive neural networks. The number of hyperedges $K$ is decided according to the study in Appendix \ref{app:k_choice}.
+In contrast to previous hypergraph construction methods \citep{jin2019robust,xiao2019multi}, which identify hyperedges by refining neighbors and simply aggregating node features, \hybrid{} makes these procedures learnable and thus is able to identify MIMR hyperedges in a data-driven way through expressive neural networks. The Full study that decides the number of hyperedges $K$ is provided in \cite{qiu2023learning}.
 
 \paragraph{Computational Complexity}
-The computational complexity of our model is $O(N^2K)$, which is just the same scale as that of MLPs even though we are addressing a more challenging task: identifying high-order relationships in an exponential space. Details of the complexity calculation can be found in Appendix \ref{app:complexity}.
+The computational complexity of our model is $O(N^2K)$, which is just the same scale as that of MLPs even though we are addressing a more challenging task: identifying high-order relationships in an exponential space. Details of the complexity calculation can be found in \cite{qiu2023learning}
 
 
 \subsection{Optimization Framework}
- Since there are no existing IB frameworks that can be applied in our context, we propose a new IB framework named \multiheadname{} to optimize \mname{}. To adopt an information bottleneck view of \mname{}, we consider $X$, $Y$ and $H$ are random variables in the Markovian chain $X \leftrightarrow Y \leftrightarrow H$. According to our MIMR objective, we optimize
+ Since there are no existing IB frameworks that can be applied in our context, we propose a new IB framework named \multiheadname{} to optimize \hybrid{}. To adopt an information bottleneck view of \hybrid{}, we consider $X$, $Y$ and $H$ are random variables in the Markovian chain $X \leftrightarrow Y \leftrightarrow H$. According to our MIMR objective, we optimize
 \begin{equation}
 \label{equ:ib2}
     \arg \max I(H; Y) - \beta I(H; X),
@@ -126,7 +123,7 @@ For the second term (redundancy) in Equation \ref{equ:ib2}, we have
 \end{equation}
 \end{proposition}
 
-where $\boldsymbol{h}^k_i$ and $X_i$  is the $i$-th row of $\boldsymbol{h}^k$ and $X$ respectively.  $p^k_{\theta,i}$ is the mask probability in Equation \ref{equ:shallow}. $\mathbb{H}$ is the entropy computation. The equality holds if and only if nodes are independent and hyperedges do not overlap. It's important to clarify that optimizing Equation \ref{equ:multi_drop} does not imply a penalty for overlaps. The second inequality is inspired by \cite{kim2021drop}. The proof of the proposition can be found in Appendix~\ref{app:proof1}.
+where $\boldsymbol{h}^k_i$ and $X_i$  is the $i$-th row of $\boldsymbol{h}^k$ and $X$ respectively.  $p^k_{\theta,i}$ is the mask probability in Equation \ref{equ:shallow}. $\mathbb{H}$ is the entropy computation. The equality holds if and only if nodes are independent and hyperedges do not overlap. It's important to clarify that optimizing Equation \ref{equ:multi_drop} does not imply a penalty for overlaps. The second inequality is inspired by \cite{kim2021drop}. The proof of the proposition can be found in \citet{qiu2023learning}.
 
 
 % \begin{equation}
@@ -141,4 +138,4 @@ Therefore, instead of optimizing the intractable objective Equations \ref{equ:ib
     \mathcal{L} &= \| Y - \mathcal{F}_l \circ \mathcal{F}_w \circ \mathcal{F}_c (X) \|_2^2 + \beta \sum_{k=1}^K\sum_{i=1}^N \mathbb{H}[X_i] (1 - p^k_{\theta,i}) \\&\geq - I(H, Y) + \beta I(H, X).
 \end{aligned}
 \end{equation}
-In conclusion, The learnable components are the shallow embeddings in Equation \ref{equ:shallow}, the $\operatorname{DimReduction}$ MLP in Equation \ref{equ:readout} and the \textsc{LinearHead} $\mathcal{F}_l$ in Equation \ref{equ:linearhead}. For how we choose the trade-off coefficient $\beta$, see Appendix \ref{app:beta} for more discussions.
+In conclusion, The learnable components are the shallow embeddings in Equation \ref{equ:shallow}, the $\operatorname{DimReduction}$ MLP in Equation \ref{equ:readout} and the \textsc{LinearHead} $\mathcal{F}_l$ in Equation \ref{equ:linearhead}.

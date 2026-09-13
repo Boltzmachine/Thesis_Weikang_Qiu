@@ -80,14 +80,12 @@ To investigate the functional organization of LLMs, we draw inspiration from neu
 % \yy{To guide the search for such organization, we draw inspiration from neuroscience, where intelligence has been linked to the topology and efficiency of functional brain networks \cite{langer2012functional, barbey2018network}. Functional brain networks represent brain regions as nodes and functional interactions, typically estimated from statistical dependencies in neural activity, as edges. Prior studies have linked intelligence-related performance to functional brain network efficiency, often characterized through small-world properties such as high clustering coefficient and short path length \cite{langer2012functional, rosenberg2020functional}. Such organization is thought to support efficient information processing by combining densely connected local neighborhoods with short communication paths between distant regions \cite{latora2001efficient, bassett2017small}. Motivated by these findings, we ask whether graph signatures in learned LLM weights are also associated with their reasoning capability.}
 
 
-\begin{wrapfigure}{r}{0.58\textwidth}
+\begin{figure}%{r}{0.58\textwidth}
     \centering
-    \vspace{-0.3cm}
     \includegraphics[width=\linewidth]{figure/swi-perf.pdf}
     \caption{\small Across LLMs, a higher small-world index (SWI; y-axis) is consistently associated with better fluid reasoning performance, measured by lower negative log-likelihood (NLL) per answer token on DRE-Bench \cite{yang2025truly} (x-axis).}
     \label{fig:swi-perf}
-    \vspace{-0.3cm}
-\end{wrapfigure}
+\end{figure}
 
 
 In this work, we answer this question by studying the functional organization of LLMs. We focus on attention heads and construct a functional graph in which nodes represent heads and edges are defined by activation similarity. By measuring the small-world organization of this graph, we find that stronger small-world index (SWI) is consistently associated with better fluid reasoning performance across models (\Cref{fig:swi-perf}). 

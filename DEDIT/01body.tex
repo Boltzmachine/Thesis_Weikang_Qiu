@@ -16,7 +16,7 @@ Various types of editing can generally be evaluated based on two key criteria: p
 \begin{figure*}[bpt]
   % \vspace{-8pt}
   \centering \includegraphics[width=0.9\linewidth]{fig/img1_small.jpg}
-  \caption{The editing pipeline of using D-Edit. 
+  \caption{The editing pipeline of using \dedit{}. 
   The user first uploads an image which is segmented into several items.
   After finetuning DPMs, the user can do various types of control, including
   (a) replacing the model with another using a text prompt;
@@ -52,7 +52,7 @@ In contrast, our approach employs independent prompts to define individual items
 
 
 
-By fully harnessing the potential of prompt uniqueness and disentangled control, we introduce a versatile image editing framework for diffusion models called Disentangled-Edit (D-Edit). This unified framework enables a wide range of image editing operations at the item level, including text-based, image-based, mask-based editing, and item removal. As illustrated in Fig. \ref{fig::pipeline}, the process begins with segmenting the target image into multiple editable items (in this context, background and unsegmented regions are also referred to as items), each associated with a prompt composed of several new tokens. 
+By fully harnessing the potential of prompt uniqueness and disentangled control, we introduce a versatile image editing framework for diffusion models called Disentangled-Edit (\dedit{}). This unified framework enables a wide range of image editing operations at the item level, including text-based, image-based, mask-based editing, and item removal. As illustrated in Fig. \ref{fig::pipeline}, the process begins with segmenting the target image into multiple editable items (in this context, background and unsegmented regions are also referred to as items), each associated with a prompt composed of several new tokens. 
 The associations between prompts and items are established through a two-step fine-tuning process, which optimizes both the text encoder's embedding matrix and the UNet model's weights.
 To disentangle prompt-to-item interactions, we introduce grouped cross-attention, which isolates attention calculation and value updates. This allows users to achieve various types of image editing by modifying prompts, items, and their associations, as well as by adjusting corresponding masks. 
 This flexibility opens up a wide range of creative possibilities and offers precise control over the editing process. We demonstrate the versatility and performance of our framework across four image editing tasks, utilizing both Stable Diffusion and Stable Diffusion XL.
@@ -60,8 +60,8 @@ We summarize our contribution as follows:
 \begin{itemize}
 \item We propose to establish item-prompt association to achieve item editing.
 \item We introduce grouped cross-attention to disentangle the controlling flow in diffusion models.
-\item We propose D-Edit as a versatile framework to support various image-editing operations at the item level, including text-based, image-based, mask-based, editing, and item removal.
-D-Edit is the first framework that can do mask-based editing, and perform text and image-based editing at the same time. Code can be found at https://github.com/collovlabs/d-edit
+\item We propose \dedit{} as a versatile framework to support various image-editing operations at the item level, including text-based, image-based, mask-based, editing, and item removal.
+\dedit{} is the first framework that can do mask-based editing, and perform text and image-based editing at the same time. Code can be found at https://github.com/collovlabs/d-edit
 \end{itemize}
 
 
@@ -118,7 +118,7 @@ Compared to these methods, our framework does not require a captioning prompt in
 
    
 \section{Method}
-In this section, we discuss the details of the D-Edit framework.
+In this section, we discuss the details of the \dedit{} framework.
 We first review the basics of diffusion models and text-to-image control flow.
 Next, we show how to establish item-prompt association through the two-step finetuning.
 Then, we discuss how to utilize the editability of prompts for versatile image editing operations.
@@ -213,8 +213,7 @@ Then we finetune the model to build the item-prompt association.
 
 \begin{figure}[tbp]
   \centering
- \includegraphics[width=0.8\linewidth]{fig/fig3.pdf}
- \vspace{-5pt}
+ \includegraphics[width=0.5\linewidth]{fig/fig3.pdf}
   \caption{Embedding layer in the text encoder. New tokens are inserted with random initialization. 
   % \rex{it would be better if we draw an overall architecture fig}
   }
@@ -281,7 +280,7 @@ We discuss four types of image editing operations that can be achieved by varyin
 \section{Experiments}
 \subsection{Experiment Setup}
 
-\xhdr{Training Details} We implement our D-Edit framework on stable diffusion (SD) v1.5 for 512 $\times$ 512 images and SDXL for 1024 $\times$ 1024 resolution images.
+\xhdr{Training Details} We implement our \dedit{} framework on stable diffusion (SD) v1.5 for 512 $\times$ 512 images and SDXL for 1024 $\times$ 1024 resolution images.
 Mask2Former \cite{cheng2022masked} is used for segmentation and Grounding DINO \cite{liu2023grounding} for text-prompted segmentation.
 The finetuning is performed with Adam optimizer with learning rate 1\textit{e}-4 for embedding training, 5\textit{e}$-$5 for cross-attention layer training, and 5\textit{e}$-$5 for LORA full parameter training.
 Gradient accumulation is applied to keep the effective batch size to 10 for training robustness.
@@ -294,7 +293,7 @@ All finetuning and inference are conducted on NVIDIA A6000 GPUs.
 \begin{figure}[hptb]
   % \vspace{-8pt}
   \centering \includegraphics[width=1\linewidth]{fig/img2_text1.jpg}
-  \caption{Text-guided editing. D-Edit enables selection of any item segmentation and edit using text prompt.}
+  \caption{Text-guided editing. \dedit{} enables selection of any item segmentation and edit using text prompt.}
   \vspace{-10pt}
   \label{fig::text1}
 \end{figure}
@@ -304,9 +303,9 @@ All finetuning and inference are conducted on NVIDIA A6000 GPUs.
 Given an input image with appropriate segmentation (no captions needed),
 we can select any one of the items and replace the learned prompt with the target text prompt.
 We show such text-guided editing results in Fig. \ref{fig::text1}.
-Compared to null-text inversion with Prompt-to-Prompt (P2P), D-Edit can generate more realistic details and have a more natural transition between edited and unedited areas (e.g., the connection between the bike handlebar and the woman's hand) because of disentangled control.
-The editing of D-Edit is more focused on the target item while the editing of inversion with P2P overflows to other regions (painting in the second example and cheese in the third) using text.
-Besides, unlike most text-guided methods, D-Edit does not require a caption for the original image which is extremely useful when the scene is hard to describe.
+Compared to null-text inversion with Prompt-to-Prompt (P2P), \dedit{} can generate more realistic details and have a more natural transition between edited and unedited areas (e.g., the connection between the bike handlebar and the woman's hand) because of disentangled control.
+The editing of \dedit{} is more focused on the target item while the editing of inversion with P2P overflows to other regions (painting in the second example and cheese in the third) using text.
+Besides, unlike most text-guided methods, \dedit{} does not require a caption for the original image which is extremely useful when the scene is hard to describe.
 
 \begin{figure}[h]
   % \vspace{-8pt}
@@ -325,7 +324,7 @@ Besides, unlike most text-guided methods, D-Edit does not require a caption for 
 
 \begin{figure*}[hptb]
   \centering \includegraphics[width=0.98\linewidth]{fig/img4_image2.jpg}
-  \caption{Qualitative comparison of image-guided editing. D-Edit is compared with Anydoor, Paint-by-Example, and TF-ICON, on item replacement and face swapping.
+  \caption{Qualitative comparison of image-guided editing. \dedit{} is compared with Anydoor, Paint-by-Example, and TF-ICON, on item replacement and face swapping.
   }
   \vspace{-10pt}
   \label{fig::image2}
@@ -339,10 +338,10 @@ In Fig. \ref{fig::text2}(b), we show the results of item personalization where w
 This differs from Dreambooth-style personalization in that Dreambooth lacks the capability for item-level customization unless the item is cropped and focused upon, which is usually hard in an image including multiple items. Besides, it requires more images (3-5) with captions for personalization, while our method takes one image without captions.
 Qualitative results show that learned item(s) can be combined with text to generate personalized images, and the text prompt can be used to personalize the background, number, and position of the item.
 
-For quantitative evaluation, we introduce a new benchmark D-Item(Text) with 100 manually selected multi-item images, where each image is properly segmented into 3-8 items with a segmentation mask. We also include the caption of each image used for baselines, although it is not needed for D-Edit.
+For quantitative evaluation, we introduce a new benchmark D-Item(Text) with 100 manually selected multi-item images, where each image is properly segmented into 3-8 items with a segmentation mask. We also include the caption of each image used for baselines, although it is not needed for \dedit{}.
 2 items of each image are selected and given 5 appropriate target prompts, therefore generating 1,000 item-prompt pair combinations.
 We adopt CLIP text (CLIP-T) score to represent the semantic alignment of the edited item and target prompt, and LPIPS score to represent consistency with the original images.
-As shown in Tab. \ref{tab::text}, D-Edit outperforms SDEdit \cite{meng2021sdedit} and P2P with DDIM inversion, especially on LPIPS score which shows improved fidelity to the original images.
+As shown in Tab. \ref{tab::text}, \dedit{} outperforms SDEdit \cite{meng2021sdedit} and P2P with DDIM inversion, especially on LPIPS score which shows improved fidelity to the original images.
 
 
 
@@ -354,17 +353,17 @@ As shown in Tab. \ref{tab::text}, D-Edit outperforms SDEdit \cite{meng2021sdedit
 \centering
 \caption{Text-guided editing: consistency with the original image (LPIPS) and target text prompt (CLIP-T).}
 
-\resizebox{0.45\columnwidth}{!}{
+% \resizebox{0.45\columnwidth}{!}{
 \begin{tabular}{lcc} 
 \toprule
        & LPIPS$\downarrow$               & CLIP-T$\uparrow$                 \\ 
 \midrule
 P2P    & 0.401                           & 39.5                           \\
 SDEdit & 0.432                           & 32.1                            \\
-D-Edit & \textbf{0.179} & \textbf{42.0}  \\
+\dedit{} & \textbf{0.179} & \textbf{42.0}  \\
 \bottomrule
 \end{tabular}
-}
+% }
 
 \vspace{-5pt}
 \label{tab::text}
@@ -376,17 +375,17 @@ D-Edit & \textbf{0.179} & \textbf{42.0}  \\
 \begin{table}[h]
 \centering
 \caption{ Image-guided editing: consistency with the original image (LPIPS$_t$) and reference image (LPIPS$_t$ and CLIP-I).}
-\resizebox{0.55\columnwidth}{!}{
+% \resizebox{0.55\columnwidth}{!}{
 \begin{tabular}{lccc} 
 \toprule
                  & LPIPS$_t$$\downarrow$ & LPIPS$_r$$\downarrow$ & CLIP-I$\uparrow$  \\ 
 \midrule
 Aydoors          & 0.608                & 0.720                & 60.2              \\
 PbE & 0.465                & 0.833                & 50.8              \\
-D-Edit           & $\textbf{0.340}$     & $\textbf{0.701}$     & $\textbf{66.4}$   \\
+\dedit{}           & $\textbf{0.340}$     & $\textbf{0.701}$     & $\textbf{66.4}$   \\
 \bottomrule
 \end{tabular}
-}
+% }
 \label{tab::image_scores}
 \end{table}
 
@@ -403,17 +402,17 @@ Anydoors can retain more relevant details from the reference image, yet it may a
 For example, the car's original orientation is preserved, causing it to appear out of the parking spot in the target image.
 Besides, it cannot preserve the face details as in the example.
 Compared to these methods, 
-D-Edit is capable of seamlessly composing objects into the target while maintaining their identities.
+\dedit{} is capable of seamlessly composing objects into the target while maintaining their identities.
 
 
-We show more image-based editing results of D-Edit in Fig. \ref{fig::image1} and Appendix. 
-D-Edit can work well when the reference image contains multiple items that may be hard to separate (like the bag in hand).
-Additionally, D-Edit doesn't necessitate the reference item to closely resemble its anticipated appearance in the target image, because blending through the prompt space offers smoother transitions compared to pixel-level manipulation, and the prompt-mask correspondence helps standardize the appearance of the reference item.
+We show more image-based editing results of \dedit{} in Fig. \ref{fig::image1} and Appendix. 
+\dedit{} can work well when the reference image contains multiple items that may be hard to separate (like the bag in hand).
+Additionally, \dedit{} doesn't necessitate the reference item to closely resemble its anticipated appearance in the target image, because blending through the prompt space offers smoother transitions compared to pixel-level manipulation, and the prompt-mask correspondence helps standardize the appearance of the reference item.
 For example, in the Ultraman example, the reference and target Ultraman can take completely different postures (kneeling v.s. standing).
 
 For quantitative evaluations, based on D-Item(Text) benchmark, we then construct the D-Item(Image) benchmark where each selected item is paired with two reference items from two different reference images, resulting in 400 item-item pairs.
 Three metrics are considered: LPIPS$_t$ measures consistency with the original target image; LPIPS$_r$ and CLIP-Image (CLIP-I) measure alignment with the reference image in low- and high-level feature spaces.
-As shown in Tab. \ref{tab::image_scores}, both D-Edit and Paint-by-Example can achieve high fidelity to the original image, while D-Edit can also preserve the target image better compared with Anydoors.
+As shown in Tab. \ref{tab::image_scores}, both \dedit{} and Paint-by-Example can achieve high fidelity to the original image, while \dedit{} can also preserve the target image better compared with Anydoors.
 
 
 \begin{figure*}[pt]
@@ -430,7 +429,7 @@ As shown in Tab. \ref{tab::image_scores}, both D-Edit and Paint-by-Example can a
 
 
 
-% Except for D-Edit and paint-by-example, other methods need to first crop, reshape, and paste the reference into the target and therefore require the reference image to match its expected appearance in the target, which is usually impossible.
+% Except for \dedit{} and paint-by-example, other methods need to first crop, reshape, and paste the reference into the target and therefore require the reference image to match its expected appearance in the target, which is usually impossible.
 % For example,..
 
 
@@ -445,11 +444,11 @@ As shown in Tab. \ref{tab::image_scores}, both D-Edit and Paint-by-Example can a
 \end{figure}
 
 For mask-based editing, we explore four types of operations on the target items, including moving, reshaping, resizing, and refinement.
-As shown in Fig. \ref{fig::mask_guided}, D-Edit can edit the shape of the target item by simply editing the corresponding mask.
+As shown in Fig. \ref{fig::mask_guided}, \dedit{} can edit the shape of the target item by simply editing the corresponding mask.
 Because of the mask-item-prompt association, the disentangled attention can imagine and fill the new details in the edited regions according to the given item prompt, therefore leading to natural editing results.
 We also show the post-editing performance in Fig. \ref{fig::post_edit}.
 This can be useful when initial masks from the segmentation model do not cover the whole item, like the missing handle of the handbag and missing straps of the backpack, which will lead to imperfect (image/text/mask-guided) editing results.
-D-Edit can later fix these mask details and regenerate using the same random seed, and lead to refined results.
+\dedit{} can later fix these mask details and regenerate using the same random seed, and lead to refined results.
 
 
 
@@ -463,13 +462,13 @@ D-Edit can later fix these mask details and regenerate using the same random see
   \label{fig::post_edit}
 \end{figure}
 
-D-Edit also enables removing items by deleting the mask-item-prompt pairs.
+\dedit{} also enables removing items by deleting the mask-item-prompt pairs.
 In Fig. \ref{fig::remove}, by deleting items from the scene image one by one, the resulting blank region will be re-partitioned to nearby masks and join the corresponding item-prompt pair.
-D-Edit will then use such new associations to imagine the blank regions and therefore lead to reasonable filling results.
+\dedit{} will then use such new associations to imagine the blank regions and therefore lead to reasonable filling results.
 More visual results can be found in Appendix.
 To quantitatively assess the item-removed images, we conducted user studies with a group of 15 annotators. 
 They are asked to score 30 pairs of original and item-removed images from 1 to 5 (higher means better), based on quality (how well the region after removal harmonized with the surrounding scene) and fidelity (the reasonableness of the filling content).
-D-Edit is compared with SDXL inpaint model by inpainting the region where the item is removed with the surrounding item's caption, and results are shown in Tab. \ref{tab::user_remove}.
+\dedit{} is compared with SDXL inpaint model by inpainting the region where the item is removed with the surrounding item's caption, and results are shown in Tab. \ref{tab::user_remove}.
 
 
 
@@ -486,7 +485,7 @@ D-Edit is compared with SDXL inpaint model by inpainting the region where the it
                  & Quality $\uparrow$ & Fidelity $\uparrow$  \\ 
 \midrule
 SDXL-inpaint &  3.26      & 2.42           \\
-     D-Edit  & \textbf{4.01}     & \textbf{4.44}      \\
+     \dedit{}  & \textbf{4.01}     & \textbf{4.44}      \\
 \bottomrule
 \end{tabular}
 }
@@ -541,18 +540,18 @@ CLIP-T    & 38.5  & 38.2  & \textbf{42.0}  & 30.1   \\
 % We believe this issue can be addressed by replacing the pretrained diffusion probabilistic models (DPMs) with ones finetuned on domain-specific datasets.
 % Besides, for the two-step optimization, current implementations take around 5 minutes for SD and 10 minutes for SDXL, and we plan to further reduce this optimization time by introducing additional pretraining steps to align prompts and items.
 
-% \xhdr{Future Work} Different types of editing in D-Edit can be simultaneously used for one item or coupled items, and it is important to study the intervention between different types of editing.
+% \xhdr{Future Work} Different types of editing in \dedit{} can be simultaneously used for one item or coupled items, and it is important to study the intervention between different types of editing.
 % Second, to better preserve details, it can be further combined with encoder-based ControlNet-style model for applications in certain domains, for example, InstantID \cite{wang2024instantid} for face swapping and StableVITON \cite{kim2023stableviton} for virtual try-on.
 % Furthermore, building universal tokens to represent multi-modal information is important for adding more types of controls to the diffusion models, and it is interesting to explore what types of control signals can be tokenized and represented in the prompt space.
 
 
 
 \section{Conclusion}
-In this work, we propose D-Edit as a versatile image editing framework based on diffusion models.
-D-Edit segments the given image into multiple items, each of which is assigned a prompt to control its representation in the prompt space.
+In this work, we propose \dedit{} as a versatile image editing framework based on diffusion models.
+\dedit{} segments the given image into multiple items, each of which is assigned a prompt to control its representation in the prompt space.
 The image-prompt cross-attention is disentangled to a group of item-prompt interactions.
 % Each prompt is constrained to exclusively interact with the item it governs through isolated cross-attention, therefore disentangling the cross-attention control pipelines.
 Item-prompt associations are built up by fintuning the diffusion model which learns to reconstruct the original image using the given set of item prompts.
-% D-Edit accomplishes image editing by allowing users to freely change or establish associations between prompts and items, and we highlight four types of image editing operations including text-based, image-based, mask-based editing, and item removal.
+% \dedit{} accomplishes image editing by allowing users to freely change or establish associations between prompts and items, and we highlight four types of image editing operations including text-based, image-based, mask-based editing, and item removal.
 We showcase the quality and versatility of the editing results across a diverse range of collected images through both qualitative and quantitative evaluations.
-% Compared to baselines, D-Edit can better preserve the information of the original image while following versatile guidance.
+% Compared to baselines, \dedit{} can better preserve the information of the original image while following versatile guidance.

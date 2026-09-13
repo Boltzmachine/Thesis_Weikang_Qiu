@@ -1,14 +1,14 @@
 \section{Results}\label{sec:results}
 
-\subsection{Overview of \bench}
+\subsection{Overview of \repqa}
 
-\bench is a benchmark for systematically evaluating the readability of LLMs in patient education question answering.
+\repqa is a benchmark for systematically evaluating the readability of LLMs in patient education question answering.
 It comprises a high-quality collection of patient education QA pairs, each with an expert-grounded reference answer, together with a large-scale set of unlabeled questions for training.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=1.0\textwidth]{figs/workflow_new.pdf}
     \caption{
-        Overview of the \bench benchmark. \textbf{Top:} dataset construction --- patient-education QA pairs are collected from 27 online public health resources and filtered by domain experts to suit lay users, yielding 533 expert-grounded QA pairs (each with an auto-generated multiple-choice counterpart) that span four categories (Suggestion, Fact, Definition, and Rationale). \textbf{Bottom:} evaluation --- given a question, an LLM agent generates a free-form response, which is scored by three readability metrics (Flesch--Kincaid grade, professional language, and Yngve depth) and an informativeness metric (the informative cosine between the response and the expert reference answer).
+        Overview of the \repqa benchmark. \textbf{Top:} dataset construction --- patient-education QA pairs are collected from 27 online public health resources and filtered by domain experts to suit lay users, yielding 533 expert-grounded QA pairs (each with an auto-generated multiple-choice counterpart) that span four categories (Suggestion, Fact, Definition, and Rationale). \textbf{Bottom:} evaluation --- given a question, an LLM agent generates a free-form response, which is scored by three readability metrics (Flesch--Kincaid grade, professional language, and Yngve depth) and an informativeness metric (the informative cosine between the response and the expert reference answer).
     }
     \label{fig:workflow}
 \end{figure}
@@ -16,15 +16,15 @@ It comprises a high-quality collection of patient education QA pairs, each with 
 Figure~\ref{fig:workflow} illustrates the overall dataset construction and evaluation pipeline: the dataset is curated through expert review, while the evaluation involves both readability assessment and an informativeness measure against the reference answers.
 The construction procedure, evaluation metrics, and study design are detailed in the Methods (Section~\ref{sec:methods}).
 
-The evaluation set of \bench contains 533 QA pairs curated from 27 authoritative online public health resources and reviewed by domain experts in nursing, public health, and clinical communication.
+The evaluation set of \repqa contains 533 QA pairs curated from 27 authoritative online public health resources and reviewed by domain experts in nursing, public health, and clinical communication.
 Each question is phrased in plain language, without user profiles, and is accompanied by a reference answer.
 As shown in Table~\ref{tab:dataset_category}, the QA pairs span four categories that capture common types of public health inquiries from lay users: \textit{Suggestion} (questions seeking advice), \textit{Fact} (questions requesting objective, verifiable information), \textit{Definition} (questions asking for explanations of medical terms or conditions), and \textit{Rationale} (questions seeking justifications behind medical guidance).
 To enable informativeness assessment of free-form responses, each QA pair includes an expert-grounded reference answer, against which a generated response is compared via the informative cosine (IC).
-In addition, \bench provides a large-scale collection of 36,060 expert-reviewed public health questions spanning topics such as sleep, exercise, smoking, weight, diet, HIV care, mental health, cardiovascular disease, diabetes, cholesterol, and SOGI, supporting the exploration of readability-enhancement strategies such as reinforcement learning with verifiable readability rewards.
+In addition, \repqa provides a large-scale collection of 36,060 expert-reviewed public health questions spanning topics such as sleep, exercise, smoking, weight, diet, HIV care, mental health, cardiovascular disease, diabetes, cholesterol, and SOGI, supporting the exploration of readability-enhancement strategies such as reinforcement learning with verifiable readability rewards.
 
 \begin{table*}[t]
     \centering
-    \caption{Examples and distribution of question categories in \bench. Each question is accompanied by a corresponding reference answer.}
+    \caption{Examples and distribution of question categories in \repqa. Each question is accompanied by a corresponding reference answer.}
     \resizebox{\textwidth}{!}{
     \begin{tabular}{cp{15cm}c}
     \toprule
@@ -48,7 +48,7 @@ In addition, \bench provides a large-scale collection of 36,060 expert-reviewed 
     \label{tab:dataset_category}
 \end{table*}
 
-Using \bench, we studied three research questions concerning LLMs' ability to adapt, assess, and optimize readability:
+Using \repqa, we studied three research questions concerning LLMs' ability to adapt, assess, and optimize readability:
 (RQ1) can LLMs generate responses at a specified reading level?
 (RQ2) can LLMs determine what readability is needed for a given question?
 and (RQ3) can readability serve as a reward signal?
@@ -56,7 +56,7 @@ We evaluated 19 LLMs, including 5 proprietary models and 14 open-source models, 
 
 \begin{table*}[t]
 \centering
-\caption{Benchmarking proprietary and open-source LLMs with the \bench{} metric suite. PL = Professional Language ($\downarrow$ less jargon), FK = Flesch--Kincaid Grade (target $\approx 6$), YD = Yngve Depth ($\downarrow$ simpler syntax), IC = Informative Cosine ($\uparrow$ more informative).}
+\caption{Benchmarking proprietary and open-source LLMs with the \repqa{} metric suite. PL = Professional Language ($\downarrow$ less jargon), FK = Flesch--Kincaid Grade (target $\approx 6$), YD = Yngve Depth ($\downarrow$ simpler syntax), IC = Informative Cosine ($\uparrow$ more informative).}
 \label{tab:repqa-main}
 \tiny
 \setlength{\tabcolsep}{3pt}
@@ -130,14 +130,14 @@ As shown in Figure~\ref{fig:analysis}(c), accuracy peaked at Middle School, was 
 This systematic bias toward lower buckets mirrored the undershoot observed for readability control.
 
 We then studied whether LLMs understand differences in the medical knowledge required by a question.
-For each question in \bench, we prompted GPT-4o to generate two counterparts that vary only in the required domain knowledge (Medium and High); examples are provided in Supplementary Section~\ref{app:example_diffculty}.
+For each question in \repqa, we prompted GPT-4o to generate two counterparts that vary only in the required domain knowledge (Medium and High); examples are provided in Supplementary Section~\ref{app:example_diffculty}.
 Each model then classified the resulting variant.
 As shown in Figure~\ref{fig:analysis}(d), performance was uneven across systems, e.g., LLaMA~3.1-8B was relatively strong on Medium but weak on Original, whereas Qwen-3-30B-Thinking excelled on Original yet remained low on High.
 Across models, detection of High difficulty was uniformly poor, indicating limited sensitivity to advanced domain knowledge and helping explain the tendency to default to overly simple outputs.
 
 \begin{table*}[t]
 \centering
-\caption{Readability-control strategies on the \bench{} metric suite, per question type. For each base model we compared training-free controls -- \emph{Prompt} (instruction-based control), \emph{CoT} (chain-of-thought), and \emph{Lookahead} (readability-guided lookahead decoding, \citealp{ribeiro-etal-2023-generating}) -- against RL fine-tuning (\emph{DAPO}/\emph{GRPO}). PL = Professional Language ($\downarrow$), FK = Flesch--Kincaid Grade (target $\approx 6$), YD = Yngve Depth ($\downarrow$, raw), IC = Informative Cosine ($\uparrow$). Prompting and lookahead improve word-level readability (FK) but not syntactic complexity (YD); RL improves all axes while best retaining informativeness (IC). Within each base model, \textbf{bold} marks the best and \underline{underline} the second-best value per column.}
+\caption{Readability-control strategies on the \repqa{} metric suite, per question type. For each base model we compared training-free controls -- \emph{Prompt} (instruction-based control), \emph{CoT} (chain-of-thought), and \emph{Lookahead} (readability-guided lookahead decoding, \citealp{ribeiro-etal-2023-generating}) -- against RL fine-tuning (\emph{DAPO}/\emph{GRPO}). PL = Professional Language ($\downarrow$), FK = Flesch--Kincaid Grade (target $\approx 6$), YD = Yngve Depth ($\downarrow$, raw), IC = Informative Cosine ($\uparrow$). Prompting and lookahead improve word-level readability (FK) but not syntactic complexity (YD); RL improves all axes while best retaining informativeness (IC). Within each base model, \textbf{bold} marks the best and \underline{underline} the second-best value per column.}
 \label{tab:post}
 \tiny
 \setlength{\tabcolsep}{3pt}
@@ -193,7 +193,7 @@ This discrepancy with the metric-based ranking in Table~\ref{tab:post} suggested
 
 \subsection{Case study: improved readability at the expense of informativeness}\label{sec:case_study}
 
-\bench revealed that, although GRPO/DAPO with a readability-based reward markedly improved readability, it can reduce the informativeness of responses.
+\repqa revealed that, although GRPO/DAPO with a readability-based reward markedly improved readability, it can reduce the informativeness of responses.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=1.\linewidth]{figs/fail_case_studyv2.pdf}

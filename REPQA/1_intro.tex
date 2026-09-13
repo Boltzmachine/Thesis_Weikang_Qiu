@@ -23,11 +23,11 @@ To evaluate the capabilities of LLMs in solving healthcare and medical problems,
 For instance, MedQA~\citep{jin2021disease}, MedMCQA~\citep{pal2022medmcqa}, MMLU~\citep{hendrycks2020measuring, wang2024mmlu}, and PubMedQA~\citep{jin2019pubmedqa} contain multiple-choice questions sourced from medical licensing examinations or PubMed articles, while LiveQA~\citep{abacha2017overview} and MedicationQA~\citep{abacha2019bridging} focus on long-form question answering for medicine-related problems.
 Recent efforts have shifted toward more complex clinical tasks requiring multi-step reasoning and decision-making~\citep{yao2024medqa, chen2025benchmarking,nori2024medprompt,saab2024capabilities}, as well as incorporating additional modalities such as electronic health records~\citep{ou2025experience, bardhan2022drugehrqa, kweon2024ehrnoteqa}, radiology~\citep{zuo2025medxpertqa, liu2021slake}, and pathology~\citep{he2020pathvqa,lu2024multimodal}.
 However, these benchmarks mainly evaluate the factual or reasoning accuracy of LLMs against professional examinations or specialized clinical tasks, rather than the readability of responses delivered to lay users.
-% As summarized in Table~\ref{tab:dataset_comparison}, \bench is the first to comprehensively evaluate the readability of LLM-generated responses to healthcare-related questions, using a dataset composed of publicly available medical queries from lay users.
+% As summarized in Table~\ref{tab:dataset_comparison}, \repqa is the first to comprehensively evaluate the readability of LLM-generated responses to healthcare-related questions, using a dataset composed of publicly available medical queries from lay users.
 
 \begin{table*}[t]
     \centering
-    \caption{The comparison between \bench and the existing healthcare benchmark datasets.}
+    \caption{The comparison between \repqa and the existing healthcare benchmark datasets.}
     \resizebox{\textwidth}{!}{
     \begin{tabular}{ccccc}
     \toprule
@@ -42,7 +42,7 @@ However, these benchmarks mainly evaluate the factual or reasoning accuracy of L
     MedicationQA~\citep{abacha2019bridging} & Long Answer & MedlinePlus \& DailyMed & Human Evaluation & Medicine Consumers \\
     JAMA \& Medbullets~\citep{chen2025benchmarking} & Long Answer \& Multiple Choice & JAMA Challenge \& USMLE & NLG Metrics \& Accuracy & Medical Professionals \\
     \midrule
-    \bench & Long Answer & Public Health FAQs \& Experts & Readability \& Informativeness & Lay Users / Patients \\
+    \repqa & Long Answer & Public Health FAQs \& Experts & Readability \& Informativeness & Lay Users / Patients \\
     \bottomrule
     \end{tabular}
     }
@@ -55,15 +55,15 @@ Three main strategies have been explored:
 (2) fine-tuning-based methods, e.g., \citet{chi2023learning} fine-tune language models on same-level paraphrasing datasets, and \citet{ribeiro-etal-2023-generating} employ PPO~\citep{schulman2017proximal} with the measured reading level~\citep{kincaid1975derivation} as a reward signal;
 and (3) decoding-based methods that incorporate constraints during text generation~\citep{ribeiro-etal-2023-generating,luo2022readability}.
 Several studies have further investigated the readability of LLM-generated responses regarding certain cancers~\citep{hershenhouse2024accuracy,gencer2024readability} or patient education handouts~\citep{swisher2024enhancing}.
-While most prior work focuses on text summarization, \bench specifically targets the readability of LLMs in patient education QA tasks.
+While most prior work focuses on text summarization, \repqa specifically targets the readability of LLMs in patient education QA tasks.
 
-In this study, a multidisciplinary team comprised of computer science, nursing, and public health experts introduced \textbf{\bench} to conduct a comprehensive investigation into the \textbf{RE}adability of LLMs in \textbf{P}atient \textbf{E}ducation question-\textbf{A}nswering (QA) tasks.
-A key strength of \bench lies in its expert-grounded foundation: it comprises a high-quality test set with 533 QA pairs curated from 27 online public health resources.
+In this study, a multidisciplinary team comprised of computer science, nursing, and public health experts introduced \textbf{\repqa} to conduct a comprehensive investigation into the \textbf{RE}adability of LLMs in \textbf{P}atient \textbf{E}ducation question-\textbf{A}nswering (QA) tasks.
+A key strength of \repqa lies in its expert-grounded foundation: it comprises a high-quality test set with 533 QA pairs curated from 27 online public health resources.
 % , all reviewed by professionals in nursing, public health, and clinical communication.
-Different from prior related benchmarks (Table~\ref{tab:dataset_comparison}), \bench focuses on frequently asked health questions from lay users or patients, and evaluates the readability of generated responses, an axis that prior healthcare benchmarks largely overlook, rather than only the underlying factual knowledge of the LLMs.
+Different from prior related benchmarks (Table~\ref{tab:dataset_comparison}), \repqa focuses on frequently asked health questions from lay users or patients, and evaluates the readability of generated responses, an axis that prior healthcare benchmarks largely overlook, rather than only the underlying factual knowledge of the LLMs.
 Additionally, we collected a large-scale corpus of 36,060 public health questions to serve as a post-training dataset, supporting the exploration of readability-enhancement strategies.
 
-We evaluated 19 LLMs on \bench using three readability metrics (Flesch-Kincaid grade level~\citep{kincaid1975derivation}, professional-language proportion, and Yngve depth~\citep{yngve1960model}) and an informativeness metric (the informative cosine between a response and its reference answer).
+We evaluated 19 LLMs on \repqa using three readability metrics (Flesch-Kincaid grade level~\citep{kincaid1975derivation}, professional-language proportion, and Yngve depth~\citep{yngve1960model}) and an informativeness metric (the informative cosine between a response and its reference answer).
 Our study targeted three capabilities: (i) answering at a specified reading level, (ii) inferring the appropriate level for a question, and (iii) using readability as a reward signal.
 We found that current models mostly missed target levels and poorly identified appropriate levels, limiting their applicability for public-health agents.
 We then benchmarked five existing readability-improvement strategies, including training-free controls (instruction-based prompting~\citep{ribeiro-etal-2023-generating,malik2024tarzan}, CoT~\citep{wei2022chain}, and lookahead decoding~\citep{ribeiro-etal-2023-generating}) and reinforcement-learning fine-tuning (GRPO~\citep{shao2024deepseekmath} and DAPO~\citep{yu2025dapo}).
@@ -71,7 +71,7 @@ Readability-aware post-training yielded large gains in readability metrics but c
 This study will offer insights for future work on developing trustworthy healthcare agents and educational domains~\citep{wang2024large}.
 In summary, our contributions are listed as follows:
 \begin{itemize}[leftmargin=*]
-\item We introduced \bench, an expert-crafted benchmark for patient education QA aimed at lay users, with three readability metrics (Flesch–Kincaid grade, professional-language proportion, and Yngve depth), an informativeness metric (the informative cosine between a response and its reference answer), and a large-scale (36,060) expert-reviewed public health questions for post-training.
+\item We introduced \repqa, an expert-crafted benchmark for patient education QA aimed at lay users, with three readability metrics (Flesch–Kincaid grade, professional-language proportion, and Yngve depth), an informativeness metric (the informative cosine between a response and its reference answer), and a large-scale (36,060) expert-reviewed public health questions for post-training.
 
 \item We conducted a study on 19 LLMs, revealing that most models failed to (i) generate at requested reading levels and (ii) identify an appropriate level for a given question.
 

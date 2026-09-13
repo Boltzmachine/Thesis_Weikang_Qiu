@@ -15,13 +15,13 @@
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.98\linewidth]{figure/iclr_figure_new.pdf}
-    \caption{\small Framework Overview: \modelname generates structured text descriptions for each training image using a VLM to iteratively extract brain-aligned object attributes and relationships. These descriptions capture the image’s compositional and relational content and serve as supervision to train an encoder and fine-tune a language model to map fMRI signals into the text space. During inference, the model predicts descriptions from fMRI signals, which then guide a pre-trained diffusion model for object-centric image reconstruction.}
+    \caption{\small Framework Overview: \prism generates structured text descriptions for each training image using a VLM to iteratively extract brain-aligned object attributes and relationships. These descriptions capture the image’s compositional and relational content and serve as supervision to train an encoder and fine-tune a language model to map fMRI signals into the text space. During inference, the model predicts descriptions from fMRI signals, which then guide a pre-trained diffusion model for object-centric image reconstruction.}
     \label{fig:framework}
     \vspace{-0.25cm}
 \end{figure}
 
 
-In this section, we present our framework, \modelname, for fMRI-to-image reconstruction (Figure~\ref{fig:framework}). We first show that fMRI signals align most strongly with the text space of LMs, compared to the hidden spaces of vision or vision–language models, under established metrics (\Cref{sec:findings}). This finding motivates our choice of using pure text as the latent space.
+In this section, we present our framework, \prism, for fMRI-to-image reconstruction (Figure~\ref{fig:framework}). We first show that fMRI signals align most strongly with the text space of LMs, compared to the hidden spaces of vision or vision–language models, under established metrics (\Cref{sec:findings}). This finding motivates our choice of using pure text as the latent space.
 During training (\Cref{sec: text_bridge}), we annotate each training image with structured text descriptions that are object-centric, compositional, and relational. To generate these descriptions, we introduce an attribute/relationship search module (\Cref{sec:train_desc_gen}), which learns optimal prompts to guide the VLM in automatically identifying the key attributes and relationships most aligned with both the fMRI signals and images. These structured descriptions are then used to train an encoder and fine-tune the LM, mapping fMRI signals into the LM text space (\Cref{sec:encoder_training}).
 At inference time (\Cref{sec:inference}), the predicted structured descriptions guide an adapted diffusion model to generate object-centric images directly from fMRI signals.
 
@@ -59,12 +59,11 @@ where \( \operatorname{tr}(\cdot) \) denotes the trace operator. The CKA is the 
 \text{CKA}(\mathbf{X}, \mathbf{K}) = \frac{\text{HSIC}(\mathbf{X}, \mathbf{K})}{\sqrt{\text{HSIC}(\mathbf{X}, \mathbf{X}) \cdot \text{HSIC}(\mathbf{K}, \mathbf{K})}}.
 \]
 We adopt a Gaussian radial basis function (RBF) kernel for \( \mathcal{K} \) \citep{alvarez2022gaussian, cortes2012algorithms}. CCA identifies linear projections $\mathbf{u} = \mathbf{p}_1^\top \mathbf{X}$ and $\mathbf{v} = \mathbf{p}_2^\top \mathbf{K}$ that maximize their correlation. The first mode captures the dominant shared axis \citep{wang2020finding}, with the canonical correlation coefficient: $\rho = \text{corr}(\mathbf{u}, \mathbf{v}) = \text{corr}(\mathbf{p}_1^\top \mathbf{X}, \mathbf{p}_2^\top \mathbf{K}),$ reflecting the strongest linear alignment between brain activity and the model space.
-\begin{wraptable}{r}{0.45\textwidth}  
-\vspace{-0.2cm}
+\begin{table}
 \centering
     \caption{\small Alignment results between model representations and fMRI data, evaluated using CKA, Generalization Gap, and CCA. The best result is highlighted in \textcolor{red}{red}. $\uparrow$ denotes higher is better; $\downarrow$ denotes lower is better.}
     \vspace{0.2cm}
-    \resizebox{0.9\linewidth}{!}{
+    % \resizebox{0.9\linewidth}{!}{
 
     \begin{tabular}{lccc}
     \toprule
@@ -81,9 +80,8 @@ We adopt a Gaussian radial basis function (RBF) kernel for \( \mathcal{K} \) \ci
     \end{tabular}
     \label{tb_similarity}
 
-    }
-\vspace{-0.4cm}
-\end{wraptable}
+    % }
+\end{table}
 
 \textbf{FMRI aligns better with the embedding space of language models.} Our results (Table~\ref{tb_similarity}) show that the text space of language models aligns best with fMRI data, outperforming both vision–language and vision-only models across all metrics. Surprisingly, vision–language models, despite integrating both modalities, underperform compared to pure language models. We hypothesize that this is because humans focus more on the meaning of an image rather than pixel-level details~\citep{naselaris2009bayesian, du2022fmri}. Unlike prior work \citep{scotti2023reconstructing, wang2024decoding, xia2024dream, lin2022mind} that primarily relies on vision representations, our findings motivate using pure text as the latent space.
 
@@ -91,11 +89,11 @@ We adopt a Gaussian radial basis function (RBF) kernel for \( \mathcal{K} \) \ci
 
 
 
-\subsection{Training of \modelname}
+\subsection{Training of \prism}
 \label{sec: text_bridge}
 % Building on our findings in \Cref{sec: finding_text}, we adopt the language model’s text space as a semantic bridge for fMRI-to-image generation. Our approach first maps fMRI signals into a language model’s embedding space and then generates textual descriptions that are subsequently linked to the vision model.
 % In this section, we describe how PERM is trained to generate structured, object-level descriptions that capture the compositional nature of human visual perception.
-In this section, we describe the training process of \modelname, which consists of automatic structured description generation for training images and encoder training.
+In this section, we describe the training process of \prism, which consists of automatic structured description generation for training images and encoder training.
 
 \subsubsection{Automatic Description Generation}
 \label{sec:train_desc_gen}
@@ -231,9 +229,9 @@ where $ y_{t'}$ denotes the $t'$-th token in the structured description. This tr
 
 
 
-\subsection{\modelname Inference: Object-Centric Image Generation}
+\subsection{\prism Inference: Object-Centric Image Generation}
 \label{sec:inference}
-The inference process of \modelname has two steps: (1) generate structured descriptions $\hat{D}_i^a$ from fMRI signals using the trained encoder and language model, and (2) reconstruct the image by composing objects conditioned on these descriptions with a pre-trained diffusion model: $\hat{\mathbf{Y}}_i =\text{Diff}(\hat{D}_i^a)$. 
+The inference process of \prism has two steps: (1) generate structured descriptions $\hat{D}_i^a$ from fMRI signals using the trained encoder and language model, and (2) reconstruct the image by composing objects conditioned on these descriptions with a pre-trained diffusion model: $\hat{\mathbf{Y}}_i =\text{Diff}(\hat{D}_i^a)$. 
 % \begin{equation}
 % \label{eq:d}
 % \begin{split}

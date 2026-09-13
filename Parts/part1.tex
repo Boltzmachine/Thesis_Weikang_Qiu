@@ -7,4 +7,10 @@ This part presents the foundation of the mind-world connection, focusing on the 
 
 \chapter{Learning High-Order Relationships of Brain Regions}
 
+We begin our study of brain signals by using machine learning to discover candidate neural priors from data. In this chapter, we investigate high-order relationships among brain regions, which capture distributed patterns of brain activity beyond pairwise connectivity. We introduce \hybrid{}, a framework that learns these relationships from fMRI signals as weighted hyperedges. Through a multi-head drop-bottleneck, the model identifies relationships that are maximally informative about a phenotypic outcome while minimizing redundant information. The learned relationships improve phenotypic prediction and provide evidence for the value of high-order structure in modeling brain signals. This work establishes the discovery side of this part's foundation: machine learning can help identify patterns of neural organization that may inform model design. The next chapter examines the complementary direction, incorporating established spatial and anatomical priors into a neural encoder.
+
 \input{HYBRID/main}
+
+// TODO: FA-EEG
+
+\import{SWA/}{main.tex}

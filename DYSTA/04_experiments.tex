@@ -38,13 +38,13 @@ OpenVLA-OFT \cite{kim2025fine} & $\underline{96.2}$ & $\mathbf{98.3}$ & $\mathbf
 \end{table}
 
 \noindent\textbf{Simulation benchmark}
-We use SimplerEnv~\cite{li2024evaluating} and LIBERO~\cite{liu2023libero} task suite to evaluate the performance and acceleration. \citet{kim2025fine} offers two settings for LIBERO, one using only a third-person image and a language instruction as inputs, and another that additionally includes an extra camera view and proprioceptive state. We adopt the former setting, as it offers broader applicability and aligns more closely with standard VLA deployment scenarios. For the LIBERO benchmark, we finetune the model to the corresponding downstream datasets. For the SimplerEnv benchmark, we use Open X-Embodiment (OXE) \cite{vuong2023open} as the training dataset. All settings are consistent with the corresponding original base model. Dataset statistics could be found in Appendix \ref{app:dataset}.
+We use SimplerEnv~\cite{li2024evaluating} and LIBERO~\cite{liu2023libero} task suite to evaluate the performance and acceleration. \citet{kim2025fine} offers two settings for LIBERO, one using only a third-person image and a language instruction as inputs, and another that additionally includes an extra camera view and proprioceptive state. We adopt the former setting, as it offers broader applicability and aligns more closely with standard VLA deployment scenarios. For the LIBERO benchmark, we finetune the model to the corresponding downstream datasets. For the SimplerEnv benchmark, we use Open X-Embodiment (OXE) \cite{vuong2023open} as the training dataset. All settings are consistent with the corresponding original base model.
 
-\noindent\textbf{Real-World benchmark} We evaluate \dysta{} with Cobot Magic robots on 7 tasks across 3 categories, each with 20 trials. This evaluation scale is consistent with prior work~\cite{shi2025memoryvlaperceptualcognitivememoryvisionlanguageaction,li2024cogact}. Models are finetuned on each task. More details could be found in Appendix~\ref{app:real}.
+\noindent\textbf{Real-World benchmark} We evaluate \dysta{} with Cobot Magic robots on 7 tasks across 3 categories, each with 20 trials. This evaluation scale is consistent with prior work~\cite{shi2025memoryvlaperceptualcognitivememoryvisionlanguageaction,li2024cogact}.
 
 \noindent\textbf{Evaluation} The performance is measured by success rate, and acceleration is measured by the FLOPs reduction rate and the inference latency.
 
-\noindent\textbf{Implementation details} We use two levels of static cache. L1 static cache consists of 133 ($52\%$) tokens and L2 static cache consists of 107 ($42\%$) tokens, resulting in 16 dynamic tokens. The sensitivity analysis of the static ratio is in Appendix~\ref{app:static_ratio}. FLOPs are measured by open-source tools \footnote{\url{https://github.com/MrYxJ/calculate-flops.pytorch}}. Additional details, including the recaching threshold $\delta_l$, the resulting average recaching intervals and the latency distribution when rollout, can be found in Appendix~\ref{app:impl} and Appendix~\ref{app:lat_dist}.
+\noindent\textbf{Implementation details} We use two levels of static cache. L1 static cache consists of 133 ($52\%$) tokens and L2 static cache consists of 107 ($42\%$) tokens, resulting in 16 dynamic tokens. FLOPs are measured by open-source tools \footnote{\url{https://github.com/MrYxJ/calculate-flops.pytorch}}.
 
 \noindent\textbf{Results}
 Table~\ref{tab:simplerenv}  and Table~\ref{tab:libero} summarize the performance and the acceleration results. Table~\ref{tab:real_res} summarizes the results on the real-world benchmark. Across tables, we show that our method achieves improved or comparable performance across benchmarks with substantial speedup. Notably, on the SimplerEnv benchmark, our method improves the base model by $4.9\%$, and outperforms the best baseline by $3.9\%$ and achieves $2.26\times$ acceleration.  On the real-world benchmark, our model improves the base model by $10.6\%$ and achieves $2.21\times$ acceleration.
@@ -138,18 +138,30 @@ OpenVLA-OFT
 
 
 \noindent\textbf{Real-world benchmark}
-We evaluate \dysta{} with Cobot Magic robots on 3 tasks, each with 20 trials. Models are finetuned on each task. Performance is measured by success rate. More details could be found in Appendix \ref{app:real}.
+We evaluated \dysta{} with Cobot Magic robots on three tasks requiring memory or temporal reasoning. In \emph{Heat Vegetables}, the robot heated vegetables one at a time and had to remember which had already been heated. In \emph{Pour Twice}, it had to track whether the first pour had been completed. In \emph{Press Buttons}, it had to remember which buttons had already been pressed and determine the next button in the sequence. We varied the objects' locations and the robot arm's starting position. Models were finetuned on each task, and performance was measured by success rate over 20 trials per task. Figure~\ref{fig:dysta-real-mem} illustrates the three tasks.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figs/real_demo_mem.jpg}
+    \caption{Real-world tasks for multi-frame integration with the Cobot Magic robot: Press Buttons (top), Pour Twice (middle), and Heat Vegetables (bottom). Each task was evaluated over 20 trials.}
+    \label{fig:dysta-real-mem}
+\end{figure}
+
+\input{DYSTA/tables/real_mem}
 
 
-\noindent\textbf{Implementation details} We use one static level. The ratio of static tokens is set to $0.9$, corresponding to $230$ static tokens and $26$ dynamic tokens. The number of observations is set to $20$, with a sampling interval of $20$ frames (1 frame per second), resulting in $750$ context tokens. More details could be found in Appendix~\ref{app:impl}. 
+\noindent\textbf{Implementation details} We use one static level. The ratio of static tokens is set to $0.9$, corresponding to $230$ static tokens and $26$ dynamic tokens. The number of observations is set to $20$, with a sampling interval of $20$ frames (1 frame per second), resulting in $750$ context tokens.
 
 
 \noindent\textbf{Results} 
-As shown in Table~\ref{tab:stove_res}, our method significantly and consistently outperforms all baselines on all objectives, with an average improvement of $24.5\%$. On the real-world experiments in Appendix~\ref{app:real_mem}, we achieve $23.3\%$ absolute in absolute success rate.
+As shown in Table~\ref{tab:stove_res}, our method significantly and consistently outperforms all baselines on all objectives, with an average improvement of $24.5\%$.
 Single-image methods such as TraceVLA almost always fail, since the task cannot be solved from the current observation alone, and visual traces provide only marginal additional benefit. 
 ContextVLA underperforms due to non-learnable pooling observations, which may discard critical temporal and spatial details.
 MemoryVLA presents the LLM backbone with only a single frame at each timestep, leaving multi-frame reasoning to a lightweight decoder; as a result, the LLM itself does not reason over multiple frames, which limits the model's capacity.
 While these baselines have their own ways to reduce context length, they do so at the cost of information or model capacity. In contrast, our approach preserves all relevant visual information by reusing temporally persistent static tokens, enabling effective multi-frame integration within a limited context window.
+
+\noindent\textbf{Real-world results}
+As shown in Table~\ref{tab:real_mem}, \dysta{} achieved an average success rate of $58.3\%$ across the three real-world tasks, outperforming ContextVLA, the strongest baseline on average ($35.0\%$), by $23.3$ percentage points.
 
 \subsection{Ablation Studies}
 
@@ -191,6 +203,4 @@ Dynamic tokens consistently attend to movable objects, most notably the gripper 
 L1 static tokens, which are designed to represent the most persistent visual information, primarily focus on background and ambient regions. Their attention heatmaps are often strongest in areas without salient foreground objects. We interpret this behavior as L1 static tokens of shallow layers functioning as sink tokens, capturing coarse, global scene context rather than object-specific details. Importantly, their attention patterns remain highly consistent across timesteps, reflecting strong temporal invariance.
 
 L2 static tokens exhibit intermediate behavior between L1 static and dynamic tokens. They attend more strongly to semi-static objects, such as the drawer, which typically remains stationary most of the time. At $t=0$ both drawer handles are highlighted, as either could potentially be moved. After the drawer is opened ($t>100$), the attention maps stabilize and remain focused on the drawer structure, indicating that these tokens capture object-level static information with moderate temporal persistence. The robotic arm is also highlighted at certain frames, which we attribute to its importance in the task and the need to preserve its appearance across timesteps.
-
-We further illustrate how static-dynamic assignments evolve along a trajectory in Appendix~\ref{app:time_evo}.
 

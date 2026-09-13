@@ -1,14 +1,14 @@
 \section{Experiments}
 \label{sec:exp}
 
-In this section, we conduct extensive experiments to evaluate \modelname, guided by the following questions: 
+In this section, we conduct extensive experiments to evaluate \prism, guided by the following questions: 
 %(\textbf{RQ1}) Does the latent space of image models align well with fMRI signals? If not, which representation space shows stronger correspondence? 
-(\textbf{RQ1}) How well does our framework \modelname perform on the image reconstruction task? (\textbf{RQ2}) How do different choices of latent space influence the reconstruction quality? (\textbf{RQ3}) What is the contribution of each component in our framework to the overall reconstruction performance?
+(\textbf{RQ1}) How well does our framework \prism perform on the image reconstruction task? (\textbf{RQ2}) How do different choices of latent space influence the reconstruction quality? (\textbf{RQ3}) What is the contribution of each component in our framework to the overall reconstruction performance?
 
 \subsection{Experimental Setup}
 We conduct experiments on three datasets: NSD \citep{allen2022massive}, BOLD5000 \citep{chang2019bold5000}, and GOD \citep{horikawa2017generic}. Detailed descriptions of the datasets are provided in Section~\ref{app:dataset} of the Appendix. Each method is evaluated by comparing the reconstructed images to the ground truth using five metrics: PixCorr and SSIM for pixel- and structure-level similarity \citep{wang2004image}, LPIPS \citep{zhang2018unreasonable} for human perceptual similarity, and CLIP and Inception V3 two-way identification \citep{scotti2024mindeye2} for semantic consistency based on pretrained model representations.
 %Pixelwise Correlation (PixCorr), Structural Similarity Index (SSIM) \citep{wang2004image}, Learned Perceptual Image Patch Similarity (LPIPS) \citep{zhang2018unreasonable}, which reflects human perceptual similarity, CLIP two-way identification (CLIP) \cite{scotti2024mindeye2} and Inception V3 two-way identification (Inception V3) \cite{scotti2024mindeye2}.
-We compare our method against the following baselines: Takagi \& Nishimoto \citep{takagi2023high} (Takagi for short), Mindvis \citep{chen2023seeing}, Mindeye \citep{scotti2023reconstructing}, \textcolor{black}{MindBridge~\citep{wang2024mindbridge}, NeuralDiffuser~\citep{li2025neuraldiffuser}}, and Mindeye2 \citep{scotti2024mindeye2}. To ensure a fair comparison, we use the same generative model, Stable Diffusion 2.1~\citep{pernias2023wurstchen, rombach2022high}, for all methods. We additionally present results for \modelname and Mindeye2 (ranked second-best) with the newer SDXL backbone~\citep{podell2023sdxl}. \textcolor{black}{We incorporate a negative prompt in our model—a textual constraint that guides the diffusion model to avoid generating undesired visual artifacts, such as distorted object shapes or background clutter. For fairness, we apply the same negative prompt when evaluating all baselines, which leads to performance gains in some cases. } More details about the baselines and training are provided in Sections~\ref{app:baseline} and~\ref{app:training} of the Appendix.
+We compare our method against the following baselines: Takagi \& Nishimoto \citep{takagi2023high} (Takagi for short), Mindvis \citep{chen2023seeing}, Mindeye \citep{scotti2023reconstructing}, \textcolor{black}{MindBridge~\citep{wang2024mindbridge}, NeuralDiffuser~\citep{li2025neuraldiffuser}}, and Mindeye2 \citep{scotti2024mindeye2}. To ensure a fair comparison, we use the same generative model, Stable Diffusion 2.1~\citep{pernias2023wurstchen, rombach2022high}, for all methods. We additionally present results for \prism and Mindeye2 (ranked second-best) with the newer SDXL backbone~\citep{podell2023sdxl}. \textcolor{black}{We incorporate a negative prompt in our model—a textual constraint that guides the diffusion model to avoid generating undesired visual artifacts, such as distorted object shapes or background clutter. For fairness, we apply the same negative prompt when evaluating all baselines, which leads to performance gains in some cases. } More details about the baselines and training are provided in Sections~\ref{app:baseline} and~\ref{app:training} of the Appendix.
 
 
 
@@ -45,7 +45,7 @@ We compare our method against the following baselines: Takagi \& Nishimoto \cite
 % \toprule
 %           & Acc. $\uparrow$   \\
 % \midrule
-% \modelname      & \textcolor{red}{0.6054} \\
+% \prism      & \textcolor{red}{0.6054} \\
 % Takagi & 0.4011 \\
 % Mindvis   & 0.5037 \\
 % Mindeye1  & 0.5516 \\
@@ -120,7 +120,7 @@ We compare our method against the following baselines: Takagi \& Nishimoto \cite
 
 
 
-\subsection{Effectiveness of \modelname }
+\subsection{Effectiveness of \prism }
 
 
 % \begin{table}[b] 
@@ -189,7 +189,7 @@ We compare our method against the following baselines: Takagi \& Nishimoto \cite
 
            
 \midrule
-\textbf{\modelname}      & \textcolor{red}{0.3404$_{\pm 0.05}$}  & \textcolor{red}{0.4640$_{\pm 0.02}$}  & \textcolor{red}{0.5963$_{\pm 0.02}$} &     \textcolor{red}{0.9467$_{\pm 0.03}$}   & \textcolor{red}{0.9516$_{\pm 0.03}$}  \\
+\textbf{\prism}      & \textcolor{red}{0.3404$_{\pm 0.05}$}  & \textcolor{red}{0.4640$_{\pm 0.02}$}  & \textcolor{red}{0.5963$_{\pm 0.02}$} &     \textcolor{red}{0.9467$_{\pm 0.03}$}   & \textcolor{red}{0.9516$_{\pm 0.03}$}  \\
 \textbf{Takagi} & 0.2100$_{\pm 0.01}$    & 0.3880$_{\pm 0.04}$ & 0.7665$_{\pm 0.04}$ & 0.8811$_{\pm 0.06}$  &  0.9086$_{\pm 0.07}$     \\
 \textbf{Mindvis}   & 0.2736$_{\pm 0.06}$  & 0.3868$_{\pm 0.06}$ & 0.6789$_{\pm 0.02}$ & 0.9000 $_{\pm 0.05}$ & 0.9135 $_{\pm 0.05}$ \\
 \textbf{Mindeye1}  & 0.3114$_{\pm 0.05}$  & 0.3868$_{\pm 0.06}$ & 0.6501$_{\pm 0.03}$ & 0.9121 $_{\pm 0.04}$ & 0.9198$_{\pm 0.03}$
@@ -202,7 +202,7 @@ We compare our method against the following baselines: Takagi \& Nishimoto \cite
           \midrule
 
 
-\textbf{\modelname}+SDXL & \textcolor{red}{0.3645$_{\pm 0.02}$}   & \textcolor{red}{0.4983$_{\pm 0.04}$} & \textcolor{red}{0.5563$_{\pm 0.02}$} & \textcolor{red}{0.9600$_{\pm 0.01}$} & \textcolor{red}{0.9765$_{\pm 0.01}$}  \\
+\textbf{\prism}+SDXL & \textcolor{red}{0.3645$_{\pm 0.02}$}   & \textcolor{red}{0.4983$_{\pm 0.04}$} & \textcolor{red}{0.5563$_{\pm 0.02}$} & \textcolor{red}{0.9600$_{\pm 0.01}$} & \textcolor{red}{0.9765$_{\pm 0.01}$}  \\
 
 \textbf{Mde2}+SDXL  & 0.3471$_{\pm 0.04}$   & 0.4425$_{\pm 0.04}$ & 0.6002$_{\pm 0.01}$ & 0.9599$_{\pm 0.02}$ & 0.9602$_{\pm 0.01}$  \\
 
@@ -213,7 +213,7 @@ We compare our method against the following baselines: Takagi \& Nishimoto \cite
 
 \midrule
 
-\textbf{\modelname} &\textcolor{red}{0.2315$_{\pm 0.01}$}   & \textcolor{red}{0.5341$_{\pm 0.02}$}   & \textcolor{red}{0.6198$_{\pm 0.02}$}  & \textcolor{red}{0.7720$_{\pm 0.03}$} & \textcolor{red}{0.6601$_{\pm 0.07}$} \\
+\textbf{\prism} &\textcolor{red}{0.2315$_{\pm 0.01}$}   & \textcolor{red}{0.5341$_{\pm 0.02}$}   & \textcolor{red}{0.6198$_{\pm 0.02}$}  & \textcolor{red}{0.7720$_{\pm 0.03}$} & \textcolor{red}{0.6601$_{\pm 0.07}$} \\
 
 \textbf{Takagi} &0.1815$_{\pm 0.03}$   & 0.4418$_{\pm 0.06}$ & 0.7558$_{\pm 0.06}$ & 0.6990$_{\pm 0.04}$ & 0.5667$_{\pm 0.01}$ \\
 
@@ -234,7 +234,7 @@ We compare our method against the following baselines: Takagi \& Nishimoto \cite
 \textbf{Mindeye2} & 0.2265$_{\pm 0.02}$  & 0.5164$_{\pm 0.02}$  & 0.6416$_{\pm 0.03}$  & 0.7600$_{\pm 0.04}$ & 0.6428$_{\pm 0.03}$ \\
 
 \midrule
-\textbf{\modelname}+SDXL &\textcolor{red}{0.2442 $_{\pm 0.02}$}  & \textcolor{red}{0.5600 $_{\pm 0.03}$} & \textcolor{red}{0.5909 $_{\pm 0.04}$}  & \textcolor{red}{0.7881$_{\pm 0.04}$} & \textcolor{red}{0.6881$_{\pm 0.02}$}\\
+\textbf{\prism}+SDXL &\textcolor{red}{0.2442 $_{\pm 0.02}$}  & \textcolor{red}{0.5600 $_{\pm 0.03}$} & \textcolor{red}{0.5909 $_{\pm 0.04}$}  & \textcolor{red}{0.7881$_{\pm 0.04}$} & \textcolor{red}{0.6881$_{\pm 0.02}$}\\
 
 \textbf{Mde2}+SDXL &0.2310 $_{\pm 0.04}$  & 0.5185 $_{\pm 0.02}$ & 0.6186 $_{\pm 0.02}$  & 0.7503$_{\pm 0.04}$ & 0.6556$_{\pm 0.02}$ \\
 \midrule
@@ -246,7 +246,7 @@ We compare our method against the following baselines: Takagi \& Nishimoto \cite
 
 
 
-\textbf{\modelname} & \textcolor{red}{0.2571 $_{\pm 0.01}$}   & \textcolor{red}{0.5200 $_{\pm 0.02}$} & \textcolor{red}{0.6213 $_{\pm 0.01}$} & \textcolor{red}{0.8567 $_{\pm 0.05}$} & \textcolor{red}{0.8428 $_{\pm 0.06}$} \\
+\textbf{\prism} & \textcolor{red}{0.2571 $_{\pm 0.01}$}   & \textcolor{red}{0.5200 $_{\pm 0.02}$} & \textcolor{red}{0.6213 $_{\pm 0.01}$} & \textcolor{red}{0.8567 $_{\pm 0.05}$} & \textcolor{red}{0.8428 $_{\pm 0.06}$} \\
 
 \textbf{Takagi} & 0.2322 $_{\pm 0.05}$  & 0.4944 $_{\pm 0.04}$& 0.6463 $_{\pm 0.05}$ & 0.7232 $_{\pm 0.01}$ & 0.7556 $_{\pm 0.02}$ \\
 
@@ -261,7 +261,7 @@ We compare our method against the following baselines: Takagi \& Nishimoto \cite
 \\
 \textbf{Mindeye2} &0.2442 $_{\pm 0.03}$  & 0.4952 $_{\pm 0.01}$ & 0.6586 $_{\pm 0.02}$  & 0.8322$_{\pm 0.02}$ & 0.8280$_{\pm 0.04}$ \\
 \midrule
-\textbf{\modelname}+SDXL  &\textcolor{red}{0.2669 $_{\pm 0.01}$}  & \textcolor{red}{0.5537 $_{\pm 0.01}$} & \textcolor{red}{0.5989 $_{\pm 0.03}$}  & \textcolor{red}{0.8727$_{\pm 0.03}$} & \textcolor{red}{0.8820$_{\pm 0.04}$} \\
+\textbf{\prism}+SDXL  &\textcolor{red}{0.2669 $_{\pm 0.01}$}  & \textcolor{red}{0.5537 $_{\pm 0.01}$} & \textcolor{red}{0.5989 $_{\pm 0.03}$}  & \textcolor{red}{0.8727$_{\pm 0.03}$} & \textcolor{red}{0.8820$_{\pm 0.04}$} \\
 \textbf{Mde2}+SDXL &0.2500 $_{\pm 0.04}$  & 0.5511 $_{\pm 0.04}$ & 0.6224 $_{\pm 0.01}$  & 0.8678$_{\pm 0.02}$ & 0.8556$_{\pm 0.01}$ \\
 \bottomrule
 
@@ -286,29 +286,27 @@ We compare our method against the following baselines: Takagi \& Nishimoto \cite
 
 We evaluate our fMRI-to-image reconstruction framework on test data and compare it with state-of-the-art methods.
 
-\begin{wraptable}{r}{0.55\textwidth}    
-\vspace{-0.75cm}
+\begin{table}   
 \centering
 \caption{\small Image QA results on reconstructed NSD images. \textbf{Mdvs}, \textbf{Mde1} and \textbf{Mde2} refer to \textbf{Mindvis}, \textbf{Mindeye1} and \textbf{Mindeye2}, respectively. Results are reported as accuracy, with the best highlighted in \textcolor{red}{red}.}
-    \resizebox{0.9\linewidth}{!}{
+    % \resizebox{0.9\linewidth}{!}{
 
 \begin{tabular}{lccccc}
 \toprule
 
-    & \textbf{\modelname}   & \textbf{Takagi} & \textbf{Mdvs} & \textbf{Mde1} & \textbf{Mde2} \\
+    & \textbf{\prism}   & \textbf{Takagi} & \textbf{Mdvs} & \textbf{Mde1} & \textbf{Mde2} \\
 \midrule    
 \textbf{Acc.}$\uparrow$ & \textcolor{red}{0.6054} & 0.4011    & 0.5037  & 0.5516   & 0.5765  \\
 \bottomrule
 \end{tabular}
-}
+% }
 \label{tb:qa}
-\vspace{-0.2cm}
-\end{wraptable}
+\end{table}
 
 
 
 
- Table \ref{tb:main} summarizes the results, with all metrics and standard deviations averaged across subjects over five runs. Visualizations of reconstructed examples from the test set are shown in Figure~\ref{fig:reconstructed}. As shown in Table \ref{tb:main}, \modelname outperforms state-of-the-art methods across all datasets and metrics, with up to a 6\% improvement in LPIPS, indicating higher perceptual similarity to the original images. Unlike baselines such as Mindeye2~\citep{scotti2024mindeye2} and Mindeye1~\citep{scotti2023reconstructing}, which often ignore key objects, \modelname successfully reconstructs all objects, yielding notable gains across all metrics. These results demonstrate the effectiveness of our framework in translating brain activity into accurate, perceptually aligned image reconstructions.
+ Table \ref{tb:main} summarizes the results, with all metrics and standard deviations averaged across subjects over five runs. Visualizations of reconstructed examples from the test set are shown in Figure~\ref{fig:reconstructed}. As shown in Table \ref{tb:main}, \prism outperforms state-of-the-art methods across all datasets and metrics, with up to a 6\% improvement in LPIPS, indicating higher perceptual similarity to the original images. Unlike baselines such as Mindeye2~\citep{scotti2024mindeye2} and Mindeye1~\citep{scotti2023reconstructing}, which often ignore key objects, \prism successfully reconstructs all objects, yielding notable gains across all metrics. These results demonstrate the effectiveness of our framework in translating brain activity into accurate, perceptually aligned image reconstructions.
 %The substantial improvements further highlight that our approach generates images that are not only structurally accurate but also perceptually closer to the original images, emphasizing the advantages of object-centric fMRI mapping and object diffusion in enhancing reconstruction quality. 
 
 
@@ -333,16 +331,14 @@ We further evaluate our method on a question answering (QA) task using reconstru
 \subsection{Ablation Study}
 
 In this subsection, we present ablation studies to justify our choice of text as the latent space and to evaluate the effectiveness of the object-centric diffusion and attribute/relationship search modules.
-% evaluate \modelname's performance across different embedding variants and the contribution of each component in our framework to fMRI-to-image reconstruction performance. 
+% evaluate \prism's performance across different embedding variants and the contribution of each component in our framework to fMRI-to-image reconstruction performance. 
 Experiments are conducted on the NSD dataset, though the trend generalizes to other datasets. 
 
-\begin{wraptable}{r}{0.6\textwidth}
-    
-\vspace{-0.35cm}
+\begin{table}{r}
 \centering
 \caption{\small Reconstruction performance across three latent spaces. The best result in each column is highlighted in \textcolor{red}{red}. $\uparrow$ indicates higher is better and $\downarrow$ indicates lower is better.}
 \vspace{0.1cm}
-\resizebox{0.6\textwidth}{!}{
+% \resizebox{0.6\textwidth}{!}{
 \begin{tabular}{lccccc}
 \toprule
           
@@ -350,15 +346,14 @@ Experiments are conducted on the NSD dataset, though the trend generalizes to ot
 
           %\multicolumn{5}{l}{\textbf{\small NSD}} &   \\
 \midrule
-\textbf{\modelname}      & \textcolor{red}{0.3404$_{\pm 0.05}$}  & \textcolor{red}{0.4640$_{\pm 0.02}$}  & \textcolor{red}{0.5963$_{\pm 0.02}$} &     \textcolor{red}{0.9467$_{\pm 0.03}$}   & \textcolor{red}{0.9516$_{\pm 0.03}$}  \\
+\textbf{\prism}      & \textcolor{red}{0.3404$_{\pm 0.05}$}  & \textcolor{red}{0.4640$_{\pm 0.02}$}  & \textcolor{red}{0.5963$_{\pm 0.02}$} &     \textcolor{red}{0.9467$_{\pm 0.03}$}   & \textcolor{red}{0.9516$_{\pm 0.03}$}  \\
 \textbf{Clip text} & 0.3208$_{\pm 0.04}$    & 0.3725$_{\pm 0.06}$ & 0.6611$_{\pm 0.05}$ &0.9197$_{\pm 0.02}$  &  0.9011$_{\pm 0.04}$  \\
 \textbf{LDM}   & 0.2090$_{\pm 0.07}$  & 0.3727$_{\pm 0.07}$ & 0.7502$_{\pm 0.04}$ & 0.8602 $_{\pm 0.06}$ & 0.8925 $_{\pm 0.05}$ \\
 \bottomrule
 \end{tabular}
 \label{tb:abl_diff_space}
-}
-\vspace{-0.3cm}
-\end{wraptable}
+% }
+\end{table}
 
 
 
@@ -366,19 +361,18 @@ We first compare reconstruction performance across three latent spaces: (1) lang
 
 
 
-\begin{wraptable}{r}{0.6\textwidth}    
+\begin{table}{r} 
 \vspace{-0.7cm}
     \centering
     \caption{\small Effectiveness of the object-centric diffusion module and attribute/relationship search module on NSD data. The best result is highlighted in \textcolor{red}{red}.}
-\vspace{0.1cm}
-\resizebox{0.8\linewidth}{!}{
+% \resizebox{0.8\linewidth}{!}{
 \begin{tabular}{lccc}
 \toprule
 
                & \textbf{PixCorr} $\uparrow$ & \textbf{SSIM} $\uparrow$  & \textbf{LPIPS} $\downarrow$ \\
 \midrule
 
-\textbf{\modelname}         & \textcolor{red}{0.3404$_{\pm 0.05}$}  & \textcolor{red}{0.4640$_{\pm 0.02}$}  & \textcolor{red}{0.5963$_{\pm 0.05}$} \\
+\textbf{\prism}         & \textcolor{red}{0.3404$_{\pm 0.05}$}  & \textcolor{red}{0.4640$_{\pm 0.02}$}  & \textcolor{red}{0.5963$_{\pm 0.05}$} \\
 \textbf{w/o ObjC.}     & 0.3291 $_{\pm 0.06}$  & 0.4299 $_{\pm 0.06}$ & 0.6111 $_{\pm 0.05}$ \\
 \textbf{w/o AttOpt.+Bst}   & 0.3311$_{\pm 0.04}$    & 0.4421$_{\pm 0.01}$ & 0.6005$_{\pm 0.02}$ \\
 %-t5+llama 2 7b & 0.3011  & 0.4094 & 0.6606\\
@@ -386,10 +380,10 @@ We first compare reconstruction performance across three latent spaces: (1) lang
 \textbf{w/o AttOpt.+Wst} &  0.3068 $_{\pm 0.05}$    & 0.4167$_{\pm 0.02}$  & 0.6398$_{\pm 0.05}$  \\ 
 
 \bottomrule
-\end{tabular}}
+\end{tabular}
+% }
 \label{tab:ablation}
-\vspace{-0.2cm}
-\end{wraptable}
+\end{table}
 
 
 
