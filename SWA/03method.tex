@@ -74,9 +74,6 @@ In this section, we present our framework for constructing functional graphs of 
 We first collect attention-head activations on DRE-Bench~\cite{yang2025truly}, whose tasks assess attribute-level, spatial, sequential, and conceptual reasoning. We follow the standard construction of functional brain networks: anatomical ROIs are treated as nodes, pairwise functional connectivity is estimated from statistical dependencies between their activity time series, and a graph is obtained by thresholding the resulting connectivity matrix. Analogously, we treat attention heads as nodes and estimate pairwise functional connectivity from activation-based similarity between heads. We then threshold the resulting head-similarity matrix to construct an attention-head functional graph.
 
 
-
-% In order to build the graph of attention heads, we first collect attention-head activations on DRE-Bench \cite{yang2025truly}, which assess attribute-level, spatial, sequential, and conceptual reasoning. We then define nodes as attention heads and edges as activation-based similarities between heads. This construction is inspired by functional brain networks, where anatomical ROIs are treated as nodes and edges are estimated from statistical dependencies between their activity time series. In brain networks, functional connectivity is often estimated by Pearson correlation between scalar ROI activity time series \cite{biswal1995functional, fox2005human}. Since attention heads produce vector-valued activations, we propose use SVCCA as a multivariate analogue of correlation that measures shared correlated subspaces between heads. Detailed justification of using SVCCA is in \Cref{app:svcca_justification} of the Appendix. \yy{Since you already have a beginning paragraph in Section 3, you do not repeat again. I would suggest delete this paragraph and integrate the information to the following subsections. }
-
 \paragraph{Activation Collection.}
 % We collect attention-head activations on DRE-Bench, a dynamic benchmark for evaluating LLM fluid intelligence through abstract reasoning tasks \cite{yang2025truly}. 
 % Its tasks assess attribute-level, spatial, sequential, and conceptual reasoning, and use dynamically generated variants to test whether models can infer latent rules.
@@ -108,7 +105,7 @@ Each row of $\mathbf{X}_m$ corresponds to the query activation of head $m$ for o
 
 
 \paragraph{SVCCA Similarity.}
-In functional brain networks, connectivity is often estimated using Pearson correlation between scalar ROI activity time series~\cite{biswal1995functional, fox2005human}. Attention heads, however, produce vector-valued activations. We therefore use SVCCA as a multivariate analogue of correlation, measuring shared correlated subspaces between heads. Additional justification for using SVCCA is provided in Section~\ref{app:swa_svcca_justification}. To compute pairwise head similarity using SVCCA as defined in~\Cref{sec:svcca_prelim}, we treat the activation matrix $\mathbf{X}_m$ of each head as its representation over DRE-Bench questions. For each pair of heads $(i,j)$, we define
+In functional brain networks, connectivity is often estimated using Pearson correlation between scalar ROI activity time series~\cite{biswal1995functional, fox2005human}. Attention heads, however, produce vector-valued activations. We therefore use SVCCA as a multivariate analogue of correlation, measuring shared correlated subspaces between heads. To compute pairwise head similarity using SVCCA as defined in~\Cref{sec:svcca_prelim}, we treat the activation matrix $\mathbf{X}_m$ of each head as its representation over DRE-Bench questions. For each pair of heads $(i,j)$, we define
 $
 S_{ij}=\mathrm{SVCCA}(\mathbf{X}_i,\mathbf{X}_j), S_{ii}=1.
 $

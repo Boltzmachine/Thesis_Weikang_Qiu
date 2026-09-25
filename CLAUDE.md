@@ -1,6 +1,7 @@
 # CLAUDE.md
 
 When making slides, keep text minimal and sufficient.
+Transition callouts use a distinct style: Yale navy (#00356B) fill, white main text, small rounded corners, and light-blue/gold secondary labels. Ordinary explanatory callouts use light backgrounds and accent bars.
 
 Yale PhD dissertation (LaTeX). Main document: `Disseration.tex` (note the typo in the
 filename — it is intentional, do not "fix" it).
@@ -54,6 +55,15 @@ make distclean# latexmk -C   (everything, incl. build/)
   surrounding chapter rather than imposing a new one.
 - Don't silently rewrite passages that were not asked about; edits should be scoped to
   what the user requested.
+- Keep all backups and intermediate deck copies outside OneDrive, under
+  `~/Thesis_Backups/Thesis_Weikang_Qiu/`. Do not create backup directories or
+  duplicate backup decks inside this project.
+- Preserve the shared `deck/dissertationv2.pptx` file when publishing edits.
+  Edit and validate a working copy outside OneDrive, then update the existing
+  file's contents in place. Do not rename the original to a backup, delete and
+  recreate it, or publish via `os.replace`/a temporary-file rename. Keep its
+  filesystem identity and metadata, and verify the existing OneDrive sharing
+  link shows the new content after synchronization when browser access is available.
 
 ## `[C: ...]` author notes
 
@@ -65,7 +75,8 @@ To resolve one: revise the surrounding prose so it satisfies the note, delete th
 and any doubled space it leaves, and leave every other paragraph byte-identical.
 
 `tools/cwatch.sh` is a background daemon that does this automatically — it polls the
-`.tex` files, waits for a file to stop changing, backs it up to `.cwatch/backups/`, and
+`.tex` files, waits for a file to stop changing, backs it up to
+`~/Thesis_Backups/Thesis_Weikang_Qiu/cwatch/`, and
 runs a headless `claude -p` on it. Controls: `make cwatch` / `cwatch-stop` /
 `cwatch-status` / `cwatch-log`. It gives up on a note after two failed passes.
 
@@ -83,9 +94,7 @@ overleaf的token在@.latex_token
 
 **Weikang Qiu** · Department of Computer Science, Yale University
 
-> **`outline.md` 是结构的唯一权威来源。** 本节只是它的摘要；两者不一致时以 `outline.md` 为准，
-> 并回来同步这一节。dissertation 的结构后面还会改，所以**章节编号未定**——下面只固定 Part 的
-> 划分和 Part 内的顺序，不要在正文、图或幻灯片里写死 "Ch N"。
+> **用户在当前会话中的最新叙事要求优先。** `outline.md` 与本节记录已确认的主线，后续修改时同步两处，不能用旧文件覆盖用户的更正。Part 2 固定为 PRISM I → MindLLM → PRISM II → D-Edit 的研究问题递进；Part 3 为 ACTION LEVEL（MWM）→ GOAL LEVEL（PHIL ∥ DySta）：从动作含义递进到指定期望结果。箭头和并列符号表达研究问题关系，不代表已经整合的模型流水线。章节编号以当前主文件为准，不在可复用说明中写死。
 
 ---
 
@@ -140,54 +149,40 @@ overleaf的token在@.latex_token
 
 ### PART 2 · The Bridge — From Signals to Representations
 
-> **挑战** ：Part 1 全程待在脑内——那些模型解释的是信号自己，没有一个把脑活动接到外部世界的语义上。而脑数据稀缺、昂贵、跨被试差异大，监督信号才是瓶颈。
+**统一主线：PRISM I → MindLLM → PRISM II → D-Edit。** 四步依次回答对齐空间、语言对齐、语言驱动的视觉重建，以及更强的生成解耦。不要把它们拆成互不相关的语言／重建／编辑三条线。
 
-**1. PRISM — I（对齐到哪儿）** `三作`
+**1. PRISM — I（选择对齐空间）** `三作`
 
-第一个问题不是怎么造桥，是造到哪儿。把 fMRI 和预训练的视觉、语言、视觉–语言表征逐一比对：**fMRI 离语言模型的语义空间更近**。这决定了后面所有工作的落点。辩护时用弱结论：在我们**实际拥有**的表示空间里，文本是 fMRI 最容易被学出来的那个；不是说大脑本身是语言式的（比较的一侧是人写的 caption、另一侧是图像，不是同类比较）。
+比较 fMRI 与预训练的视觉、语言、视觉–语言表示。在所测候选空间中，语言模型语义表示更适合作为 fMRI 的对齐目标。这为语言对齐提供依据，不是说大脑本身是语言式的，也不把论证顺序当作论文发表时间线。
 
-**2. Brain Instruction Tuning（MindLLM）** `一作`
+**2. MindLLM（将 fMRI 对齐到语言）** `一作`
 
-fMRI-to-text 不是简单翻译被试想说的话，而是学一个尽量丰富的 multi-purpose / multi-function 表征。监督来自一次 **join**：NSD 的被试看的是 MSCOCO 图，而 MSCOCO 被标注了十年——图像就是连接键，把一条 fMRI 记录和早就写好的文本连起来。98 万段多轮对话、15 个数据集，**没有新扫一次脑**。四族脑功能：感知、记忆与知识、语言与符号、复杂推理；其中「描述被试上一张看过的图」是自己推出来的任务，标签来自 NSD 的试次顺序，是唯一一个问记忆的任务。
+通过脑指令微调，把 fMRI 与语言表征对齐，使感知、记忆与知识、语言与符号、复杂推理能用统一的文本格式读出。它不是语音或被试想说的词的解码。NSD 与 MSCOCO 的共享图像连接 fMRI 和既有标注，构成 980,610 段多轮对话，无须新增扫描。
 
-captioning +3.32%；通用解码 +12.0%（其中 28.0% 来自 BIT）；两个 BCI 相关的新任务 +13.5%（BIT 贡献 25.0%）；没见过的被试（1–7 训、8 测、不微调）+24.5%。那两个 ablation 说明：干活的是训练范式。
+**3. PRISM — II（基于语言重建视觉内容）** `三作`
 
-**3. PRISM — II（重建）** `三作`
+从 fMRI 解码的语言信息还可以用于恢复视觉内容。PRISM 把描述组织为物体、属性、关系，再用 object-centric generation 生成并组合场景。它将语言表征用于视觉重建，同时显出保持物体结构对生成端的重要性。
 
-重建暴露出提问暴露不了的东西：统一的表征会把物体和它的属性糅在一起——被试看到一只灰色虎斑猫，重建出来是一只老虎。人的视觉是物体中心、组合式的。所以把文本结构化成物体／属性／关系，配 object-centric diffusion，用 VLM 搜哪些属性和关系真的被神经活动携带。同一 backbone 下，NSD、BOLD5000、GOD 上 training-free 指标最好或并列最好，LPIPS 最多低 5.9%，重建 QA 60.54%。
+**4. D-Edit（加强生成端的逐物体解耦）** `二作`
 
-**4. D-Edit** `二作`
+PRISM 的物体中心生成进一步引出更明确的 object-disentangled generator。D-Edit 为每个 item 学习独立 soft prompt，用 grouped cross-attention 分开不同区域与条件的交互，从 prompt 与 attention 两层加强局部控制。文本、图像、mask 编辑及物体移除是这种生成能力的验证；不要只把它写成一个独立图像编辑工具。
 
-除了原文使用的较为简单的 object-centric，更进一步需要一个 object 解耦的**生成端**：扩散模型整张图收一个 prompt——你改猫，沙发跟着动，粒度在最后一步全丢。D-Edit 把图切成 item，每个 item 一条自己的 prompt，grouped cross-attention 让每个区域只看自己那条。文本、图像、mask 三种编辑加物体移除，一个模型全包。item 级文本编辑 LPIPS 降 55.4%；移除任务上 15 位标注者在质量和保真两项都更偏好它。接到脑信号明确写成 future work。
+这里“更强”指解耦机制，不暗示已经在 PRISM 的脑重建任务上取得更高指标，也不宣称 MindLLM、PRISM、D-Edit 的模型权重或输出已被整合评测。
 
 ---
 
 ### PART 3 · The Embodiment — From Representations to Interactions
 
-> **挑战** ：前两部分把脑信号送进了语义空间。要让它变成动作，瓶颈换了一个，但性质和 Part 2 是同一个——还是监督信号。运动想象的数据贵在 cue-locked 的试次和逐条标注，量上不去。
+**结构：ACTION LEVEL（MWM）→ GOAL LEVEL（PHIL ∥ DySta）。** 动作层中，MWM 联合学习 mind model 和 world model，通过动作的视觉后果把脑信号与动作含义连接起来。完成任务时，人往往更希望指定期望结果，而不必表达每一步动作；这一需求把研究问题推进到目标层。PHIL 与 DySta 在目标层研究两个互补接口：**PHIL：goal image → target graph state → graph search**；**DySta：language instruction + multi-frame visual history → policy actions**。图像与语言目标对应第二部分解码出的图像与文本。箭头表示研究范围递进，不是 MWM 输出流向后两者；PHIL 与 DySta 也不是规划器—执行器串接，不能写成快环／慢环。
 
-**1. Mind World Model** `一作`
+**MWM** `一作` 把当前 EEG 映射为 latent action，以此预测未来视觉表征。同步 EEG 与第一视角视频提供无需动作标注的预训练数据，损失包括未来预测、跨模态对齐和偏侧化相关监督。mind model 用于运动解码，world model 的动作接口通过独立 IMU 适配评估。不要声称预测损失是唯一监督、模型保证排除全部伪迹，或已经完成 EEG 到机器人的闭环。
 
-换一种能规模化的采集方式：EEG 和第一视角视频可以连续录、不用标注，mind model 和 world model 在同一条流上一起训。mind model 从当前 EEG 出一个动作 `a_t = Mind(y_t)`，world model 用它预测下一帧 `x_{t+1} = World(x_t, a_t)`；**mind model 自己没有任何标签，唯一的监督是 world model 在下一帧上的预测误差**。这和 Part 2 那次 join 是同一招——不新采数据，把监督从已经存在的东西里挤出来。
+**PHIL** `二作` 在论文具身接口中以 **goal image** 指定期望结果；图像所表达的结果需要对应状态图中的目标节点及其特征。给定起点、目标节点和状态图时，PHIL 用局部图结构及搜索记忆预测到目标的距离，指导 greedy best-first search。原方法实验评估给定 graph/start/goal 的搜索任务；将第二部分解码图像转换成可规划目标是未来整合。不要把这一接口对应写成已经评估的图像输入或脑控系统，也不要改写原方法的图搜索定义。PHIL 不是 DySta 的前置模块。
 
-而且这个目标天然对着 motor imagery：mind model 只能贡献那些会改变下一帧的东西，所以它学不到 volume conduction 和静态伪迹，只能学运动相关的时间动力学。评测放在 motor-imagery benchmark 上跟 EEG foundation model 比，最后收口在自采数据集上的机械臂连续控制闭环。
-
-**2. DySta** `一作`（目录 `DYSTA/`；曾用名 SD-VLA）
-
-现实里的 VLA 每一步都要过一遍完整的视觉–语言前向；一旦要看多帧，上下文就爆：视觉 backbone 每张图吐几百个 token，几帧一拼，注意力的平方复杂度就压垮了。现有加速手段基本是通用压缩，不看 VLA 自己的结构。
-
-DySta 把 token 按跨帧变不变拆开：静态的跨帧只留一份并复用它的 KV cache，动态的每步重算，一个可学的 recache gate 决定什么时候该更新静态那一份。上下文长度和每步 FLOPs 一起降。SimplerEnv 上成功率比最强基线高 3.9%、推理加速 2.26×；真机上比 base model 高 10.6%、加速 2.21×。多帧整合另建了 LIBERO-Memory 基准（三类时序依赖任务），全指标提升 24.5%，真机绝对成功率提升 23.3%。
-
-**3. PHIL** `二作` — **慢环；不是这一部分的主体，结尾一带而过。**
-
-如果神经信号给出的是一个目标而不是逐步的动作，中间就得有一层规划把它补成路径，而 rollout 规划太贵、闭不上环。学一个 cost-to-go 把前瞻截断，就是 PHIL 在 A* 里做的事。
-
-> ⚠️ **顺序** — PHIL 在 Part 3 的**最后**，是与快环并列的慢环旁支，**不是** Mind World Model 与 DySta 之间的一级。图和幻灯片里不要把它画成串联的中间节点，也不要给它编造一个交给执行器的输出对象。
-
-> ⚠️ **未定** — 规划路线（MPC＋CEM）vs RL 策略路线；`outline.md` 没有结论。这个决定锁着 Mind World Model 的技术内容和脑信号的插入点（target embedding vs reward/actor conditioning）。无论走哪条，PHIL 都保持旁支、一带而过。
+**DySta** `一作` 的目标输入是 **language instruction**，对应第二部分的文本输出；策略根据语言指令与视觉观察直接预测动作。静态／动态 token 分解、静态 KV cache 复用与 learned recache gate 降低推理开销，多帧动态信息支持需要记忆的任务。它与 PHIL 分别评估；将脑解码文本作为指令仍是未来整合，输入不是 PHIL 路径或 MWM latent action。
 
 ---
 
 ### Conclusion
 
-收到「神经信号 → 语义 → 动作」的闭环，以及从内在思维到物理具身这条路还差什么。
+总结脑信号建模、语义对齐与具身行为的研究贡献，并明确各自的验证范围，以及把这些能力整合为脑控系统仍需完成的工作。

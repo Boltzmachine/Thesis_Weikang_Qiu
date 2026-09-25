@@ -28,7 +28,7 @@
 % break one character per line.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 0.  TOGGLES --- the three places where the guide leaves room for judgment.
+% 0.  TOGGLES --- the four places where the guide leaves room for judgment.
 %     Flip any of these to \togglefalse{...} / \toggletrue{...} and rebuild.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -39,18 +39,20 @@
 %     cost of roughly 20% more pages.
 \newtoggle{yale@latexdouble}\toggletrue{yale@latexdouble}
 
-% (b) "Use 10 to 12 point size."  Read strictly this caps headings too.
+% (b) "Use 10 to 12 point size."  The guide says nothing at all about chapter
+%     or section headings: "Font and point size are same as body of text" and
+%     "Do not use bold or all caps" appear only under Title Page, Abstract and
+%     Lay Summary, i.e. they govern those three pages.  The 10-12pt line is not
+%     new either -- the pre-2026 GSAS guide already said "If formatting on a
+%     computer, use a 10- to 12-point font" -- and three accepted Yale
+%     dissertations (2021, 2025, 2026) all set chapter titles at ~2x body size.
+%     So it has never been read as a cap on headings.
+%     FALSE (default) = the traditional LaTeX cascade: \huge chapter titles,
+%             \Huge part titles, \Large sections.  Matches those dissertations.
 %     TRUE  = nothing larger than \large (14.4pt): chapter and part titles
-%             \large bold, sections \large bold, subsections body size.  One
-%             step above the body instead of the usual four.
-%     FALSE = the traditional LaTeX cascade (\huge chapter titles, \Huge part
-%             titles).  This is what almost every accepted dissertation
-%             actually looks like, and heading size is not something the
-%             Registrar has historically enforced.
-%     NOTE: a fully literal reading of "10 to 12 point" would put headings at
-%     \normalsize.  Swap the two \large's in section 4 below for \normalsize
-%     if you want that.
-\newtoggle{yale@strictheadings}\toggletrue{yale@strictheadings}
+%             \large bold, sections \large bold, subsections at body size.
+%             A defensive reading, kept in case a reader ever objects.
+\newtoggle{yale@strictheadings}\togglefalse{yale@strictheadings}
 
 % (c) "Text of abstract ... is double spaced, left justified, and indented".
 %     TRUE  = flush left / ragged right, as in Yale's Example: Abstract Page.
@@ -200,7 +202,7 @@
 \iftoggle{yale@strictheadings}{%
   \titleformat{\chapter}[display]
     {\normalfont\centering\bfseries}{\chaptertitlename\ \thechapter}{6pt}
-    {\singlespacing\large}
+    {\yalesinglespace\large}
   \titlespacing*{\chapter}{0pt}{50pt}{30pt}
   \titleformat{\section}{\normalfont\large\bfseries}{\thesection}{1em}{}
   \titleformat{\subsection}{\normalfont\normalsize\bfseries}{\thesubsection}{1em}{}
@@ -232,7 +234,7 @@
   % Traditional LaTeX cascade -- what Disseration.tex used before.
   \titleformat{\chapter}[display]
     {\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{5pt}
-    {\centering\singlespacing\huge}
+    {\centering\yalesinglespace\huge}
   \titlespacing*{\chapter}{0pt}{50pt}{30pt}
 }
 \makeatother
@@ -260,19 +262,24 @@
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 6.  TITLE PAGE --- reproduces Yale's "Example: Title Page".
+% 6.  TITLE PAGE --- reproduces Yale's "Example: Title Page" (revised 9 Sep 2026).
 %
-% Measured from that PDF (letter, 1in margins, y from the top of the sheet):
-%   title block   y=147   (75pt below the top margin), single spaced
-%   [equal gap 190pt]
-%   "A Dissertation ... Doctor of Philosophy"  y=352-425, single spaced
-%   [equal gap 191pt]
-%   "by" / author  y=616-630
-%   [30pt -- one blank double-spaced line]
-%   "Dissertation Director:" / "Committee Chair:"  y=660-674
-%   [30pt]
-%   "Month Year"   y=704
-% The two large gaps are equal, which is exactly \vfill ... \vfill.
+% Measured from that PDF (letter, 1in margins; top of each line's glyph box,
+% y from the top of the sheet; the example is set in 12pt Aptos):
+%   title                                         y=144  (wraps, single spaced)
+%   "A Dissertation ... Doctor of Philosophy"     y=364-437, single spaced
+%   "by" / author                                 y=613-628
+%   [one blank line]
+%   "Dissertation Adviser:" / "Committee Chair:"  y=657-672
+%   [one blank line]
+%   "Month Year"                                  y=701
+% The September revision changed "Dissertation Director" to "Dissertation
+% Adviser" (now matching the Title Page Formatting Example) and made the two
+% large gaps unequal (205pt and 176pt).  So the blocks are pinned at those
+% positions rather than spread with \vfill: the two upper blocks each sit in a
+% \vbox of fixed height, which also keeps "A Dissertation" where it belongs
+% when a long title wraps onto a second line.  Times glyph boxes are ~5pt
+% shorter than Aptos ones, so the lengths below align glyph-box centres.
 %
 % Everything is centered, at body size, and NOT bold -- the class used
 % \LARGE\bf for the title, which the guide forbids ("Do not use bold or all
@@ -282,39 +289,37 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \makeatletter
-% Distance from the top margin to the title, tuned so the title's cap height
-% lands 75pt below the margin as it does in Yale's Example: Title Page.
-\newlength{\yale@titletopskip}\setlength{\yale@titletopskip}{57\p@}
+\newlength{\yale@titletopskip}\setlength{\yale@titletopskip}{69\p@}
+\newlength{\yale@tp@upper}\setlength{\yale@tp@upper}{294\p@}
+\newlength{\yale@tp@middle}\setlength{\yale@tp@middle}{244\p@}
 \renewcommand{\maketitle}{%
   \cleardoublepage
   \thispagestyle{empty}%
-  \begin{singlespace}
-  \begin{center}
-    \null\vskip \yale@titletopskip
+  \begingroup
+  \singlespacing
+  \setlength{\parindent}{\z@}%
+  \centering
+  \vbox to \yale@tp@upper{\hsize\textwidth\centering
+    \null\vskip\yale@titletopskip
     \@title\par
-    % \vfill (order fill), not \vfil: the output routine's own \@textbottom is
-    % fil-order glue and would otherwise eat a third of the free space, leaving
-    % the block stranded in the upper half of the page.
-    \vfill
+    \vss}%
+  \vbox to \yale@tp@middle{\hsize\textwidth\centering
     A Dissertation\\
     Presented to the Faculty of the Graduate School\\
     of\\
     Yale University\\
     in Candidacy for the Degree of\\
     Doctor of Philosophy\par
-    \vfill
-    by\\
-    \@author\par
-    \vskip \baselineskip
-    Dissertation Director: \@dvisor\par
-    \ifx\yale@chair\@empty\else Committee Chair: \yale@chair\par\fi
-    \vskip \baselineskip
-    \@date\par
-    \ifdraft Draft of \today\par\fi
-    \vspace*{16\p@}%  starred: survives the page break, so the last line sits
-                   %  16pt above the bottom margin as in Yale's example
-  \end{center}
-  \end{singlespace}
+    \vss}%
+  by\\
+  \@author\par
+  \vskip\baselineskip
+  Dissertation Adviser: \@dvisor\par
+  \ifx\yale@chair\@empty\else Committee Chair: \yale@chair\par\fi
+  \vskip\baselineskip
+  \@date\par
+  \ifdraft Draft of \today\par\fi
+  \endgroup
   \clearpage
 }
 \makeatother

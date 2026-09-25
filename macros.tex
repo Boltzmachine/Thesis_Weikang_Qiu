@@ -1,6 +1,3 @@
-% Packages and macros needed by the chapters under PHIL/
-% (extracted from the original paper preamble, PHIL/appendix.tex)
-
 % T1 encoding: accented letters (ö in "Teichteil-Königsbuch") become single
 % glyphs, so TeX can hyphenate the word instead of overflowing the margin.
 \usepackage[T1]{fontenc}
@@ -27,7 +24,7 @@
 % Shorthands
 % Model names: because this dissertation collects several papers, each paper's
 % name macro is called after the model itself (\phil, \hybrid, \mindllm,
-% \prism, \repqa, \dysta) rather than the generic \alg/\mname/\modelname/
+% \prism, \repqa, \dysta, \mwm) rather than the generic \alg/\mname/\modelname/
 % \bench/\name/\method the individual papers used.
 \newcommand{\etal}{\textit{et al.}\xspace}
 \newcommand{\phil}{\textsc{PHIL}\xspace}
@@ -111,7 +108,7 @@
 
 % Review annotations (\rex is defined above and deliberately not redefined)
 \newcommand{\yy}[1]{\textcolor{orange}{(Yujun: #1)}}
-\newcommand{\qwk}[1]{\textcolor{blue}{(Weikang: #1)}}
+\newcommand{\qwk}[1]{\textcolor{magenta}{(qwk:#1)}}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -149,12 +146,29 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Every package that preamble loads is already loaded above or in
 % Disseration.tex, except `listings` (and its PDDL definition), which only the
-% appendix needs, and `dblfloatfix`, which only matters in two-column mode.
 % The paper's generic \method is renamed \dysta, following the convention
 % noted at the top of this file.
 
 \newcommand{\dysta}{DySta\xspace}
 \newcommand{\bs}[1]{\boldsymbol{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Mind World Model chapter (from the ICLR 2027 paper preamble)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The paper's \method is renamed \mwm, and its headline-number macros
+% (\resultClsWins, ...) gain an \mwm prefix, so the next merged paper that
+% uses the same pattern cannot collide. Not merged: tikz and figstyle.tex (the
+% figures are included as standalone-compiled PDFs), math_commands.tex (none of
+% its macros are used), \qwk (already defined above), and \todo/\fix/\new
+% (unused; \todo would also clash with todonotes).
+
+\newcommand{\mwm}{MWM\xspace}
+\newcommand{\mwmClsWins}{6}
+\newcommand{\mwmRegWins}{5}
+\newcommand{\mwmClsGainPct}{1.2}
+\newcommand{\mwmRegGainPct}{2.6}
+\newcommand{\mwmWMWithinGainPct}{23.2}
+\newcommand{\mwmWMSubjectGainPct}{11.0}
 
 
 % A part-divider page that carries a short introductory paragraph on the SAME

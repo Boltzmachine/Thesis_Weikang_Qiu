@@ -110,6 +110,10 @@ detect-weight=true,detect-inline-weight=math
 }
 \begin{table}[t]
 \centering
+% At body size this table is ~26pt taller than the text block.  Trimming the
+% padding booktabs puts around each \midrule keeps it on the page without
+% shrinking the type (the \resizebox below is deliberately left off).
+\setlength{\aboverulesep}{1pt}\setlength{\belowrulesep}{1.5pt}
 \caption{Model generalization, compared with subject-agnostic model. We train the models on subject $1-7$ and evaluate on subject $8$, which is the held-out subject.}
 \label{tab:subj8}
 

@@ -19,39 +19,30 @@ Part 1.
 
 Part 2.
 
-第一部分全程待在脑内。我们让模型尊重大脑的组织方式,但那些模型解释的是信号自己——没有一个把脑活动接到外部世界的语义上。第二部分做的就是这件事。
+第一部分研究脑信号本身。第二部分把脑活动接到外部世界的语义上，主线是四个相继提出的问题：PRISM I 启发对齐空间的选择，MindLLM 将 fMRI 对齐到语言，PRISM II 基于语言重建视觉内容，D-Edit 则把生成端推进到更强的逐物体解耦。这是研究问题和方法设计的衔接，不意味着四个工作共享已经串接好的模型权重。
 
-第一个问题不是怎么造桥,是造到哪儿，应该用什么世界模态去对齐大脑。我们去测了——把 fMRI 和预训练的视觉、语言、视觉–语言表征逐一比对。fMRI 离语言模型的语义空间更近。 这决定了后面所有工作的落点。
+先问对齐到哪里。PRISM I 把 fMRI 与预训练的视觉、语言、视觉–语言表征逐一比较；在所测的候选空间中，语言模型的语义空间更适合作为对齐目标。这个结果为后面选择语言作为中间表征提供依据，而不是说大脑本身就是语言式的。
 
+再问如何对齐。MindLLM 用脑指令微调将 fMRI 对齐到语言，让感知、记忆与知识、语言与符号、复杂推理都能以文本这一统一格式读出。这里不是翻译被试想说的话。监督信号来自一次 join：NSD 的被试看的是 MSCOCO 图，图像作为连接键，把 fMRI 记录和已有文本标注连起来，得到 980,610 段多轮对话，不需要新扫描。
 
-fMRI-to-text并不是简单的翻译被试想说的话，而是学一个尽量丰富的表征——multi-purpose、multi-function。
+语言表征学到了，能否用它恢复视觉内容？PRISM II 基于从 fMRI 解码的语言信息进行视觉重建。单一描述容易把物体和属性糅在一起，所以它把语言组织成物体、属性、关系，再用 object-centric diffusion 按物体生成并组合场景。这样，语言既是多种脑功能的统一读出格式，也可以承载重建图像所需的内容和结构。
 
-监督信号来自一次 join。NSD 的被试看的是 MSCOCO 图,而 MSCOCO 被标注了十年。图像就是连接键,把一条 fMRI 记录和早就写好的文本连起来。98 万段多轮对话,15 个数据集,没有新扫一次脑。四族脑功能:感知、记忆与知识、语言与符号、复杂推理。其中一个任务是我们自己推出来的——描述被试上一张看过的图,标签来自 NSD 的试次顺序,是唯一一个问记忆的任务。
+这个物体结构进一步提出生成端的问题：PRISM 的 object-centric generation 已经按物体组织生成，但怎样让每个物体的条件和注意力也更明确地分开？D-Edit 为每个 item 学习独立的 soft prompt，再用 grouped cross-attention 限定各区域与对应 prompt 的交互，从 prompt 和 attention 两层加强逐物体解耦。
 
-captioning +3.32%;通用解码 +12.0%,其中 28.0% 来自 brain instruction tuning;两个 BCI 相关的新任务 +13.5%,BIT 贡献 25.0%;没见过的被试,1–7 训 8 测不微调,+24.5%。那两个 ablation 说明:干活的是训练范式。
-
-表征学到了,拿它做什么（应用）、能怎么样验证。一个自然的下游是把人看到的东西重建出来。
-
-而重建立刻暴露出提问暴露不了的东西:统一的表征会把物体和它的属性糅在一起——被试看到一只灰色虎斑猫,重建出来是一只老虎。 人的视觉是物体中心、组合式的。所以我们把文本结构化成物体、属性、关系,配 object-centric diffusion,用 VLM 搜哪些属性和关系真的被神经活动携带。同一个 backbone 下,NSD、BOLD5000、GOD 上 training-free 指标最好或并列最好,LPIPS 最多低 5.9%,重建 QA 60.54%。
-
-除了原文使用的较为简单的object centric，更进一步地我们需要object解耦的生成端。例如，扩散模型整张图收一个 prompt——你改猫,沙发跟着动,粒度在最后一步全丢。
-
-D-Edit 把图切成 item,每个 item 一条自己的 prompt,grouped cross-attention 让每个区域只看自己那条。文本、图像、mask 三种编辑加物体移除,一个模型全包。item 级文本编辑 LPIPS 降 55.4%,移除任务上 15 位标注者在质量和保真两项都更偏好它。
+因此 D-Edit 在这条主线中是更强的解耦生成方法。文本、图像、mask 编辑和物体移除展示了这种局部控制能力；它不只是附在末尾的图像编辑工具。这里的“更强”指解耦机制更明确，并不是未经验证的 PRISM 重建指标提升，也不是已经把 D-Edit 接入 MindLLM 或 PRISM 的实验结果。
 
 
 Part 3.
 
-前两部分把脑信号送进了语义空间。要让它变成动作，瓶颈换了一个，但性质和第二部分是同一个：还是监督信号。运动想象的数据贵在 cue-locked 的试次和逐条标注，量上不去。
+前两部分研究脑信号及其语义表征。第三部分从动作层递进到目标层：MWM 通过联合学习 mind model 和 world model，让脑信号表示具有动作含义；但完成任务时，人往往更希望指定期望结果，而不必表达每一步动作。这引出目标层的两个互补方法：PHIL 根据 goal image 所对应的目标状态进行图搜索，DySta 根据 language instruction 和多帧视觉历史直接生成动作。两个目标接口对应第二部分解码出的图像与文本。PHIL 与 DySta 在目标层并行，不是先规划再执行的串接。
 
-Mind World Model 换的是一种能规模化的采集方式：EEG 和第一视角视频可以连续录、不用标注，mind model 和 world model 在同一条流上一起训。mind model 从当前 EEG 出一个动作 a_t = Mind(y_t)，world model 用它预测下一帧 x_{t+1} = World(x_t, a_t)；mind model 自己没有任何标签，唯一的监督是 world model 在下一帧上的预测误差。这和第二部分那次 join 是同一招——不新采数据，把监督从已经存在的东西里挤出来。
+MWM 将当前 EEG 编码为 latent action，以当前视觉状态为条件预测未来视觉表征。训练使用同步 EEG 与第一视角视频，不需要动作标注；预测损失与跨模态对齐、偏侧化监督共同学习与动作有关的脑信号表示。其 mind model 用于运动解码，world model 的动作接口另通过 IMU 适配进行评估。
 
-而且这个目标天然对着 motor imagery：mind model 只能贡献那些会改变下一帧的东西，所以它学不到 volume conduction 和静态伪迹，只能学运动相关的时间动力学。评测放在 motor-imagery benchmark 上跟 EEG foundation model 比，最后收口在自采数据集上的机械臂连续控制闭环。
+论文的具身接口用 goal image 向 PHIL 指定期望结果，对应第二部分的图像输出。图搜索需要将图像表达的结果落到状态图的目标节点及其特征上。给定起点、目标节点与可搜索的状态图，PHIL 学习到目标的距离启发式，用搜索历史和局部图结构引导 greedy best-first search，减少寻找可行路径所需的节点展开。PHIL 原方法的实验是给定 graph/start/goal 的搜索任务；把解码图像转换成可规划目标属于未来整合，不声称原实验直接接收脑解码图像或原始像素图像。
 
-有了驱动信号，另一端得接得住——这是这一部分工作量最大的地方。现实里的 VLA 每一步都要过一遍完整的视觉—语言前向；而且一旦要看多帧，上下文就爆：视觉 backbone 每张图吐几百个 token，几帧一拼，注意力的平方复杂度就压垮了。现有的加速手段基本是通用压缩，不看 VLA 自己的结构。
+DySta 是视觉–语言–动作策略，目标输入是 language instruction，对应第二部分的文本输出；策略根据这条语言指令与视觉观察直接预测动作。它区分静态和动态 token，复用静态 KV cache，并用 recache gate 按需刷新；保留多帧动态信息，以较低推理成本完成需要记忆的任务。
 
-SD-VLA 把 token 按跨帧变不变拆开：静态的跨帧只留一份并复用它的 KV cache，动态的每步重算，一个可学的 recache gate 决定什么时候该更新静态那一份。上下文长度和每步 FLOPs 一起降。SimplerEnv 上成功率比最强基线高 3.9%，推理加速 2.26×；真机上比 base model 高 10.6%，加速 2.21×。多帧整合本身还专门建了 LIBERO-Memory 基准，三类时序依赖的任务，在上面全指标提升 24.5%，真机绝对成功率提升 23.3%。
-
-最后提一句慢环。如果神经信号给出的是一个目标而不是逐步的动作，中间就得有一层规划把它补成路径，而 rollout 规划太贵、闭不上环。学一个 cost-to-go 把前瞻截断，就是 PHIL 在 A* 里做的事。这一层不是这一部分的主体，结尾一带而过。
+结构写作 ACTION LEVEL（MWM）→ GOAL LEVEL（PHIL ∥ DySta）。箭头表达研究问题从动作含义到期望结果的递进，不表示 MWM 的 latent action 已经输入 PHIL 或 DySta；PHIL 的路径也不是 DySta 的输入。三者分别评估，脑控机器人的完整整合属于后续工作。报告顺序为 MWM、PHIL、DySta，不使用“快环／慢环”来定义它们的关系。
 
 
 衔接：
@@ -76,29 +67,33 @@ SWA
 We talked about models that work within brain signals, for real-world BCI tasks, we need to brige them to representations that align to real world. Talking about real-world modalities, images and text are representative ones. A question is: is fMRI close to text representations or image representations.
 
 
-PRISM 1
+PRISM I
 |
-| Therefore, we want to align fMRI by text annotations to a space that is closer to text. However, this is not a speech-decoding task that decode a person want to say, it is a method that make the representations capture multiple brain functions including visual, symbolic processing, knowledge and memory, by decoding them to a uniform format, i.e., text.
+| The alignment comparison motivates language as a representation space for fMRI.
 |
-Brain Instruction Tuning
+MindLLM
 |
-| Aligning fMRI to a text space is not speech decoding, the goal is not to recover the words a person is trying to say, or is reading. It is to use text as a single unified format in which many brain functions can be read out and compared: perception, memory and knowledge, language and symbols, and complex reasoning.
+| Brain instruction tuning aligns fMRI to language and reads out multiple brain functions in a shared format. Can this language representation also recover visual content?
 |
-PRISM 2
+PRISM II
 |
-| To better decode visual stimulus and reflect the structured text space of fMRI, we want a generation model that could perform more item-level disentangled generations.
+| Reconstruct visual content from decoded language, organized into objects, attributes, and relations. Object-centric generation then motivates a generator with stronger per-item disentanglement.
 |
 D-Edit
 
+D-Edit assigns an independent soft prompt to each item and separates their cross-attention. Its editing tasks demonstrate this generation capability. This is a progression of research questions, not a claim that the trained models have already been integrated or that D-Edit has measured superiority over PRISM on neural reconstruction.
 
-After we align fMRI with world modalities, we want it to not only reflect semantics, we also want it to interact with the real-world. That is to say, decoding brain signals into movement intentions, and use that to control, for example, neuroprosthetics or embodied AIs.
 
-Mind World Model
-|
-| Neural signals are fast, VLAs are slow
-|
-DySta
-|
-| Besides real-time fast control, sometimes a slow control would be easier for people. Users output sparse intentions or goals.
-|
-PHIL
+After aligning fMRI with world representations, Part 3 asks how intention can become behavior, progressing from the action level to the goal level:
+
+ACTION LEVEL — MWM jointly learns a mind model and a world model, grounding EEG-derived latent actions in their visual consequences.
+
+Task completion motivates the transition: a person should be able to specify the desired result rather than every action.
+
+GOAL LEVEL — PHIL and DySta study two complementary approaches to realizing that result.
+- PHIL uses a goal image as the goal-facing interface in the embodiment framing, with the depicted outcome represented as a goal state for explicit graph search. This corresponds to Part 2 images.
+- DySta takes a language instruction, corresponding to Part 2 text, and predicts actions using visual history, efficient inference, and multi-frame memory.
+
+Grounding a decoded goal image in the planner state graph and using decoded text as a policy instruction are future integration steps. The PHIL experiments evaluate supplied graph-and-goal problems.
+
+ACTION LEVEL (MWM) → GOAL LEVEL (PHIL ∥ DySta): the arrow expresses a progression of research questions. The models are evaluated independently; MWM outputs do not feed PHIL or DySta, and PHIL is not DySta's planner.

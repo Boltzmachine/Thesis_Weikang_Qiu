@@ -1,0 +1,55 @@
+\chapter{Conclusion}
+\label{chapter:conclusion}
+
+% The dissertation summary will be written later.
+
+\section{Future Directions}
+\label{sec:future_directions}
+
+I hope to pursue two complementary directions: using machine learning to build more capable brain--computer interfaces, and using neural recordings to guide artificial intelligence. My main future directions are as follows.
+
+\noindent\textbf{From Decoded Images and Text to Embodied Goals.}
+A future integration of Parts~\ref{part:bridge} and~\ref{part:embodiment} would use their shared image and language interfaces. A decoded or reconstructed image could specify a desired outcome for \phil{}, after that outcome is grounded in a goal state and its features in a planning graph. Decoded text could supply a language instruction to \dysta{}, whose policy also uses visual observation history. This correspondence extends the dissertation's progression from grounding action meaning with \mwm{} to specifying desired outcomes for complementary planning and policy approaches. It also connects the image and text outputs of the semantic bridge to goal-directed behavior. Validating image-to-goal grounding and instruction-based control with decoded representations is an open integration problem.
+
+\noindent\textbf{Multimodal Brain Foundation Models.}
+I aim to develop a shared model of brain dynamics across fMRI, EEG, MEG, and functional ultrasound. Modality-specific encoders and decoders would connect through a common latent state that transfers across subjects. Inspired by latent-prediction world models such as V-JEPA 2~\citep{assran2025vjepa2}, I hope to learn dynamics that predict future neural representations from past brain states, optionally conditioned on stimuli or stimulation. Rolling these dynamics forward without new observations would allow the model to simulate possible brain responses in its latent space, while modality-specific decoders would map the predicted states back to neural recordings. Figure~\ref{fig:future_multimodal_brain_world_model} illustrates this proposed architecture.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/future_directions/multimodal_brain_world_model.pdf}
+    \caption[Proposed multimodal brain world model]{Proposed multimodal brain world model. Modality-specific encoders map recordings into a shared latent state. A transition model predicts subsequent states conditioned on stimuli or stimulation, and modality-specific decoders map these states back to neural recordings.}
+    \label{fig:future_multimodal_brain_world_model}
+\end{figure}
+
+\noindent\textbf{Closed-Loop Control through Brain World Models.}
+I am interested in a Dreamer-style framework that learns control policies through predicted brain trajectories~\citep{hafner2025mastering}, with neural decoding providing reward and value signals. One application is closed-loop focused ultrasound for chronic pain, where a validated pain-related decoder could provide feedback for stimulation. The central challenge is to learn reliable predictions of intervention outcomes that can support control beyond simulation. Figure~\ref{fig:future_brain_closed_loop} outlines the proposed control loop.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/future_directions/brain_closed_loop.pdf}
+    \caption[Proposed closed-loop control through a brain world model]{Proposed closed-loop control through a brain world model, adapted from the Dreamer framework~\citep{hafner2025mastering}. The world model predicts brain trajectories for actor--critic training. Neural decoding would provide reward and auxiliary value targets for learning a stimulation policy, illustrated here with focused ultrasound for chronic pain.}
+    \label{fig:future_brain_closed_loop}
+\end{figure}
+
+\noindent\textbf{Brain Grounding for Artificial Intelligence.}
+\citet{aw2023instruction} found that instruction tuning improves alignment between language models and brain activity. I hope to explore the reverse direction: whether training models to better predict neural responses can improve their alignment with human preferences. Evaluating these models against independent human judgments would test whether brain signals provide useful supervision beyond text-based feedback. Figure~\ref{fig:future_brain_grounding} illustrates the neural prediction pathway that would provide this supervision.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/future_directions/brain_grounding.png}
+    \caption[Brain grounding through neural response prediction]{Brain grounding through neural response prediction. Language-model activations provide features for predicting brain responses, as studied by \citet{aw2023instruction}. The proposed direction would use neural prediction to train the language model and test whether this improves alignment with human preferences.}
+    \label{fig:future_brain_grounding}
+\end{figure}
+
+\begin{samepage}
+\noindent\textbf{Geometric Grounding for Artificial Intelligence.}
+I hope to explore whether giving artificial neurons a learned spatial organization can help align their representations with the brain. This would involve jointly learning the weights and spatial positions of artificial neurons. As illustrated in Figure~\ref{fig:future_geometric_grounding}, differentiable rasterization could map their activations into a spatial field for comparison with neural recordings. Training with both neural data and stimulus-related tasks could reveal whether learned geometry improves generalization while producing representations more consistent with brain organization.
+
+\end{samepage}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/future_directions/geometric_grounding.pdf}
+    \caption[Proposed geometric grounding of artificial networks]{Proposed geometric grounding of artificial networks. Learned neuron positions and activations define a spatial field through differentiable rasterization. A neural-response predictor maps this field to brain recordings, while a task head supports stimulus-related learning.}
+    \label{fig:future_geometric_grounding}
+\end{figure}

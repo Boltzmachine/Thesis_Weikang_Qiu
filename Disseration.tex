@@ -9,7 +9,7 @@
 \usepackage{graphicx}
 \usepackage{import}
 % Chapters under PHIL/ reference their images as figures/xxx.png
-\graphicspath{{./}{PHIL/}{HYBRID/}{MINDLLM/}{PRISM/}{DEDIT/}{REPQA/}{DYSTA/}}
+\graphicspath{{./}{PHIL/}{HYBRID/}{MINDLLM/}{PRISM/}{DEDIT/}{REPQA/}{DYSTA/}{MWM/}}
 \usepackage{lscape}
 \usepackage{times}
 \usepackage{float}
@@ -50,10 +50,10 @@
 	% title page, the copyright page, and the abstract page.
 	\author{Weikang Qiu}
 	%
-	% Where there is an advisory committee, only the chairperson is listed.
+	% Printed as "Dissertation Adviser:" (Yale's Title Page Example, Sep 2026).
 	\advisor{Prof. Rex Ying}
 	% Optional: printed only if non-empty.  Set it only if the committee chair
-	% is a different person from the dissertation director.
+	% is a different person from the dissertation adviser.
 	\committeechair{}
 	% Month and year the degree is AWARDED (not the submission month); no comma.
 	\date{September 2026}
@@ -92,8 +92,16 @@
     \input{REPQA/main}
 
     \input{Parts/part1.tex}
+    % Part II argument: PRISM I (space) -> MindLLM (alignment) ->
+    % PRISM II (language-based reconstruction) -> D-Edit (disentangled generator).
     \input{Parts/part2.tex}
+    % Part III progresses from action meaning (MWM) to goal realization:
+    % goal images -> graph states -> PHIL search, and language instructions
+    % + visual history -> DySta policy. These are complementary goal-level
+    % approaches linked to Part II images/text, not a tested model pipeline.
     \input{Parts/part3.tex}
+
+    \include{Conclusion}
 
 
     % Start the bibliography on its own page and give hyperref a real anchor

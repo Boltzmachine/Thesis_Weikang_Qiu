@@ -1,0 +1,1015 @@
+<!doctype html><html><head><meta charset="utf-8"></head><body><title>Closed-Loop Ultrasound Neuromodulation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+:root{
+  --ground:#F4F7FB; --stage:#FFFFFF; --card:#F5F8FC; --border:#D9DEE7; --pale:#E8EEF6;
+  --ink:#1F2A3A; --muted:#6B7280; --primary:#00356B; --blue:#4472C4; --sky:#A9C0DA;
+  --amber:#E39B1B; --amber-soft:#F6C453; --red:#C8243C; --green:#1F8A44; --green-tint:#DDF0E3;
+  --head:#EEF3F9; --brain:#DCE6F3; --pill:#00356B; --pill-text:#FFFFFF; --housing:#4B5563;
+  --btn:#FFFFFF; --btn-on:#00356B; --btn-on-text:#FFFFFF; --focus:#F6C453;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0C1522; --stage:#121D30; --card:#182640; --border:#2B3B58; --pale:#1F2F4A;
+    --ink:#E7EEF7; --muted:#9BAAC2; --primary:#9DBEE8; --blue:#7FA6E0; --sky:#4F6E96;
+    --amber:#F0B443; --amber-soft:#F6C453; --red:#E5647A; --green:#4CC078; --green-tint:#1E3A2C;
+    --head:#1A2A45; --brain:#22375A; --pill:#9DBEE8; --pill-text:#0C1522; --housing:#8A97AB;
+    --btn:#182640; --btn-on:#9DBEE8; --btn-on-text:#0C1522; --focus:#FFD37A;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0C1522; --stage:#121D30; --card:#182640; --border:#2B3B58; --pale:#1F2F4A;
+  --ink:#E7EEF7; --muted:#9BAAC2; --primary:#9DBEE8; --blue:#7FA6E0; --sky:#4F6E96;
+  --amber:#F0B443; --amber-soft:#F6C453; --red:#E5647A; --green:#4CC078; --green-tint:#1E3A2C;
+  --head:#1A2A45; --brain:#22375A; --pill:#9DBEE8; --pill-text:#0C1522; --housing:#8A97AB;
+  --btn:#182640; --btn-on:#9DBEE8; --btn-on-text:#0C1522; --focus:#FFD37A;
+}
+html,body{height:100%}
+body{margin:0;background:var(--ground);color:var(--ink);
+  font-family:'Source Sans 3','Helvetica Neue',Arial,'PingFang SC','Noto Sans SC','Microsoft YaHei',sans-serif;font-size:14px}
+.app{height:100%;box-sizing:border-box;display:flex;flex-direction:column;gap:10px;padding-inline:16px;padding-block:12px}
+.stage-wrap{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+svg.stage{display:block;width:100%;height:100%;max-width:100%;
+  font-family:'Source Sans 3','Helvetica Neue',Arial,'PingFang SC','Noto Sans SC','Microsoft YaHei',sans-serif}
+.bar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:center}
+.grp{display:flex;gap:0;border:1px solid var(--border);border-radius:7px;overflow:hidden;background:var(--btn)}
+.grp button{border:0;border-right:1px solid var(--border);background:transparent;color:var(--ink);padding:7px 13px;font:inherit;font-weight:600;cursor:pointer;min-width:42px}
+.grp button:last-child{border-right:0}
+.grp button.on{background:var(--btn-on);color:var(--btn-on-text)}
+.grp button:focus-visible,button.solo:focus-visible{outline:2px solid var(--amber);outline-offset:-2px}
+button.solo{border:1px solid var(--border);border-radius:7px;background:var(--btn);color:var(--ink);padding:7px 13px;font:inherit;font-weight:600;cursor:pointer}
+.hint{color:var(--muted);font-size:12.5px;text-align:center}
+.app.fs .bar,.app.fs .hint{position:fixed;left:0;right:0;transition:opacity .3s}
+.app.fs .bar{bottom:calc(28px + env(safe-area-inset-bottom,0px))}
+.app.fs .hint{bottom:calc(8px + env(safe-area-inset-bottom,0px))}
+.app.fs.idle .bar,.app.fs.idle .hint{opacity:0;pointer-events:none}
+body.sheet{background:#FFFFFF}
+body.sheet .app{padding:0;gap:0;height:auto}
+body.sheet .stage-wrap{display:block}
+body.sheet svg.stage{height:auto}
+[hidden]{display:none!important}
+
+/* SVG styling */
+.stage-bg{fill:var(--stage);stroke:var(--border);stroke-width:1}
+.t-title{font-family:'Source Serif 4',Georgia,'Times New Roman','Songti SC',serif;font-size:38px;font-weight:600;fill:var(--primary)}
+.t-sub{font-size:17px;fill:var(--muted)}
+.pill{fill:var(--pale)} .pill.on{fill:var(--pill)} .pill.off{opacity:.4}
+.pill-t{font-size:14px;font-weight:600;letter-spacing:.05em;fill:var(--primary);text-anchor:middle} .pill-t.on{fill:var(--pill-text)}
+.caption{font-size:18.5px;fill:var(--ink)}
+.card{fill:var(--card);stroke:var(--border);stroke-width:1.2} .card.on{stroke:var(--primary);stroke-width:2.2}
+.card-g.dim{opacity:.38}
+.numbox{fill:var(--primary)} .num-t{fill:var(--pill-text);font-size:14px;font-weight:700;text-anchor:middle}
+.h1{font-size:20px;font-weight:700;fill:var(--primary)} .h2{font-size:13px;fill:var(--muted);text-anchor:end}
+.lbl{font-size:13px;fill:var(--muted)} .lbl.c{text-anchor:middle} .lbl.r{text-anchor:end}
+.lbl-ink{font-size:14px;fill:var(--ink);font-weight:600}
+.val{font-size:21px;font-weight:700;fill:var(--ink);font-variant-numeric:tabular-nums}
+.val.r{text-anchor:end}
+.small{font-size:12px;fill:var(--muted)}
+.head{fill:var(--head)} .head-s{fill:none;stroke:var(--primary);stroke-width:3;stroke-linejoin:round;stroke-linecap:round}
+.brain{fill:var(--brain);stroke:var(--primary);stroke-width:1.5}
+.sulci{fill:none;stroke:var(--primary);stroke-width:1.3;opacity:.4;stroke-linecap:round}
+.eeg{fill:none;stroke:var(--primary);stroke-width:1.6;stroke-linejoin:round}
+.wire{fill:none;stroke:var(--primary);stroke-width:2;stroke-linecap:round} .wire.off{stroke:var(--sky);stroke-dasharray:7 7}
+.lead{fill:none;stroke:var(--primary);stroke-width:1.4;opacity:.7}
+.electrode{fill:var(--stage);stroke:var(--primary);stroke-width:2.2} .electrode.hot{fill:var(--sky)}
+.pkt{fill:var(--blue);stroke:var(--stage);stroke-width:1.5} .pkt.dose{fill:var(--amber)}
+.housing{fill:var(--housing)} .elem{fill:var(--stage);opacity:.9} .elem.hot{fill:var(--amber)}
+.wave{fill:none;stroke:var(--amber);stroke-linecap:round}
+.ripple{fill:none;stroke:var(--primary)}
+.target{fill:var(--pale);stroke:var(--primary);stroke-width:1.5}
+.cross{stroke:var(--primary);stroke-width:1;opacity:.6} .cross-c{fill:none;stroke:var(--primary);stroke-width:1;stroke-dasharray:3 3;opacity:.6}
+.leader{stroke:var(--muted);stroke-width:1}
+.nn-node{fill:var(--stage);stroke:var(--primary);stroke-width:1.5} .nn-node.hot{fill:var(--blue)} .nn-edge{stroke:var(--border);stroke-width:1}
+.track{fill:var(--border)} .band{fill:var(--green-tint);stroke:var(--green);stroke-width:1}
+.marker{fill:var(--primary);stroke:var(--stage);stroke-width:2} .marker.bad{fill:var(--red)} .marker.good{fill:var(--green)}
+.knob{fill:var(--amber);stroke:var(--stage);stroke-width:2} .fill-amber{fill:var(--amber)}
+.map{fill:var(--stage);stroke:var(--border);stroke-width:1.2}
+.visit{stroke:var(--stage);stroke-width:1.5;fill:var(--muted)} .visit.lo{fill:var(--red)} .visit.mid{fill:var(--amber)} .visit.hi{fill:var(--green)}
+.chip{fill:var(--pale)} .chip-t{font-size:13.5px;fill:var(--primary);font-weight:600;text-anchor:middle}
+.badge{rx:5} .badge.bad{fill:var(--red)} .badge.good{fill:var(--green)} .badge-t{fill:#FFFFFF;font-size:12.5px;font-weight:700;text-anchor:middle}
+.grid{stroke:var(--border);stroke-width:1;stroke-dasharray:4 4}
+.axis{stroke:var(--border);stroke-width:1}
+.line{fill:none;stroke:var(--primary);stroke-width:2.8;stroke-linejoin:round}
+.dot{fill:var(--primary);stroke:var(--stage);stroke-width:2}
+.dose{fill:var(--amber);opacity:.6}
+.arrhead{fill:var(--primary)} .arrhead.off{fill:var(--sky)} .arrhead.amber{fill:var(--amber)}
+.aim{stroke:var(--amber);stroke-width:1.8;stroke-dasharray:6 5;opacity:.65}
+.steer{fill:none;stroke:var(--amber);stroke-width:3;stroke-linecap:round}
+.focmark{fill:none;stroke:var(--amber);stroke-width:2.6} .focdot{fill:var(--amber)}
+.foclbl{font-size:13px;font-weight:700;fill:var(--amber)}
+.dim-t{fill:var(--muted);font-size:12px;font-weight:700;letter-spacing:.05em}
+/* compact (slide) layout */
+.slide-bg{fill:var(--stage)}
+.s-cap{font-size:38px;fill:var(--ink)} .s-cap-phase{font-weight:700;fill:var(--primary)}
+.s-lbl{font-size:26px;font-weight:700;fill:var(--ink)} .s-lbl2{font-size:22px;fill:var(--muted)} .s-foclbl{font-size:26px;font-weight:700;fill:var(--amber)}
+.slide .head-s{stroke-width:4} .slide .brain{stroke-width:2} .slide .electrode{stroke-width:3} .slide .lead{stroke-width:2}
+.slide .cross{stroke-width:1.6} .slide .cross-c{stroke-width:1.6;stroke-dasharray:5 5} .slide .leader{stroke-width:1.6}
+.s-aim{stroke-width:3;stroke-dasharray:10 8} .s-steer{stroke-width:5} .slide .focmark{stroke-width:3.5}
+.s-wire{fill:none;stroke:var(--primary);stroke-width:4;stroke-linecap:round} .s-wire.off{stroke:var(--sky);stroke-dasharray:12 10}
+.s-arrow{fill:none;stroke:var(--muted);stroke-width:6;stroke-linecap:round} .s-arrow.off{stroke-dasharray:14 12;opacity:.5}
+.arrhead.grey{fill:var(--muted)}
+.node{fill:var(--card);stroke:var(--border);stroke-width:2} .node-g.on .node{fill:var(--pill);stroke:var(--pill)}
+.node-t{font-size:34px;font-weight:700;fill:var(--primary)} .node-g.on .node-t{fill:var(--pill-text)}
+.node-v{font-size:28px;font-weight:700;fill:var(--ink);font-variant-numeric:tabular-nums} .node-g.on .node-v{fill:var(--pill-text)}
+.node-s{font-size:24px;fill:var(--muted)} .node-g.on .node-s{fill:var(--sky)}
+.s-eeg{stroke-width:2.6} .node-g.on .eeg{stroke:var(--pill-text)} .node-g.on .track{fill:rgba(255,255,255,.35)}
+.node-g.dim{opacity:.35}
+.pulse{fill:none;stroke:var(--amber);stroke-width:4;stroke-linecap:round}
+.s-axis-t{font-size:22px;fill:var(--muted)} .s-line{fill:none;stroke:var(--primary);stroke-width:4;stroke-linejoin:round}
+.slide .pkt{stroke-width:2.5} .slide .dose{opacity:.55} .slide .grid{stroke-width:1.5} .slide .axis{stroke-width:1.5}
+</style>
+
+<div class="app" id="app">
+  <div class="stage-wrap" id="stageWrap"></div>
+  <div class="bar" id="bar">
+    <div class="grp">
+      <button id="btnPlay" title="Play / pause (Space)">Pause</button>
+      <button id="btnRestart" title="Restart (R)">Restart</button>
+      <button id="btnPrev" title="Previous step (←)">◀ Step</button>
+      <button id="btnNext" title="Next step (→)">Step ▶</button>
+    </div>
+    <div class="grp" id="grpMode">
+      <button data-mode="closed">Closed loop</button>
+      <button data-mode="open">Open loop</button>
+    </div>
+    <div class="grp" id="grpLayout">
+      <button data-layout="full">Full</button>
+      <button data-layout="slide">Compact</button>
+    </div>
+    <div class="grp" id="grpLang">
+      <button data-lang="en">EN</button>
+      <button data-lang="zh">中文</button>
+    </div>
+    <div class="grp" id="grpSpeed">
+      <button data-speed="0.5">0.5×</button>
+      <button data-speed="1">1×</button>
+      <button data-speed="2">2×</button>
+    </div>
+    <button class="solo" id="btnFs" title="Fullscreen (F)">Fullscreen</button>
+  </div>
+  <div class="hint" id="hint">Space play/pause · ←/→ step · M mode · L language · F fullscreen</div>
+</div>
+
+<script>
+(() => {
+const NS = 'http://www.w3.org/2000/svg';
+const q = new URLSearchParams(location.search);
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const lerp = (a,b,s) => a + (b-a)*s;
+const smooth = s => { s = clamp(s,0,1); return s*s*(3-2*s); };
+const P = 7, K = 4, HOLD = 1.6, T = P*K + HOLD;
+const XSTAR = 0.35, BAND = [0.30, 0.42];
+const W = 1600, H = 900;
+const FOCUS = [478, 404];
+const TH0 = Math.atan2(238-FOCUS[1], 690-FOCUS[0]);   // transducer axis (points up-right, back of head)
+const HALF = 15*Math.PI/180;
+const R_IN = 240, R_OUT = 268;
+const PXMM = 10;                                      // on-head exaggeration: px per mm of focus offset
+
+/* ---------- copy ---------- */
+const L = {
+  en: {
+    title: 'Closed-Loop Ultrasound Neuromodulation',
+    sub: 'Low-intensity focused ultrasound: dose and focus set by real-time EEG',
+    pills: ['Sense','Decode','Control','Stimulate','Respond'],
+    cap: {
+      sense: 'Scalp EEG streams in real time',
+      decode: 'A decoder estimates the brain state from EEG',
+      control: 'Compare with the target state, set the ultrasound dose',
+      stim: 'Focused ultrasound reaches the deep target through the skull',
+      respond: 'The brain state shifts; the next cycle re-measures',
+      hold: 'Within the target band — the dose falls to maintenance',
+    },
+    capOpen: {
+      sense: 'Open loop: no measurement, no feedback',
+      decode: 'Open loop: no measurement, no feedback',
+      control: 'The same dose at the MRI target, every cycle',
+      stim: 'Focused ultrasound reaches the deep target through the skull',
+      respond: 'The brain state changes, but nothing checks it',
+      hold: 'No feedback: focus off-target, the state never reaches the band',
+    },
+    c1: ['Sense','Scalp EEG · streaming'], c2: ['Decode','Brain-state estimate'], c3: ['Control','Dose & focus'],
+    notUsed: 'NOT USED',
+    capControl: ['Set the dose; pre-shift the focus for skull refraction', 'Weak response for the dose: steer the focus, re-dose', 'Better response: step the focus further, lower the dose', 'Focus locked; the dose tapers as the state nears target'],
+    focus: 'Focus offset', focusFrom: 'from MRI target', focusLbl: 'focus',
+    eeg: 'EEG', tfus: ['tFUS transducer','500 kHz'], mriT: ['MRI target','(thalamus)'], inBand: 'In band', offTarget: 'Off target',
+    electrodes: 'EEG electrodes', transducer: ['Focused ultrasound', 'transducer · 500 kHz'],
+    target: 'Deep target (thalamus)', mri: 'MRI-guided',
+    xhat: 'x̂', tgt: 'target x* = 0.35', band: 'target band',
+    formula: 'u = K · (x̂ − x*)', formulaOpen: 'u = fixed', err: 'x̂ − x*',
+    intensity: 'Intensity I', unit: 'W/cm²', prf: 'PRF 500 Hz', duty: 'Duty 30 %', burst: 'Burst 500 ms',
+    chart: 'Brain state across cycles', legState: 'brain state', legDose: 'ultrasound dose', legBand: 'target band',
+    cycle: k => `cycle ${k}`, high: 'too high', inband: 'in target band', over: 'overshoot', wait: '—',
+  },
+  zh: {
+    title: '闭环超声神经调控',
+    sub: '低强度聚焦超声：剂量与焦点由实时 EEG 决定',
+    pills: ['采集','解码','决策','刺激','响应'],
+    cap: {
+      sense: '头皮 EEG 实时采集',
+      decode: '解码器从 EEG 估计当前脑状态',
+      control: '与目标状态比较，计算超声剂量',
+      stim: '聚焦超声透过颅骨作用于深部靶点',
+      respond: '脑状态改变，下一轮重新测量',
+      hold: '进入目标区间 — 剂量降至维持水平',
+    },
+    capOpen: {
+      sense: '开环：不测量，无反馈',
+      decode: '开环：不测量，无反馈',
+      control: '每一轮都在 MRI 靶点给同样的剂量',
+      stim: '聚焦超声透过颅骨作用于深部靶点',
+      respond: '脑状态改变，但没有任何环节检查它',
+      hold: '无反馈：焦点偏离有效位点，脑状态达不到目标区间',
+    },
+    c1: ['采集','头皮 EEG · 实时流'], c2: ['解码','脑状态估计'], c3: ['决策','剂量与焦点'],
+    notUsed: '未使用',
+    capControl: ['计算剂量；按颅骨折射预先校正焦点', '响应弱于预期：调整焦点位置，重新给剂量', '响应改善：焦点再进一步，剂量下调', '焦点锁定；状态接近目标，剂量递减'],
+    focus: '焦点偏移', focusFrom: '相对 MRI 靶点', focusLbl: '焦点',
+    eeg: 'EEG', tfus: ['超声换能器','500 kHz'], mriT: ['MRI 靶点','（丘脑）'], inBand: '达标', offTarget: '未达标',
+    electrodes: 'EEG 电极', transducer: ['聚焦超声换能器', '500 kHz'],
+    target: '深部靶点（丘脑）', mri: 'MRI 导航',
+    xhat: 'x̂', tgt: '目标 x* = 0.35', band: '目标区间',
+    formula: 'u = K · (x̂ − x*)', formulaOpen: 'u = 固定', err: 'x̂ − x*',
+    intensity: '强度 I', unit: 'W/cm²', prf: 'PRF 500 Hz', duty: '占空比 30 %', burst: '脉冲串 500 ms',
+    chart: '脑状态随周期变化', legState: '脑状态', legDose: '超声剂量', legBand: '目标区间',
+    cycle: k => `第 ${k} 轮`, high: '偏高', inband: '进入目标区间', over: '越过目标', wait: '—',
+  }
+};
+
+/* ---------- model ---------- */
+const OFFS = [[2,-1],[4,-2],[6,-3],[6,-3]];  // focus offset per cycle, mm (+x posterior, +y inferior on screen)
+const SITE = [6,-3], SIG2 = 12.04;           // effective site; efficacy 0.44 after the skull pre-shift, 0.15 at the MRI target itself
+const eff = o => Math.exp(-((o[0]-SITE[0])**2 + (o[1]-SITE[1])**2)/(2*SIG2));
+function schedule(mode){
+  const xs = [0.85], us = [], offs = [], etas = [];
+  for (let k=0;k<K;k++){
+    const x = xs[k], off = mode==='closed' ? OFFS[k] : [0,0], eta = eff(off);
+    const u = mode==='closed' ? clamp(1.8*(x-XSTAR), 0, 1) : 0.9;
+    us.push(u); offs.push(off); etas.push(eta); xs.push(clamp(x - 0.34*u*eta, 0.04, 1));
+  }
+  return {xs, us, offs, etas};
+}
+function offAt(k, tau, sch){
+  if (k >= K) return sch.offs[K-1];
+  const prev = k>0 ? sch.offs[k-1] : [0,0];
+  if (tau < 3.3) return prev;
+  const s = smooth((tau-3.3)/0.7);
+  return [lerp(prev[0], sch.offs[k][0], s), lerp(prev[1], sch.offs[k][1], s)];
+}
+function stateAt(t, sch){
+  const k = clamp(Math.floor(t/P), 0, K);
+  let x;
+  if (k >= K) x = sch.xs[K];
+  else { const tau = t - k*P; x = lerp(sch.xs[k], sch.xs[k+1], smooth((tau-6.0)/0.9)); }
+  return clamp(x + 0.012*Math.sin(3.7*t) + 0.008*Math.sin(9.1*t+1), 0, 1);
+}
+function phaseAt(t){
+  if (t >= K*P) return {k:K, tau:t-K*P, name:'hold'};
+  const k = Math.floor(t/P), tau = t-k*P;
+  const name = tau<1.6?'sense' : tau<2.8?'decode' : tau<4.0?'control' : tau<6.0?'stim' : 'respond';
+  return {k, tau, name};
+}
+function estimateAt(k, tau, sch){          // what the decoder currently displays (null = nothing yet)
+  if (k >= K) return lerp(sch.xs[K-1], sch.xs[K], smooth(tau/0.6));
+  const prev = k>0 ? sch.xs[k-1] : null;
+  if (tau < 2.2) return prev;
+  return lerp(prev===null ? 0 : prev, sch.xs[k], smooth((tau-2.2)/0.5));
+}
+function doseAt(k, tau, sch, mode){
+  if (k >= K) return mode==='closed' ? 0.04 : 0.9;
+  const prev = k>0 ? sch.us[k-1] : (mode==='closed' ? 0 : 0.9);
+  if (tau < 3.3) return prev;
+  return lerp(prev, sch.us[k], smooth((tau-3.3)/0.5));
+}
+function eeg(ch, tt, x){
+  const ph = [0, 2.1, 4.2][ch];
+  const bg = 5*Math.sin(2*Math.PI*0.7*tt+ph) + 3*Math.sin(2*Math.PI*1.9*tt+ph*1.7) + 2*Math.sin(2*Math.PI*4.3*tt+ph*0.4) + 1.2*Math.sin(2*Math.PI*11*tt+ph);
+  const rhythm = 17*x*Math.sin(2*Math.PI*5*tt + ph*0.6) * (0.75 + 0.25*Math.sin(2*Math.PI*0.45*tt+ph));
+  return bg + rhythm;
+}
+
+/* ---------- geometry helpers ---------- */
+function el(tag, attrs, parent){
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs){ if (attrs[k]!==null && attrs[k]!==undefined) e.setAttribute(k, attrs[k]); }
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function txt(parent, x, y, s, cls, attrs){
+  const t = el('text', Object.assign({x, y, class: cls}, attrs||{}), parent);
+  t.textContent = s; return t;
+}
+function spline(pts, closed){
+  const n = pts.length, get = i => closed ? pts[(i+n)%n] : pts[clamp(i,0,n-1)];
+  let d = `M${pts[0][0]},${pts[0][1]}`;
+  const m = closed ? n : n-1;
+  for (let i=0;i<m;i++){
+    const p0=get(i-1), p1=get(i), p2=get(i+1), p3=get(i+2);
+    const c1=[p1[0]+(p2[0]-p0[0])/6, p1[1]+(p2[1]-p0[1])/6], c2=[p2[0]-(p3[0]-p1[0])/6, p2[1]-(p3[1]-p1[1])/6];
+    d += ` C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0]},${p2[1]}`;
+  }
+  return closed ? d+' Z' : d;
+}
+const polar = (r, a) => [FOCUS[0]+r*Math.cos(a), FOCUS[1]+r*Math.sin(a)];
+const E1 = polar(R_IN, TH0-HALF), E2 = polar(R_IN, TH0+HALF), EM = polar(R_IN, TH0);
+const arcAt = (c, r, a0, a1) => `M${(c[0]+r*Math.cos(a0)).toFixed(1)},${(c[1]+r*Math.sin(a0)).toFixed(1)} A${r.toFixed(1)},${r.toFixed(1)} 0 0 1 ${(c[0]+r*Math.cos(a1)).toFixed(1)},${(c[1]+r*Math.sin(a1)).toFixed(1)}`;
+function arcPath(r, a0, a1){ const p=polar(r,a0), q2=polar(r,a1); return `M${p[0].toFixed(1)},${p[1].toFixed(1)} A${r},${r} 0 0 1 ${q2[0].toFixed(1)},${q2[1].toFixed(1)}`; }
+function ringPath(r0, r1, a0, a1){
+  const a=polar(r1,a0), b=polar(r1,a1), c=polar(r0,a1), d=polar(r0,a0);
+  return `M${a[0]},${a[1]} A${r1},${r1} 0 0 1 ${b[0]},${b[1]} L${c[0]},${c[1]} A${r0},${r0} 0 0 0 ${d[0]},${d[1]} Z`;
+}
+
+/* head outline (facing left) ordered: bottom-front → face → crown → back → bottom-back */
+const HEAD = [[452,770],[440,700],[400,648],[330,612],[304,578],[300,545],[306,512],[262,458],[290,402],[312,352],[332,296],[362,232],
+              [420,168],[520,160],[615,212],[672,318],[668,428],[632,528],[585,598],[598,690],[610,770]];
+const BRAIN = [[322,392],[340,312],[402,258],[490,240],[580,262],[636,332],[646,412],[610,484],[540,522],[458,528],[378,506],[336,455]];
+const CEREB = [[556,506],[604,500],[626,530],[600,562],[552,548]];
+const ELEC = [[356,236],[392,196],[440,168],[500,160],[560,180]];
+
+/* ---------- build one stage ---------- */
+let R_beamGrad = null;
+function buildStage(container, uid){
+  const svg = el('svg', {viewBox:`0 0 ${W} ${H}`, class:'stage', preserveAspectRatio:'xMidYMid meet', role:'img'}, container);
+  const defs = el('defs', {}, svg);
+  const mk = (id, cls) => {
+    const m = el('marker', {id:`${id}-${uid}`, viewBox:'0 0 10 10', refX:'9', refY:'5', markerWidth:'7', markerHeight:'7', orient:'auto'}, defs);
+    el('path', {d:'M0,0 L10,5 L0,10 z', class:cls}, m);
+  };
+  mk('arr','arrhead'); mk('arr-off','arrhead off'); mk('arr-amber','arrhead amber');
+  const bg = el('radialGradient', {id:`beam-${uid}`, gradientUnits:'userSpaceOnUse', cx:FOCUS[0], cy:FOCUS[1], r:R_IN}, defs);
+  R_beamGrad = bg;
+  el('stop', {offset:'0', 'stop-color':'var(--amber)', 'stop-opacity':'0.42'}, bg);
+  el('stop', {offset:'0.45', 'stop-color':'var(--amber)', 'stop-opacity':'0.16'}, bg);
+  el('stop', {offset:'1', 'stop-color':'var(--amber)', 'stop-opacity':'0.05'}, bg);
+  const fg = el('radialGradient', {id:`focus-${uid}`}, defs);
+  el('stop', {offset:'0', 'stop-color':'var(--focus)', 'stop-opacity':'0.95'}, fg);
+  el('stop', {offset:'0.5', 'stop-color':'var(--amber)', 'stop-opacity':'0.45'}, fg);
+  el('stop', {offset:'1', 'stop-color':'var(--amber)', 'stop-opacity':'0'}, fg);
+
+  el('rect', {x:0.5, y:0.5, width:W-1, height:H-1, rx:14, class:'stage-bg'}, svg);
+  const clip = el('clipPath', {id:`headclip-${uid}`}, defs);
+  const R = {svg, uid, beamGrad: R_beamGrad};
+
+  /* title */
+  R.title = txt(svg, 60, 74, '', 't-title');
+  R.sub = txt(svg, 62, 104, '', 't-sub');
+
+  /* phase pills + caption */
+  R.pills = []; R.pillT = [];
+  for (let i=0;i<5;i++){
+    const x = 880 + i*134;
+    R.pills.push(el('rect', {x, y:46, width:124, height:30, rx:6, class:'pill'}, svg));
+    R.pillT.push(txt(svg, x+62, 66, '', 'pill-t'));
+  }
+  R.caption = txt(svg, 880, 112, '', 'caption');
+
+  /* ---- head ---- */
+  const head = el('g', {}, svg);
+  const openD = spline(HEAD, false);
+  el('path', {d: openD + ' Z'}, clip);
+  el('path', {d: openD + ' Z', class:'head'}, head);
+  el('path', {d: spline(BRAIN, true), class:'brain'}, head);
+  el('path', {d: spline(CEREB, true), class:'brain'}, head);
+  el('path', {d:'M392,300 q28,42 8,92 M470,252 q-12,60 18,112 M562,282 q-30,52 -8,104 M400,470 q60,-22 122,8 M356,392 q40,-60 92,-52', class:'sulci'}, head);
+  el('path', {d: openD, class:'head-s'}, head);
+
+  /* beam + waves + focus */
+  R.beam = el('path', {d: `M${polar(R_IN,TH0-HALF)} A${R_IN},${R_IN} 0 0 1 ${polar(R_IN,TH0+HALF)} L${FOCUS} Z`, fill:`url(#beam-${uid})`}, head);
+  R.waves = []; for (let i=0;i<6;i++) R.waves.push(el('path', {class:'wave', d:''}, head));
+  R.focus = el('circle', {cx:FOCUS[0], cy:FOCUS[1], r:40, fill:`url(#focus-${uid})`}, head);
+  const rg = el('g', {'clip-path':`url(#headclip-${uid})`}, head);
+  R.ripples = []; for (let i=0;i<3;i++) R.ripples.push(el('circle', {cx:FOCUS[0], cy:FOCUS[1], r:0, class:'ripple'}, rg));
+
+  /* target + crosshair */
+  el('line', {x1:FOCUS[0]-34, y1:FOCUS[1], x2:FOCUS[0]+34, y2:FOCUS[1], class:'cross'}, head);
+  el('line', {x1:FOCUS[0], y1:FOCUS[1]-34, x2:FOCUS[0], y2:FOCUS[1]+34, class:'cross'}, head);
+  el('circle', {cx:FOCUS[0], cy:FOCUS[1], r:26, class:'cross-c'}, head);
+  el('ellipse', {cx:FOCUS[0], cy:FOCUS[1], rx:16, ry:11, class:'target'}, head);
+  el('line', {x1:FOCUS[0], y1:FOCUS[1]+30, x2:FOCUS[0], y2:576, class:'leader'}, head);
+  R.aim = el('line', {x1:EM[0], y1:EM[1], x2:FOCUS[0], y2:FOCUS[1], class:'aim'}, head);
+  R.steer = el('path', {d:'', class:'steer', 'marker-end':`url(#arr-amber-${uid})`}, head);
+  R.focMark = el('circle', {cx:FOCUS[0], cy:FOCUS[1], r:9, class:'focmark'}, head);
+  R.focDot = el('circle', {cx:FOCUS[0], cy:FOCUS[1], r:2.6, class:'focdot'}, head);
+  R.focLbl = txt(head, FOCUS[0]+15, FOCUS[1]-12, '', 'foclbl');
+  R.targetT = txt(head, FOCUS[0], 596, '', 'lbl-ink', {'text-anchor':'middle'});
+  R.mriT = txt(head, FOCUS[0], 615, '', 'small', {'text-anchor':'middle'});
+
+  /* transducer housing + elements */
+  el('path', {d: ringPath(R_IN, R_OUT, TH0-HALF, TH0+HALF), class:'housing'}, head);
+  R.elems = [];
+  const NE = 9;
+  for (let i=0;i<NE;i++){
+    const a0 = TH0-HALF + (i+0.12)*(2*HALF/NE), a1 = TH0-HALF + (i+0.88)*(2*HALF/NE);
+    R.elems.push(el('path', {d: ringPath(R_IN+3, R_IN+11, a0, a1), class:'elem'}, head));
+  }
+  R.transT1 = txt(head, 728, 300, '', 'lbl-ink');
+  R.transT2 = txt(head, 728, 319, '', 'small');
+
+  /* electrodes + leads + wire to Sense */
+  ELEC.forEach(p => el('path', {d:`M${p[0]},${p[1]} L${p[0]},132 L600,132`, class:'lead'}, head));
+  R.wireA = el('path', {d:'M600,132 C720,132 800,238 878,238', class:'wire', 'marker-end':`url(#arr-${uid})`}, head);
+  R.elecs = ELEC.map(p => el('circle', {cx:p[0], cy:p[1], r:8.5, class:'electrode'}, head));
+  R.elecT = txt(head, 340, 150, '', 'lbl-ink', {'text-anchor':'end'});
+
+  /* cable Control → transducer */
+  const cableEnd = polar(R_OUT+2, TH0);
+  R.cable = el('path', {d:`M878,655 C745,655 705,540 705,400 C705,330 700,282 ${cableEnd[0].toFixed(1)},${cableEnd[1].toFixed(1)}`, class:'wire', 'marker-end':`url(#arr-${uid})`}, head);
+
+  /* ---- cards ---- */
+  function card(i, y, hdrKey){
+    const g = el('g', {class:'card-g'}, svg);
+    const rect = el('rect', {x:880, y, width:660, height:182, rx:10, class:'card'}, g);
+    el('rect', {x:898, y:y+16, width:26, height:26, rx:6, class:'numbox'}, g);
+    txt(g, 911, y+35, String(i), 'num-t');
+    const h1 = txt(g, 936, y+35, '', 'h1');
+    const h2 = txt(g, 1522, y+35, '', 'h2');
+    const nu = txt(g, 1522, y+35, '', 'dim-t', {'text-anchor':'end'}); nu.setAttribute('hidden','');
+    return {g, rect, h1, h2, nu, y};
+  }
+  R.c1 = card(1, 148); R.c2 = card(2, 356); R.c3 = card(3, 564);
+  R.arrow12 = el('line', {x1:1210, y1:333, x2:1210, y2:353, class:'wire', 'marker-end':`url(#arr-${uid})`}, svg);
+  R.arrow23 = el('line', {x1:1210, y1:541, x2:1210, y2:561, class:'wire', 'marker-end':`url(#arr-${uid})`}, svg);
+
+  /* card 1: EEG */
+  R.eegY = [210, 252, 294];
+  R.chT = ['Fz','Cz','Pz'].map((n,i) => txt(R.c1.g, 912, R.eegY[i]+5, n, 'lbl'));
+  R.eeg = R.eegY.map(() => el('polyline', {class:'eeg', points:''}, R.c1.g));
+
+  /* card 2: decoder glyph + state bar */
+  const layers = [[915,[424,448,472,496]],[980,[412,436,460,484,508]],[1045,[436,460,484]]];
+  for (let l=0;l<layers.length-1;l++) for (const y0 of layers[l][1]) for (const y1 of layers[l+1][1])
+    el('line', {x1:layers[l][0], y1:y0, x2:layers[l+1][0], y2:y1, class:'nn-edge'}, R.c2.g);
+  R.nn = layers.map(([x, ys]) => ys.map(y => el('circle', {cx:x, cy:y, r:7, class:'nn-node'}, R.c2.g)));
+  const BX0 = 1110, BX1 = 1450, BY = 454;
+  R.bx = v => BX0 + (BX1-BX0)*clamp(v,0,1);
+  el('rect', {x:BX0, y:BY-7, width:BX1-BX0, height:14, rx:7, class:'track'}, R.c2.g);
+  el('rect', {x:R.bx(BAND[0]), y:BY-11, width:R.bx(BAND[1])-R.bx(BAND[0]), height:22, rx:4, class:'band'}, R.c2.g);
+  txt(R.c2.g, BX0, BY+30, '0', 'lbl'); txt(R.c2.g, BX1, BY+30, '1', 'lbl r');
+  R.tgtT = txt(R.c2.g, R.bx(XSTAR), BY+30, '', 'lbl c');
+  R.marker = el('circle', {cx:BX0, cy:BY, r:10, class:'marker'}, R.c2.g);
+  R.xhatT = txt(R.c2.g, 1522, BY+8, '', 'val r');
+  R.badge = el('rect', {x:0, y:BY-52, width:120, height:24, class:'badge'}, R.c2.g);
+  R.badgeT = txt(R.c2.g, 0, BY-35, '', 'badge-t');
+
+  /* card 3: controller */
+  el('rect', {x:898, y:604, width:214, height:30, rx:6, class:'chip'}, R.c3.g);
+  R.formulaT = txt(R.c3.g, 1005, 625, '', 'chip-t');
+  R.errT = txt(R.c3.g, 1124, 625, '', 'lbl');
+  R.intT = txt(R.c3.g, 898, 674, '', 'lbl-ink');
+  const SX0 = 1016, SX1 = 1136, SY = 668;
+  R.sx = v => SX0 + (SX1-SX0)*clamp(v,0,1);
+  el('rect', {x:SX0, y:SY-4, width:SX1-SX0, height:8, rx:4, class:'track'}, R.c3.g);
+  R.sfill = el('rect', {x:SX0, y:SY-4, width:0, height:8, rx:4, class:'fill-amber'}, R.c3.g);
+  R.knob = el('circle', {cx:SX0, cy:SY, r:11, class:'knob'}, R.c3.g);
+  R.doseT = txt(R.c3.g, 1236, SY+8, '', 'val r');
+  R.chips = [[898,100],[1006,92],[1106,112]].map(([x,w]) => {
+    el('rect', {x, y:706, width:w, height:28, rx:6, class:'chip'}, R.c3.g);
+    return txt(R.c3.g, x+w/2, 726, '', 'chip-t');
+  });
+  /* focus panel: offset readout + response map around the MRI target */
+  el('line', {x1:1252, y1:608, x2:1252, y2:736, class:'axis'}, R.c3.g);
+  R.focT = txt(R.c3.g, 1270, 634, '', 'lbl-ink');
+  R.focV = txt(R.c3.g, 1270, 664, '', 'val');
+  R.focFrom = txt(R.c3.g, 1270, 686, '', 'small');
+  const MX = 1466, MY = 666, MS = 7;
+  R.mx = o => [MX + MS*o[0], MY + MS*o[1]];
+  el('rect', {x:1410, y:610, width:112, height:112, rx:8, class:'map'}, R.c3.g);
+  el('line', {x1:1416, y1:MY, x2:1516, y2:MY, class:'cross'}, R.c3.g);
+  el('line', {x1:MX, y1:616, x2:MX, y2:716, class:'cross'}, R.c3.g);
+  el('circle', {cx:MX, cy:MY, r:49, class:'cross-c'}, R.c3.g);
+  R.visits = OFFS.map(() => el('circle', {cx:MX, cy:MY, r:6, class:'visit'}, R.c3.g));
+  R.focM = el('circle', {cx:MX, cy:MY, r:7, class:'knob'}, R.c3.g);
+
+  /* ---- bottom chart ---- */
+  const CX0 = 150, CX1 = 1320, CY0 = 800, CY1 = 868;
+  R.cx = t => CX0 + (CX1-CX0)*clamp(t/T,0,1);
+  R.cy = v => CY1 - (CY1-CY0)*clamp(v,0,1);
+  el('rect', {x:CX0, y:R.cy(BAND[1]), width:CX1-CX0, height:R.cy(BAND[0])-R.cy(BAND[1]), class:'band'}, svg);
+  el('line', {x1:CX0, y1:CY1, x2:CX1, y2:CY1, class:'axis'}, svg);
+  el('line', {x1:CX0, y1:CY0, x2:CX0, y2:CY1, class:'axis'}, svg);
+  txt(svg, 140, CY1+4, '0', 'lbl r'); txt(svg, 140, CY0+6, '1', 'lbl r');
+  R.cycleT = [];
+  for (let k=0;k<K;k++){
+    if (k>0) el('line', {x1:R.cx(k*P), y1:CY0, x2:R.cx(k*P), y2:CY1, class:'grid'}, svg);
+    R.cycleT.push(txt(svg, R.cx(k*P)+4, CY0-5, '', 'small'));
+  }
+  R.doses = []; for (let k=0;k<K;k++) R.doses.push(el('rect', {x:0, y:CY1, width:0, height:0, class:'dose'}, svg));
+  R.line = el('polyline', {class:'line', points:''}, svg);
+  R.dot = el('circle', {cx:CX0, cy:CY1, r:5, class:'dot'}, svg);
+  R.chartT = txt(svg, 1360, 806, '', 'lbl-ink');
+  el('line', {x1:1360, y1:829, x2:1384, y2:829, class:'line'}, svg); R.legState = txt(svg, 1392, 833, '', 'lbl');
+  el('rect', {x:1360, y:846, width:24, height:9, class:'dose'}, svg); R.legDose = txt(svg, 1392, 855, '', 'lbl');
+  el('rect', {x:1360, y:866, width:24, height:9, class:'band'}, svg); R.legBand = txt(svg, 1392, 875, '', 'lbl');
+
+  return R;
+}
+
+/* ---------- render ---------- */
+function render(R, t, mode, lang){
+  const S = L[lang], sch = schedule(mode);
+  const closed = mode==='closed';
+  const {k, tau, name} = phaseAt(t);
+  const x = stateAt(t, sch);
+  const xhat = estimateAt(k, tau, sch);
+  const u = doseAt(k, tau, sch, mode);
+  const uk = k<K ? sch.us[k] : (closed ? 0.04 : 0.9);
+  const off = offAt(k, tau, sch);
+  const foc = [FOCUS[0]+PXMM*off[0], FOCUS[1]+PXMM*off[1]];
+  const on = c => c.classList;
+
+  /* text */
+  R.title.textContent = S.title; R.sub.textContent = S.sub;
+  const capSet = closed ? S.cap : S.capOpen;
+  R.caption.textContent = (closed && name==='control') ? S.capControl[Math.min(k, S.capControl.length-1)] : capSet[name];
+  const order = ['sense','decode','control','stim','respond'];
+  R.pills.forEach((p,i) => {
+    const active = order[i]===name || (name==='hold' && (i===1 || i===0));
+    p.classList.toggle('on', active && (closed || i>=2));
+    p.classList.toggle('off', !closed && i<2);
+    R.pillT[i].textContent = S.pills[i]; R.pillT[i].classList.toggle('on', active && (closed || i>=2));
+  });
+  [[R.c1,S.c1],[R.c2,S.c2],[R.c3,S.c3]].forEach(([c,s]) => { c.h1.textContent = s[0]; c.h2.textContent = s[1]; });
+  R.c1.rect.classList.toggle('on', closed && (name==='sense' || name==='hold'));
+  R.c2.rect.classList.toggle('on', closed && (name==='decode' || name==='hold'));
+  R.c3.rect.classList.toggle('on', name==='control');
+  R.c1.g.classList.toggle('dim', !closed); R.c2.g.classList.toggle('dim', !closed);
+  [R.c1, R.c2].forEach(c => { c.nu.textContent = S.notUsed; if (closed) { c.nu.setAttribute('hidden',''); c.h2.removeAttribute('hidden'); } else { c.nu.removeAttribute('hidden'); c.h2.setAttribute('hidden',''); } });
+  R.wireA.classList.toggle('off', !closed); R.arrow12.classList.toggle('off', !closed); R.arrow23.classList.toggle('off', !closed);
+  const arrOff = `url(#arr-off-${R.uid})`, arrOn = `url(#arr-${R.uid})`;
+  [R.wireA, R.arrow12, R.arrow23].forEach(w => w.setAttribute('marker-end', closed ? arrOn : arrOff));
+  R.elecT.textContent = S.electrodes; R.transT1.textContent = S.transducer[0]; R.transT2.textContent = S.transducer[1];
+  R.targetT.textContent = S.target; R.mriT.textContent = S.mri; R.tgtT.textContent = S.tgt;
+  R.formulaT.textContent = closed ? S.formula : S.formulaOpen;
+  R.chips[0].textContent = S.prf; R.chips[1].textContent = S.duty; R.chips[2].textContent = S.burst;
+  R.chartT.textContent = S.chart; R.legState.textContent = S.legState; R.legDose.textContent = S.legDose; R.legBand.textContent = S.legBand;
+  R.cycleT.forEach((c,i) => c.textContent = S.cycle(i+1));
+  if (!R.intT.firstChild || R.intT.dataset.lang !== lang){
+    R.intT.textContent = ''; R.intT.dataset.lang = lang;
+    R.intT.appendChild(document.createTextNode(S.intensity));
+    const sub = el('tspan', {dy:'4', 'font-size':'10px'}, R.intT); sub.textContent = 'SPPA';
+  }
+
+  /* electrodes + EEG */
+  const sensing = closed && (name==='sense' || name==='hold');
+  const flash = name==='respond' && tau>6.55 && tau<6.9;
+  R.elecs.forEach((e,i) => e.classList.toggle('hot', (sensing && Math.sin(t*9+i)>0) || flash));
+  const N = 160, WIN = 3;
+  R.eeg.forEach((pl,ch) => {
+    let pts = '';
+    for (let i=0;i<=N;i++){
+      const tt = t - WIN + WIN*i/N;
+      const xx = 968 + (1516-968)*i/N;
+      const v = closed || true ? eeg(ch, tt, stateAt(tt, sch)) : 0;
+      pts += `${xx.toFixed(1)},${(R.eegY[ch]-v).toFixed(1)} `;
+    }
+    pl.setAttribute('points', pts);
+  });
+
+  /* decoder */
+  R.nn.forEach((layer,l) => layer.forEach((n,i) => n.classList.toggle('hot', closed && ((name==='decode' && tau>2.0+0.18*l && tau<2.75) || (name==='hold' && tau<0.7 && tau>0.15*l)))));
+  const showEst = closed && xhat!==null;
+  R.marker.setAttribute('cx', R.bx(showEst ? xhat : 0));
+  R.marker.style.opacity = showEst ? 1 : 0;
+  R.xhatT.textContent = showEst ? `${S.xhat} = ${xhat.toFixed(2)}` : `${S.xhat} = ${S.wait}`;
+  const settled = closed && xhat!==null && ((k<K && (tau>=2.75 || (k>0 && tau<2.2))) || (k>=K && tau>0.6));
+  let status = null;
+  if (settled){ status = xhat > BAND[1] ? 'bad-high' : xhat < BAND[0] ? 'bad-low' : 'good'; }
+  R.marker.classList.toggle('bad', status && status!=='good'); R.marker.classList.toggle('good', status==='good');
+  if (status){
+    const label = status==='good' ? S.inband : status==='bad-high' ? S.high : S.over;
+    const bw = lang==='zh' ? label.length*13+22 : label.length*7.2+22;
+    const bxc = clamp(R.bx(xhat), 1110+bw/2, 1450-bw/2);
+    R.badge.setAttribute('x', bxc-bw/2); R.badge.setAttribute('width', bw);
+    R.badge.setAttribute('class', `badge ${status==='good'?'good':'bad'}`);
+    R.badgeT.setAttribute('x', bxc); R.badgeT.textContent = label;
+    R.badge.style.opacity = 1; R.badgeT.style.opacity = 1;
+  } else { R.badge.style.opacity = 0; R.badgeT.style.opacity = 0; }
+
+  /* controller */
+  const errKnown = closed && status!==null;
+  R.errT.textContent = errKnown ? `${S.err} = ${(xhat-XSTAR)>=0?'+':'−'}${Math.abs(xhat-XSTAR).toFixed(2)}` : '';
+  R.knob.setAttribute('cx', R.sx(u)); R.sfill.setAttribute('width', R.sx(u)-R.sx(0));
+  R.doseT.textContent = `${(10*u).toFixed(1)} ${S.unit}`;
+  /* on-head focus marker, aim line, steering arrow */
+  R.aim.setAttribute('x2', foc[0]); R.aim.setAttribute('y2', foc[1]);
+  R.focMark.setAttribute('cx', foc[0]); R.focMark.setAttribute('cy', foc[1]);
+  R.focDot.setAttribute('cx', foc[0]); R.focDot.setAttribute('cy', foc[1]);
+  R.focLbl.setAttribute('x', foc[0]+15); R.focLbl.setAttribute('y', foc[1]-12); R.focLbl.textContent = S.focusLbl;
+  const prevOff = k>0 ? sch.offs[k-1] : [0,0];
+  const steering = closed && k<K && (sch.offs[k][0]!==prevOff[0] || sch.offs[k][1]!==prevOff[1]) && tau>=3.0 && tau<4.4;
+  if (steering){
+    const p0 = [FOCUS[0]+PXMM*prevOff[0], FOCUS[1]+PXMM*prevOff[1]];
+    const p1 = [FOCUS[0]+PXMM*sch.offs[k][0], FOCUS[1]+PXMM*sch.offs[k][1]];
+    const L2 = Math.hypot(p1[0]-p0[0], p1[1]-p0[1]), ux = (p1[0]-p0[0])/L2, uy = (p1[1]-p0[1])/L2;
+    const end = [p1[0]-ux*13, p1[1]-uy*13];
+    R.steer.setAttribute('d', `M${p0[0].toFixed(1)},${p0[1].toFixed(1)} L${end[0].toFixed(1)},${end[1].toFixed(1)}`);
+    R.steer.style.opacity = tau<4.0 ? 1 : 1-(tau-4.0)/0.4;
+  } else R.steer.style.opacity = 0;
+  /* focus panel */
+  R.focT.textContent = S.focus; R.focFrom.textContent = S.focusFrom;
+  R.focV.textContent = `${Math.hypot(off[0], off[1]).toFixed(1)} mm`;
+  const fm = R.mx(off); R.focM.setAttribute('cx', fm[0]); R.focM.setAttribute('cy', fm[1]);
+  R.visits.forEach((v,kk) => {
+    const revealed = closed && (kk < K-1 ? t >= (kk+1)*P + 2.7 : t >= K*P + 0.6);
+    if (!revealed){ v.style.opacity = 0; return; }
+    const pm = R.mx(sch.offs[kk]); v.setAttribute('cx', pm[0]); v.setAttribute('cy', pm[1]); v.style.opacity = 1;
+    const e = sch.etas[kk]; v.setAttribute('class', `visit ${e<0.5?'lo':e<0.9?'mid':'hi'}`);
+  });
+
+  /* packets */
+  const pk = (elm, path, s, cls) => {
+    if (s===null){ elm.style.opacity = 0; return; }
+    const len = path.getTotalLength(), p = path.getPointAtLength(len*clamp(s,0,1));
+    elm.setAttribute('cx', p.x); elm.setAttribute('cy', p.y); elm.style.opacity = 1;
+  };
+  if (!R.pA){ R.pA = el('circle', {r:7, class:'pkt'}, R.svg); R.pB = el('circle', {r:7, class:'pkt'}, R.svg); R.pC = el('circle', {r:7, class:'pkt'}, R.svg); R.pD = el('circle', {r:7, class:'pkt dose'}, R.svg); }
+  pk(R.pA, R.wireA, closed && name==='sense' && tau>0.3 && tau<1.1 ? (tau-0.3)/0.8 : null);
+  const lin = (elm, x0,y0,x1,y1,s) => { if (s===null){ elm.style.opacity=0; return; } elm.setAttribute('cx', lerp(x0,x1,s)); elm.setAttribute('cy', lerp(y0,y1,s)); elm.style.opacity=1; };
+  lin(R.pB, 1210,333,1210,353, closed && name==='decode' && tau<2.0 ? (tau-1.6)/0.4 : null);
+  lin(R.pC, 1210,541,1210,561, closed && name==='control' && tau<3.2 ? (tau-2.8)/0.4 : null);
+  pk(R.pD, R.cable, name==='stim' && tau<4.45 ? (tau-4.0)/0.45 : null);
+
+  /* transducer + beam */
+  const firing = name==='stim' && tau>4.4 && tau<5.9;
+  const intensity = uk;
+  R.elems.forEach((e,i) => e.classList.toggle('hot', firing && ((Math.floor((tau-4.4)*18)+i)%3!==0 || intensity>0.5)));
+  R.beam.style.opacity = firing ? 0.35+0.65*intensity : 0;
+  R.beam.setAttribute('d', `M${E1[0].toFixed(1)},${E1[1].toFixed(1)} A${R_IN},${R_IN} 0 0 1 ${E2[0].toFixed(1)},${E2[1].toFixed(1)} L${foc[0].toFixed(1)},${foc[1].toFixed(1)} Z`);
+  R.beamGrad.setAttribute('cx', foc[0]); R.beamGrad.setAttribute('cy', foc[1]);
+  const a0 = Math.atan2(E1[1]-foc[1], E1[0]-foc[0]), a1 = Math.atan2(E2[1]-foc[1], E2[0]-foc[0]);
+  const Reff = Math.hypot(EM[0]-foc[0], EM[1]-foc[1]);
+  let arrive = 0;
+  R.waves.forEach((w,j) => {
+    const te = 4.5 + 0.22*j, D = 0.5, s = (tau-te)/D;
+    if (name!=='stim' || s<0 || s>1){ w.style.opacity = 0; return; }
+    const r = Reff*(1-s);
+    w.setAttribute('d', arcAt(foc, Math.max(r,2), a0, a1));
+    w.setAttribute('stroke-width', (2+3*s).toFixed(1));
+    w.style.opacity = (0.3+0.7*s)*(0.35+0.65*intensity);
+    if (s>0.85) arrive = Math.max(arrive, (s-0.85)/0.15);
+  });
+  const glow = name==='stim' && tau>4.9 ? intensity*(0.55+0.45*arrive) : (name==='respond' ? intensity*Math.max(0,1-(tau-6)/0.6) : 0);
+  R.focus.style.opacity = glow; R.focus.setAttribute('r', 34+26*arrive*intensity);
+  R.focus.setAttribute('cx', foc[0]); R.focus.setAttribute('cy', foc[1]);
+  R.ripples.forEach(c => { c.setAttribute('cx', foc[0]); c.setAttribute('cy', foc[1]); });
+
+  /* ripples (brain response) */
+  R.ripples.forEach((c,i) => {
+    const s = (tau-6.0-0.25*i)/0.65;
+    if (name!=='respond' || s<0 || s>1){ c.style.opacity = 0; return; }
+    c.setAttribute('r', 20+250*s); c.style.opacity = (1-s)*0.8*(0.3+0.7*intensity); c.setAttribute('stroke-width', (3-2*s).toFixed(1));
+  });
+
+  /* chart */
+  let pts = '';
+  for (let tt=0; tt<=t; tt+=0.08) pts += `${R.cx(tt).toFixed(1)},${R.cy(stateAt(tt,sch)).toFixed(1)} `;
+  pts += `${R.cx(t).toFixed(1)},${R.cy(x).toFixed(1)}`;
+  R.line.setAttribute('points', pts);
+  R.dot.setAttribute('cx', R.cx(t)); R.dot.setAttribute('cy', R.cy(x));
+  R.doses.forEach((d,kk) => {
+    const t0 = kk*P+4.5, t1 = kk*P+5.8;
+    if (t < t0){ d.setAttribute('width', 0); return; }
+    const hgt = 52*sch.us[kk];
+    d.setAttribute('x', R.cx(t0)); d.setAttribute('width', Math.max(1, R.cx(Math.min(t,t1))-R.cx(t0)));
+    d.setAttribute('y', 868-hgt); d.setAttribute('height', hgt);
+  });
+}
+
+/* ---------- compact "slide" layout: for embedding in a slide ---------- */
+function buildSlide(container, uid){
+  const svg = el('svg', {viewBox:`0 0 ${W} ${H}`, class:'stage slide', preserveAspectRatio:'xMidYMid meet', role:'img'}, container);
+  const defs = el('defs', {}, svg);
+  const mk = (id, cls, mw) => {
+    const m = el('marker', {id:`${id}-${uid}`, viewBox:'0 0 10 10', refX:'9', refY:'5', markerWidth:mw||7, markerHeight:mw||7, orient:'auto'}, defs);
+    el('path', {d:'M0,0 L10,5 L0,10 z', class:cls}, m);
+  };
+  mk('arr','arrhead'); mk('arr-off','arrhead off'); mk('arr-amber','arrhead amber'); mk('arr-grey','arrhead grey',5);
+  const bg = el('radialGradient', {id:`beam-${uid}`, gradientUnits:'userSpaceOnUse', cx:FOCUS[0], cy:FOCUS[1], r:R_IN}, defs);
+  el('stop', {offset:'0', 'stop-color':'var(--amber)', 'stop-opacity':'0.42'}, bg);
+  el('stop', {offset:'0.45', 'stop-color':'var(--amber)', 'stop-opacity':'0.16'}, bg);
+  el('stop', {offset:'1', 'stop-color':'var(--amber)', 'stop-opacity':'0.05'}, bg);
+  const fg = el('radialGradient', {id:`focus-${uid}`}, defs);
+  el('stop', {offset:'0', 'stop-color':'var(--focus)', 'stop-opacity':'0.95'}, fg);
+  el('stop', {offset:'0.5', 'stop-color':'var(--amber)', 'stop-opacity':'0.45'}, fg);
+  el('stop', {offset:'1', 'stop-color':'var(--amber)', 'stop-opacity':'0'}, fg);
+  const clip = el('clipPath', {id:`headclip-${uid}`}, defs);
+  el('rect', {x:0, y:0, width:W, height:H, class:'slide-bg'}, svg);
+  const R = {svg, uid, beamGrad: bg, compact: true};
+
+  /* one caption line: bold phase word + text */
+  R.cap = txt(svg, 40, 72, '', 's-cap');
+  R.capA = el('tspan', {class:'s-cap-phase'}, R.cap);
+  R.capB = el('tspan', {}, R.cap);
+
+  /* head (same geometry as the full layout, larger labels) */
+  const head = el('g', {}, svg);
+  const openD = spline(HEAD, false);
+  el('path', {d: openD + ' Z'}, clip);
+  el('path', {d: openD + ' Z', class:'head'}, head);
+  el('path', {d: spline(BRAIN, true), class:'brain'}, head);
+  el('path', {d: spline(CEREB, true), class:'brain'}, head);
+  el('path', {d:'M392,300 q28,42 8,92 M470,252 q-12,60 18,112 M562,282 q-30,52 -8,104 M400,470 q60,-22 122,8 M356,392 q40,-60 92,-52', class:'sulci'}, head);
+  el('path', {d: openD, class:'head-s'}, head);
+  R.beam = el('path', {d:'', fill:`url(#beam-${uid})`}, head);
+  R.waves = []; for (let i=0;i<6;i++) R.waves.push(el('path', {class:'wave', d:''}, head));
+  R.focus = el('circle', {cx:FOCUS[0], cy:FOCUS[1], r:40, fill:`url(#focus-${uid})`}, head);
+  const rg = el('g', {'clip-path':`url(#headclip-${uid})`}, head);
+  R.ripples = []; for (let i=0;i<3;i++) R.ripples.push(el('circle', {cx:FOCUS[0], cy:FOCUS[1], r:0, class:'ripple'}, rg));
+  el('line', {x1:FOCUS[0]-36, y1:FOCUS[1], x2:FOCUS[0]+36, y2:FOCUS[1], class:'cross'}, head);
+  el('line', {x1:FOCUS[0], y1:FOCUS[1]-36, x2:FOCUS[0], y2:FOCUS[1]+36, class:'cross'}, head);
+  el('circle', {cx:FOCUS[0], cy:FOCUS[1], r:28, class:'cross-c'}, head);
+  el('ellipse', {cx:FOCUS[0], cy:FOCUS[1], rx:17, ry:12, class:'target'}, head);
+  el('line', {x1:FOCUS[0], y1:FOCUS[1]+32, x2:FOCUS[0], y2:572, class:'leader'}, head);
+  R.targetT = txt(head, FOCUS[0], 602, '', 's-lbl', {'text-anchor':'middle'});
+  R.targetT2 = txt(head, FOCUS[0], 630, '', 's-lbl2', {'text-anchor':'middle'});
+  R.aim = el('line', {x1:EM[0], y1:EM[1], x2:FOCUS[0], y2:FOCUS[1], class:'aim s-aim'}, head);
+  R.steer = el('path', {d:'', class:'steer s-steer', 'marker-end':`url(#arr-amber-${uid})`}, head);
+  R.focMark = el('circle', {cx:FOCUS[0], cy:FOCUS[1], r:11, class:'focmark'}, head);
+  R.focDot = el('circle', {cx:FOCUS[0], cy:FOCUS[1], r:3, class:'focdot'}, head);
+  R.focLbl = txt(head, FOCUS[0]+18, FOCUS[1]-14, '', 's-foclbl');
+  el('path', {d: ringPath(R_IN, R_OUT, TH0-HALF, TH0+HALF), class:'housing'}, head);
+  R.elems = [];
+  const NE = 9;
+  for (let i=0;i<NE;i++){
+    const a0 = TH0-HALF + (i+0.12)*(2*HALF/NE), a1 = TH0-HALF + (i+0.88)*(2*HALF/NE);
+    R.elems.push(el('path', {d: ringPath(R_IN+3, R_IN+11, a0, a1), class:'elem'}, head));
+  }
+  R.transT1 = txt(head, 738, 338, '', 's-lbl');
+  R.transT2 = txt(head, 738, 364, '', 's-lbl2');
+  ELEC.forEach(p => el('path', {d:`M${p[0]},${p[1]} L${p[0]},132 L600,132`, class:'lead s-lead'}, head));
+  R.wireA = el('path', {d:'M600,132 C700,132 790,205 849,205', class:'s-wire', 'marker-end':`url(#arr-${uid})`}, head);
+  R.elecs = ELEC.map(p => el('circle', {cx:p[0], cy:p[1], r:10, class:'electrode'}, head));
+  R.elecT = txt(head, 345, 150, '', 's-lbl', {'text-anchor':'end'});
+  const cableEnd = polar(R_OUT+2, TH0);
+  R.cable = el('path', {d:`M849,465 C770,465 715,400 702,320 C697,290 693,262 ${cableEnd[0].toFixed(1)},${cableEnd[1].toFixed(1)}`, class:'s-wire', 'marker-end':`url(#arr-${uid})`}, head);
+
+  /* ring of four nodes */
+  const NX = {sense:855, decode:1250, control:1250, stim:855}, NY = {sense:140, decode:140, control:400, stim:400}, NW = 300, NH = 130;
+  R.node = {};
+  for (const key of ['sense','decode','control','stim']){
+    const g = el('g', {class:'node-g'}, svg), x = NX[key], y = NY[key];
+    el('rect', {x, y, width:NW, height:NH, rx:16, class:'node'}, g);
+    const t = txt(g, x+24, y+50, '', 'node-t');
+    const nu = txt(g, x+NW-20, y+50, '', 'node-s', {'text-anchor':'end'}); nu.setAttribute('hidden','');
+    R.node[key] = {g, x, y, t, nu};
+  }
+  R.sEeg = el('polyline', {class:'eeg s-eeg', points:''}, R.node.sense.g);
+  const D = R.node.decode, BX0 = D.x+24, BX1 = D.x+184, BY = D.y+96;
+  R.sbx = v => BX0 + (BX1-BX0)*clamp(v,0,1);
+  el('rect', {x:BX0, y:BY-8, width:BX1-BX0, height:16, rx:8, class:'track'}, D.g);
+  el('rect', {x:R.sbx(BAND[0]), y:BY-12, width:R.sbx(BAND[1])-R.sbx(BAND[0]), height:24, rx:5, class:'band'}, D.g);
+  R.sMarker = el('circle', {cx:BX0, cy:BY, r:11, class:'marker'}, D.g);
+  R.sXhat = txt(D.g, D.x+204, BY+10, '', 'node-v');
+  const C = R.node.control;
+  R.sDose = txt(C.g, C.x+24, C.y+106, '', 'node-v');
+  R.sFoc = txt(C.g, C.x+172, C.y+106, '', 'node-v');
+  const T_ = R.node.stim;
+  R.pulseC = [T_.x+34, T_.y+96];
+  R.sPulses = []; for (let i=0;i<4;i++) R.sPulses.push(el('path', {class:'pulse', d:''}, T_.g));
+  R.sPrf = txt(T_.g, T_.x+150, T_.y+104, '', 'node-s');
+
+  /* arrows between nodes (slide-diagram style) */
+  R.arrAB = el('path', {d:`M${NX.sense+NW+8},205 L${NX.decode-10},205`, class:'s-arrow', 'marker-end':`url(#arr-grey-${uid})`}, svg);
+  R.arrBC = el('path', {d:`M1400,${NY.decode+NH+8} L1400,${NY.control-10}`, class:'s-arrow', 'marker-end':`url(#arr-grey-${uid})`}, svg);
+  R.arrCD = el('path', {d:`M${NX.control-8},465 L${NX.stim+NW+10},465`, class:'s-arrow', 'marker-end':`url(#arr-grey-${uid})`}, svg);
+  R.pA = el('circle', {r:9, class:'pkt'}, svg); R.pB = el('circle', {r:9, class:'pkt'}, svg);
+  R.pC = el('circle', {r:9, class:'pkt'}, svg); R.pD = el('circle', {r:9, class:'pkt dose'}, svg);
+
+  /* chart, bottom right */
+  const CX0 = 900, CX1 = 1540, CY0 = 665, CY1 = 850;
+  R.cx = t => CX0 + (CX1-CX0)*clamp(t/T,0,1);
+  R.cy = v => CY1 - (CY1-CY0)*clamp(v,0,1);
+  el('rect', {x:CX0, y:R.cy(BAND[1]), width:CX1-CX0, height:R.cy(BAND[0])-R.cy(BAND[1]), class:'band'}, svg);
+  el('line', {x1:CX0, y1:CY1, x2:CX1, y2:CY1, class:'axis'}, svg);
+  el('line', {x1:CX0, y1:CY0, x2:CX0, y2:CY1, class:'axis'}, svg);
+  txt(svg, 886, CY1+7, '0', 's-axis-t', {'text-anchor':'end'}); txt(svg, 886, CY0+8, '1', 's-axis-t', {'text-anchor':'end'});
+  R.cycleT = [];
+  for (let k=0;k<K;k++){
+    if (k>0) el('line', {x1:R.cx(k*P), y1:CY0, x2:R.cx(k*P), y2:CY1, class:'grid'}, svg);
+    R.cycleT.push(txt(svg, R.cx(k*P)+6, CY0-8, '', 's-axis-t'));
+  }
+  R.doses = []; for (let k=0;k<K;k++) R.doses.push(el('rect', {x:0, y:CY1, width:0, height:0, class:'dose'}, svg));
+  R.line = el('polyline', {class:'s-line', points:''}, svg);
+  R.dot = el('circle', {cx:CX0, cy:CY1, r:7, class:'dot'}, svg);
+  el('line', {x1:900, y1:606, x2:936, y2:606, class:'s-line'}, svg); R.legState = txt(svg, 946, 614, '', 's-axis-t');
+  el('rect', {x:1100, y:599, width:36, height:14, class:'dose'}, svg); R.legDose = txt(svg, 1146, 614, '', 's-axis-t');
+  el('rect', {x:1350, y:599, width:36, height:14, class:'band'}, svg); R.legBand = txt(svg, 1396, 614, '', 's-axis-t');
+  return R;
+}
+
+function renderSlide(R, t, mode, lang){
+  const S = L[lang], sch = schedule(mode), closed = mode==='closed';
+  const {k, tau, name} = phaseAt(t);
+  const x = stateAt(t, sch), xhat = estimateAt(k, tau, sch), u = doseAt(k, tau, sch, mode);
+  const uk = k<K ? sch.us[k] : (closed ? 0.04 : 0.9);
+  const off = offAt(k, tau, sch), foc = [FOCUS[0]+PXMM*off[0], FOCUS[1]+PXMM*off[1]];
+  const order = ['sense','decode','control','stim','respond'];
+
+  /* caption */
+  const capSet = closed ? S.cap : S.capOpen;
+  const capText = (closed && name==='control') ? S.capControl[Math.min(k, S.capControl.length-1)] : capSet[name];
+  R.capA.textContent = name==='hold' ? (closed ? S.inBand : S.offTarget) : S.pills[order.indexOf(name)];
+  R.capB.textContent = '  ·  ' + capText;
+
+  /* head */
+  R.elecT.textContent = S.eeg; R.transT1.textContent = S.tfus[0]; R.transT2.textContent = S.tfus[1];
+  R.targetT.textContent = S.mriT[0]; R.targetT2.textContent = S.mriT[1];
+  const sensing = closed && (name==='sense' || name==='hold');
+  const flash = name==='respond' && tau>6.55 && tau<6.9;
+  R.elecs.forEach((e,i) => e.classList.toggle('hot', (sensing && Math.sin(t*9+i)>0) || flash));
+  R.wireA.classList.toggle('off', !closed);
+  R.wireA.setAttribute('marker-end', closed ? `url(#arr-${R.uid})` : `url(#arr-off-${R.uid})`);
+  R.aim.setAttribute('x2', foc[0]); R.aim.setAttribute('y2', foc[1]);
+  R.focMark.setAttribute('cx', foc[0]); R.focMark.setAttribute('cy', foc[1]);
+  R.focDot.setAttribute('cx', foc[0]); R.focDot.setAttribute('cy', foc[1]);
+  R.focLbl.setAttribute('x', foc[0]+18); R.focLbl.setAttribute('y', foc[1]-14); R.focLbl.textContent = S.focusLbl;
+  const prevOff = k>0 ? sch.offs[k-1] : [0,0];
+  const steering = closed && k<K && (sch.offs[k][0]!==prevOff[0] || sch.offs[k][1]!==prevOff[1]) && tau>=3.0 && tau<4.4;
+  if (steering){
+    const p0 = [FOCUS[0]+PXMM*prevOff[0], FOCUS[1]+PXMM*prevOff[1]], p1 = [FOCUS[0]+PXMM*sch.offs[k][0], FOCUS[1]+PXMM*sch.offs[k][1]];
+    const L2 = Math.hypot(p1[0]-p0[0], p1[1]-p0[1]), ux = (p1[0]-p0[0])/L2, uy = (p1[1]-p0[1])/L2;
+    R.steer.setAttribute('d', `M${p0[0].toFixed(1)},${p0[1].toFixed(1)} L${(p1[0]-ux*15).toFixed(1)},${(p1[1]-uy*15).toFixed(1)}`);
+    R.steer.style.opacity = tau<4.0 ? 1 : 1-(tau-4.0)/0.4;
+  } else R.steer.style.opacity = 0;
+  const firing = name==='stim' && tau>4.4 && tau<5.9, intensity = uk;
+  R.elems.forEach((e,i) => e.classList.toggle('hot', firing && ((Math.floor((tau-4.4)*18)+i)%3!==0 || intensity>0.5)));
+  R.beam.style.opacity = firing ? 0.35+0.65*intensity : 0;
+  R.beam.setAttribute('d', `M${E1[0].toFixed(1)},${E1[1].toFixed(1)} A${R_IN},${R_IN} 0 0 1 ${E2[0].toFixed(1)},${E2[1].toFixed(1)} L${foc[0].toFixed(1)},${foc[1].toFixed(1)} Z`);
+  R.beamGrad.setAttribute('cx', foc[0]); R.beamGrad.setAttribute('cy', foc[1]);
+  const a0 = Math.atan2(E1[1]-foc[1], E1[0]-foc[0]), a1 = Math.atan2(E2[1]-foc[1], E2[0]-foc[0]);
+  const Reff = Math.hypot(EM[0]-foc[0], EM[1]-foc[1]);
+  let arrive = 0;
+  R.waves.forEach((w,j) => {
+    const te = 4.5 + 0.22*j, s = (tau-te)/0.5;
+    if (name!=='stim' || s<0 || s>1){ w.style.opacity = 0; return; }
+    w.setAttribute('d', arcAt(foc, Math.max(Reff*(1-s),2), a0, a1));
+    w.setAttribute('stroke-width', (3+4*s).toFixed(1));
+    w.style.opacity = (0.3+0.7*s)*(0.35+0.65*intensity);
+    if (s>0.85) arrive = Math.max(arrive, (s-0.85)/0.15);
+  });
+  const glow = name==='stim' && tau>4.9 ? intensity*(0.55+0.45*arrive) : (name==='respond' ? intensity*Math.max(0,1-(tau-6)/0.6) : 0);
+  R.focus.style.opacity = glow; R.focus.setAttribute('r', 36+28*arrive*intensity);
+  R.focus.setAttribute('cx', foc[0]); R.focus.setAttribute('cy', foc[1]);
+  R.ripples.forEach((c,i) => {
+    const s = (tau-6.0-0.25*i)/0.65;
+    c.setAttribute('cx', foc[0]); c.setAttribute('cy', foc[1]);
+    if (name!=='respond' || s<0 || s>1){ c.style.opacity = 0; return; }
+    c.setAttribute('r', 20+250*s); c.style.opacity = (1-s)*0.8*(0.3+0.7*intensity); c.setAttribute('stroke-width', (4-3*s).toFixed(1));
+  });
+
+  /* nodes */
+  const active = {sense: closed && (name==='sense' || name==='hold'), decode: closed && (name==='decode' || name==='hold'), control: name==='control', stim: name==='stim'};
+  for (const key of ['sense','decode','control','stim']){
+    const n = R.node[key];
+    n.g.classList.toggle('on', !!active[key]);
+    n.g.classList.toggle('dim', !closed && (key==='sense' || key==='decode'));
+    n.t.textContent = S.pills[order.indexOf(key)];
+    n.nu.textContent = S.notUsed;
+    if (!closed && (key==='sense' || key==='decode')) n.nu.removeAttribute('hidden'); else n.nu.setAttribute('hidden','');
+  }
+  const sN = R.node.sense; let pts = '';
+  for (let i=0;i<=120;i++){ const tt = t-3+3*i/120, xx = sN.x+24+252*i/120; pts += `${xx.toFixed(1)},${(sN.y+96-0.9*eeg(1, tt, stateAt(tt, sch))).toFixed(1)} `; }
+  R.sEeg.setAttribute('points', pts);
+  const showEst = closed && xhat!==null;
+  R.sMarker.style.opacity = showEst ? 1 : 0; R.sMarker.setAttribute('cx', R.sbx(showEst ? xhat : 0));
+  const settled = closed && xhat!==null && ((k<K && (tau>=2.75 || (k>0 && tau<2.2))) || (k>=K && tau>0.6));
+  const status = settled ? (xhat > BAND[1] ? 'bad' : xhat < BAND[0] ? 'bad' : 'good') : null;
+  R.sMarker.classList.toggle('bad', status==='bad'); R.sMarker.classList.toggle('good', status==='good');
+  R.sXhat.textContent = showEst ? xhat.toFixed(2) : S.wait;
+  R.sDose.textContent = `${(10*u).toFixed(1)} ${S.unit}`;
+  R.sFoc.textContent = `Δ ${Math.hypot(off[0], off[1]).toFixed(1)} mm`;
+  R.sPrf.textContent = S.prf;
+  R.sPulses.forEach((p,i) => {
+    const c = R.pulseC;
+    let r, op;
+    if (firing){ const f = ((tau-4.4)*2.2 + i/4) % 1; r = 96*(1-f)+6; op = 0.35+0.65*f; }
+    else { r = 24+24*i; op = 0.35; }
+    const a0 = -0.62, a1 = 0.62;
+    p.setAttribute('d', `M${(c[0]+r*Math.cos(a0)).toFixed(1)},${(c[1]+r*Math.sin(a0)).toFixed(1)} A${r.toFixed(1)},${r.toFixed(1)} 0 0 1 ${(c[0]+r*Math.cos(a1)).toFixed(1)},${(c[1]+r*Math.sin(a1)).toFixed(1)}`);
+    p.style.opacity = op;
+  });
+
+  /* arrows + packets */
+  [R.arrAB, R.arrBC].forEach(a => a.classList.toggle('off', !closed));
+  const along = (elm, path, s) => { if (s===null){ elm.style.opacity = 0; return; } const len = path.getTotalLength(), p = path.getPointAtLength(len*clamp(s,0,1)); elm.setAttribute('cx', p.x); elm.setAttribute('cy', p.y); elm.style.opacity = 1; };
+  along(R.pA, R.wireA, closed && name==='sense' && tau>0.3 && tau<1.1 ? (tau-0.3)/0.8 : null);
+  along(R.pB, R.arrAB, closed && name==='decode' && tau<2.0 ? (tau-1.6)/0.4 : null);
+  along(R.pC, R.arrBC, closed && name==='control' && tau<3.2 ? (tau-2.8)/0.4 : null);
+  if (name==='stim' && tau<4.45) along(R.pD, tau<4.2 ? R.arrCD : R.cable, tau<4.2 ? (tau-4.0)/0.2 : (tau-4.2)/0.25); else R.pD.style.opacity = 0;
+
+  /* chart */
+  R.cycleT.forEach((c,i) => c.textContent = S.cycle(i+1));
+  R.legState.textContent = S.legState; R.legDose.textContent = S.legDose; R.legBand.textContent = S.legBand;
+  let cp = '';
+  for (let tt=0; tt<=t; tt+=0.08) cp += `${R.cx(tt).toFixed(1)},${R.cy(stateAt(tt,sch)).toFixed(1)} `;
+  cp += `${R.cx(t).toFixed(1)},${R.cy(x).toFixed(1)}`;
+  R.line.setAttribute('points', cp);
+  R.dot.setAttribute('cx', R.cx(t)); R.dot.setAttribute('cy', R.cy(x));
+  R.doses.forEach((d,kk) => {
+    const t0 = kk*P+4.5, t1 = kk*P+5.8;
+    if (t < t0){ d.setAttribute('width', 0); return; }
+    const hgt = 120*sch.us[kk];
+    d.setAttribute('x', R.cx(t0)); d.setAttribute('width', Math.max(1, R.cx(Math.min(t,t1))-R.cx(t0)));
+    d.setAttribute('y', 850-hgt); d.setAttribute('height', hgt);
+  });
+}
+
+/* ---------- app ---------- */
+const stored = k => { try { return localStorage.getItem('cltus-'+k); } catch(e){ return null; } };
+const store = (k,v) => { try { localStorage.setItem('cltus-'+k, v); } catch(e){} };
+const state = {
+  t: Math.max(0, parseFloat(q.get('t')||'0')||0) % T,
+  playing: q.get('paused')!=='1',
+  speed: parseFloat(q.get('speed')||'1')||1,
+  lang: ['en','zh'].includes(q.get('lang')) ? q.get('lang') : (['en','zh'].includes(stored('lang')) ? stored('lang') : 'en'),
+  mode: ['closed','open'].includes(q.get('mode')) ? q.get('mode') : (['closed','open'].includes(stored('mode')) ? stored('mode') : 'closed'),
+  layout: q.get('layout')==='slide' ? 'slide' : (q.get('layout')==='full' ? 'full' : (stored('layout')==='slide' ? 'slide' : 'full')),
+};
+const app = document.getElementById('app'), wrap = document.getElementById('stageWrap');
+if (q.get('theme')==='light' || q.get('theme')==='dark') document.documentElement.setAttribute('data-theme', q.get('theme'));
+const sheetN = parseInt(q.get('sheet')||'0', 10);
+
+if (sheetN > 0){
+  /* frame-sheet mode for offline export: N stages stacked, each at t0 + i*dt */
+  document.body.classList.add('sheet');
+  document.getElementById('bar').hidden = true; document.getElementById('hint').hidden = true;
+  const dt = parseFloat(q.get('dt')||'0.0416667'), w = parseInt(q.get('w')||'1600',10), h = Math.round(w*H/W);
+  for (let i=0;i<sheetN;i++){
+    const d = document.createElement('div'); d.style.width = w+'px'; d.style.height = h+'px'; wrap.appendChild(d);
+    const R = state.layout==='slide' ? buildSlide(d, i) : buildStage(d, i);
+    (state.layout==='slide' ? renderSlide : render)(R, (state.t + i*dt) % T, state.mode, state.lang);
+  }
+} else {
+  let R = state.layout==='slide' ? buildSlide(wrap, 0) : buildStage(wrap, 0);
+  const rebuild = () => { wrap.innerHTML = ''; R = state.layout==='slide' ? buildSlide(wrap, 0) : buildStage(wrap, 0); };
+  const draw = () => (state.layout==='slide' ? renderSlide : render)(R, state.t, state.mode, state.lang);
+  if (q.get('hide')==='1'){ document.getElementById('bar').hidden = true; document.getElementById('hint').hidden = true; }
+  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced && !q.has('t')){ state.playing = false; state.t = 4.9; }
+
+  const btnPlay = document.getElementById('btnPlay');
+  const syncUI = () => {
+    btnPlay.textContent = state.playing ? (state.lang==='zh' ? '暂停' : 'Pause') : (state.lang==='zh' ? '播放' : 'Play');
+    document.getElementById('btnRestart').textContent = state.lang==='zh' ? '重播' : 'Restart';
+    document.getElementById('btnPrev').textContent = state.lang==='zh' ? '◀ 上一步' : '◀ Step';
+    document.getElementById('btnNext').textContent = state.lang==='zh' ? '下一步 ▶' : 'Step ▶';
+    document.getElementById('btnFs').textContent = state.lang==='zh' ? '全屏' : 'Fullscreen';
+    document.querySelectorAll('#grpMode button').forEach(b => { b.classList.toggle('on', b.dataset.mode===state.mode); b.textContent = state.lang==='zh' ? (b.dataset.mode==='closed'?'闭环':'开环') : (b.dataset.mode==='closed'?'Closed loop':'Open loop'); });
+    document.querySelectorAll('#grpLang button').forEach(b => b.classList.toggle('on', b.dataset.lang===state.lang));
+    document.querySelectorAll('#grpLayout button').forEach(b => { b.classList.toggle('on', b.dataset.layout===state.layout); b.textContent = state.lang==='zh' ? (b.dataset.layout==='slide'?'紧凑':'完整') : (b.dataset.layout==='slide'?'Compact':'Full'); });
+    document.querySelectorAll('#grpSpeed button').forEach(b => b.classList.toggle('on', parseFloat(b.dataset.speed)===state.speed));
+    document.getElementById('hint').textContent = state.lang==='zh' ? '空格 播放/暂停 · ←/→ 单步 · M 模式 · L 语言 · C 布局 · F 全屏' : 'Space play/pause · ←/→ step · M mode · L language · C layout · F fullscreen';
+  };
+  const bounds = [];
+  for (let k=0;k<K;k++) for (const o of [0,1.6,2.8,4.0,6.0]) bounds.push(k*P+o);
+  bounds.push(K*P);
+  const step = dir => {
+    state.playing = false;
+    if (dir>0){ const nb = bounds.find(b => b > state.t+0.02); state.t = nb===undefined ? 0 : nb; }
+    else { const pb = [...bounds].reverse().find(b => b < state.t-0.02); state.t = pb===undefined ? bounds[bounds.length-1] : pb; }
+    syncUI(); draw();
+  };
+  btnPlay.onclick = () => { state.playing = !state.playing; syncUI(); };
+  document.getElementById('btnRestart').onclick = () => { state.t = 0; state.playing = true; syncUI(); };
+  document.getElementById('btnPrev').onclick = () => step(-1);
+  document.getElementById('btnNext').onclick = () => step(1);
+  document.querySelectorAll('#grpMode button').forEach(b => b.onclick = () => { state.mode = b.dataset.mode; store('mode', state.mode); syncUI(); draw(); });
+  document.querySelectorAll('#grpLang button').forEach(b => b.onclick = () => { state.lang = b.dataset.lang; store('lang', state.lang); syncUI(); draw(); });
+  document.querySelectorAll('#grpSpeed button').forEach(b => b.onclick = () => { state.speed = parseFloat(b.dataset.speed); syncUI(); });
+  document.querySelectorAll('#grpLayout button').forEach(b => b.onclick = () => { state.layout = b.dataset.layout; store('layout', state.layout); rebuild(); syncUI(); draw(); });
+  const fsBtn = document.getElementById('btnFs');
+  fsBtn.onclick = () => { if (document.fullscreenElement) document.exitFullscreen(); else if (app.requestFullscreen) app.requestFullscreen(); };
+  let idleTimer = null;
+  const poke = () => { app.classList.remove('idle'); clearTimeout(idleTimer); if (document.fullscreenElement) idleTimer = setTimeout(() => app.classList.add('idle'), 2200); };
+  document.addEventListener('fullscreenchange', () => { app.classList.toggle('fs', !!document.fullscreenElement); poke(); });
+  document.addEventListener('mousemove', poke);
+  document.addEventListener('keydown', e => {
+    if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
+    if (e.code==='Space'){ e.preventDefault(); btnPlay.onclick(); }
+    else if (e.key==='ArrowRight') step(1);
+    else if (e.key==='ArrowLeft') step(-1);
+    else if (e.key==='r' || e.key==='R') document.getElementById('btnRestart').onclick();
+    else if (e.key==='m' || e.key==='M'){ state.mode = state.mode==='closed' ? 'open' : 'closed'; store('mode', state.mode); syncUI(); draw(); }
+    else if (e.key==='l' || e.key==='L'){ state.lang = state.lang==='en' ? 'zh' : 'en'; store('lang', state.lang); syncUI(); draw(); }
+    else if (e.key==='f' || e.key==='F') fsBtn.onclick();
+    else if (e.key==='c' || e.key==='C'){ state.layout = state.layout==='slide' ? 'full' : 'slide'; store('layout', state.layout); rebuild(); syncUI(); draw(); }
+    poke();
+  });
+
+  syncUI();
+  let last = null;
+  const tick = now => {
+    if (last===null) last = now;
+    const dt = Math.min(0.1, (now-last)/1000); last = now;
+    if (state.playing){ state.t = (state.t + dt*state.speed) % T; }
+    draw();
+    requestAnimationFrame(tick);
+  };
+  draw();
+  requestAnimationFrame(tick);
+}
+})();
+</script>
+</body></html>

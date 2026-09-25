@@ -1,14 +1,6 @@
 \section{Experiments}
 \label{sec:experiments}
-In our experiments, we evaluate \phil both on benchmark heuristic learning datasets \cite{bhardwaj2017learning} (Section \ref{sec:experiments-grids}) as well on a diverse set of graph datasets (Section \ref{sec:experiments-diversity}). Finally, we show that \phil can be applied to efficient planning in the context of drone flight (Section \ref{sec:experiments-drone}). Our main goal is to assess how \phil compares to baseline methods in terms of necessary expansions before the goal node is reached. Please refer to the supplementary material for information about baselines, an ablation study, and additional experiment details.
-
-%Our goal is to answer the following questions: 
-
-%\begin{itemize}
-    %\item How does \phil compare with previous work?
-    %\item Can \phil directly learn useful search heuristics in real-life graphs with various structures?
-    %\item Can \phil be used for time-critical robotic planning scenarios? 
-%\end{itemize}
+In our experiments, we evaluate \phil both on benchmark heuristic learning datasets \cite{bhardwaj2017learning} (Section \ref{sec:experiments-grids}) as well on a diverse set of graph datasets (Section \ref{sec:experiments-diversity}). Finally, we show that \phil can be applied to efficient planning in the context of drone flight (Section \ref{sec:experiments-drone}). Our main goal is to assess how \phil compares to baseline methods in terms of necessary expansions before the goal node is reached.
 
 
 \subsection{Heuristic search in grids}
@@ -62,7 +54,7 @@ Multiple Bugtraps   & \frame{\includegraphics[width=0.6cm, height=0.6cm]{figures
 
 \textbf{Discussion.} As we can see in Table \ref{tab:table-1}, \phil outperforms the best baseline (\textit{\sail}) on all datasets, with an average reduction of explored nodes before $v_g$ is found of $58.5 \%$.
 %Even with \textit{CEM} performing better than \phil on \textit{Single Bugtrap}, \phil reduces the necessary search effort compared with the best baseline on each dataset by \michal{$40.8 \%$} on average.
-Qualitatively, observing Figure \ref{fig:sail-comparison}, we can attribute these results to \phil's ability to \textbf{reduce the redundancy in explored nodes} during a search. Further, \phil is also \textbf{capable of escaping local minima}, which is illustrated in Figure \ref{fig:local-min}. However, note that we occasionally observe failure cases in practice, where \phil gets stuck in a bug trap-like structure. We discuss possible remedies and opportunities for future work in the supplementary material.
+Qualitatively, observing Figure \ref{fig:sail-comparison}, we can attribute these results to \phil's ability to \textbf{reduce the redundancy in explored nodes} during a search. Further, \phil is also \textbf{capable of escaping local minima}, which is illustrated in Figure \ref{fig:local-min}. However, note that we occasionally observe failure cases in practice, where \phil gets stuck in a bug trap-like structure.
 
 \xhdr{Runtime \& convergence speed} \phil converges in up to $N = 36$ iterations, with $m = 1, t_\tau = 32$ (i.e., after observing less than $N * t_\tau * max(|\VS_{new}|) \approx 9,216$ shortest path distances, where we take $max(|\VS_{new}|) = 8$ as the maximal size of $\VS_{new}$). According to figures reported in \cite{bhardwaj2017learning}, this is approximately $5\times$ less data than it takes for \sail to converge.
 %Although neither the \sail or \phil code-bases were optimized for runtime speed, we found that our implementation of \phil runs about $7 \times$ faster than the publicly available implementation of \sail on the \textit{Gaps+Forest} dataset.
@@ -172,7 +164,7 @@ Similarly as in Section \ref{sec:experiments-grids}, our $\textsc{MLP}$ has four
   \label{fig:room-adv}
 \end{wrapfigure}
 
-In our final experiment, we use \phil to plan collision-free paths in a practical drone flight use case within an indoor environment. We built our environment using the CoppeliaSim simulator \cite{coppeliaSim}, and the Ivy framework \cite{lenton2021ivy}. Figure \ref{fig:room-adv}  presents the environment which we refer to as \textit{room adversarial} in Table \ref{tab:table-3}. For more detail about each environment, please refer to the supplementary material. We discretize the environments into 3D grid graphs of size $50 \times 50 \times 25$, and randomly remove $5$ sub-graphs of size  $5 \times 5 \times 5$ both during training and testing, this way simulating real-life planning scenarios with random obstacles. The hyperparameter configuration and the specific architecture we utilize are equivalent to Section \ref{sec:experiments-grids}, but with $n = 4$. Likewise, the node features are 3D grid coordinates, and the baselines include supervised learning (SL), $h_{euc}$, A*, and BFS, similarly as in Sections \ref{sec:experiments-grids}, \ref{sec:experiments-diversity}. In Table \ref{tab:table-3} we report the ratio of expanded nodes with respect to $h_{euc}$. 
+In our final experiment, we use \phil to plan collision-free paths in a practical drone flight use case within an indoor environment. We built our environment using the CoppeliaSim simulator \cite{coppeliaSim}, and the Ivy framework \cite{lenton2021ivy}. Figure \ref{fig:room-adv}  presents the environment which we refer to as \textit{room adversarial} in Table \ref{tab:table-3}. We discretize the environments into 3D grid graphs of size $50 \times 50 \times 25$, and randomly remove $5$ sub-graphs of size  $5 \times 5 \times 5$ both during training and testing, this way simulating real-life planning scenarios with random obstacles. The hyperparameter configuration and the specific architecture we utilize are equivalent to Section \ref{sec:experiments-grids}, but with $n = 4$. Likewise, the node features are 3D grid coordinates, and the baselines include supervised learning (SL), $h_{euc}$, A*, and BFS, similarly as in Sections \ref{sec:experiments-grids}, \ref{sec:experiments-diversity}. In Table \ref{tab:table-3} we report the ratio of expanded nodes with respect to $h_{euc}$. 
 
 \xhdr{Video demo} We provide a video demonstration of \phil running in \textit{room adversarial}: \url{https://cutt.ly/eniu5ax}.
 \begin{table*}[!htb]

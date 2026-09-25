@@ -1,0 +1,112 @@
+\section{Experiments}
+
+In this section, we evaluate whether the pretrained mind model transfers to motor decoding and whether the pretrained world model transfers from EEG-derived actions to real-world action signals.
+
+\subsection{Experimental Setup}
+
+\paragraph{Pretraining.}
+We pretrain \mwm{} on EgoBrain~\citep{lin2026egobrain}, using synchronized EEG and egocentric video from all 40 participants without downstream labels. The corpus contains 56,950 non-overlapping four-second clips, totaling 63.28 hours. Each training example contains a one-second EEG window ending at an anchor frame, the anchor frame itself, and a target frame $0.2$\,s later.
+
+We train in FP32 using AdamW with a batch size of 128, a learning rate of $5\times10^{-4}$, weight decay of 0.05, and gradient clipping at 0.8. The learning rate follows an iteration-wise cosine schedule to $10^{-5}$ without warmup. All downstream experiments use the same fixed pretrained checkpoint.
+
+\paragraph{Linear-probe evaluation.}
+We evaluate every backbone on the same one-second EEG input sampled at 200\,Hz. We freeze the backbone in evaluation mode and train only a linear prediction head. For \mwm{}, we discard the visual encoder and frame predictor, disable stochastic flips, and flatten the frozen EEG token grid before applying the head. For regression, we additionally apply a non-affine LayerNorm and standardize each target dimension using training-split statistics.
+
+We train the \mwm{} probes with AdamW using a learning rate of $5\times10^{-5}$, weight decay of 0.01, a batch size of 64, an iteration-wise cosine schedule to $10^{-6}$, and gradient clipping at 1. Classification probes are trained for 80 epochs with cross-entropy and 0.1 label smoothing, while regression probes are trained for 10 epochs with MSE. We select checkpoints by validation balanced accuracy for classification and validation Pearson correlation for regression. We report test balanced accuracy for classification and pooled test Pearson correlation for regression, averaging correlations across output dimensions for vector targets. All downstream results are reported as the mean and sample standard deviation over three seeds.
+
+\paragraph{Baselines.}
+We compare with BIOT, LaBraM, CBraMod, CSBrain, and REVE, using each model's channel interface and linear-probe recipe. LaBraM pretraining includes PhysioNet-MI, while REVE pretraining includes Ofner2017 and Weibo2014; the remaining reported model--dataset pairs have no known pretraining overlap.
+
+\subsection{Regression Tasks}
+
+\paragraph{Tasks.}
+We evaluate continuous motor decoding on five tasks in Table~\ref{tab:reg-pooled-lp}. ForceGameReg predicts plateau force, SrisReachME predicts future planar reaching speed, OfnerApertureME predicts future hand-aperture change, OfnerKinME predicts future three-dimensional hand speed, and BiomechMag predicts future wrist-speed magnitude. Except for ForceGameReg, each task uses one-second EEG windows with a $0.2$\,s stride and predicts movement from $0.2$ to $0.4$\,s after the window ends.
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lccccc}
+\toprule
+Model & ForceGameReg & SrisReachME & OfnerApertureME & OfnerKinME & BiomechMag \\
+\midrule
+BIOT & 0.034{\scriptsize\,$\pm$0.017} & 0.108{\scriptsize\,$\pm$0.006} & 0.036{\scriptsize\,$\pm$0.003} & -0.019{\scriptsize\,$\pm$0.002} & 0.039{\scriptsize\,$\pm$0.001}$^{\dagger}$ \\
+LaBraM & 0.107{\scriptsize\,$\pm$0.003} & 0.174{\scriptsize\,$\pm$0.003} & 0.060{\scriptsize\,$\pm$0.003} & -0.003{\scriptsize\,$\pm$0.009} & 0.119{\scriptsize\,$\pm$0.001} \\
+CBraMod & 0.102{\scriptsize\,$\pm$0.007} & 0.218{\scriptsize\,$\pm$0.002} & 0.080{\scriptsize\,$\pm$0.006} & 0.073{\scriptsize\,$\pm$0.010} & 0.138{\scriptsize\,$\pm$0.001} \\
+CSBrain & 0.115{\scriptsize\,$\pm$0.004} & 0.185{\scriptsize\,$\pm$0.000} & 0.047{\scriptsize\,$\pm$0.001} & 0.059{\scriptsize\,$\pm$0.013} & 0.136{\scriptsize\,$\pm$0.002} \\
+REVE & 0.093{\scriptsize\,$\pm$0.023} & 0.218{\scriptsize\,$\pm$0.001} & 0.161{\scriptsize\,$\pm$0.013} & 0.187{\scriptsize\,$\pm$0.020} & 0.153{\scriptsize\,$\pm$0.005} \\
+\midrule
+\textbf{MWM (ours)} & \textbf{0.149{\scriptsize\,$\pm$0.025}} & \textbf{0.232{\scriptsize\,$\pm$0.009}} & \textbf{0.200{\scriptsize\,$\pm$0.051}} & \textbf{0.203{\scriptsize\,$\pm$0.013}} & \textbf{0.157{\scriptsize\,$\pm$0.002}} \\
+\bottomrule
+\end{tabular}
+\caption{Pearson correlation, linear probe. Mean $\pm$ s.d. over 3 seeds. $^{\dagger}$On BiomechMag, BIOT uses its native-montage checkpoint, because its published bipolar montage cannot be constructed from the eight available channels.}
+\label{tab:reg-pooled-lp}
+\end{table}
+
+\paragraph{Results.}
+As shown in Table~\ref{tab:reg-pooled-lp}, \mwm{} achieves the highest Pearson correlation on all \mwmRegWins{} tasks. Averaged across tasks, it improves Pearson correlation by \mwmRegGainPct{}\% over the strongest single baseline.
+
+\subsection{Classification Tasks}
+
+\paragraph{Tasks.}
+We evaluate six motor-classification tasks in Table~\ref{tab:cls-lp}: PhysioNet-MI, FineMI, Ofner2017ME, Ofner2017MI, Weibo2014, and Jeong2020. These benchmarks span both motor execution and motor imagery. All models use the same task-specific one-second interval and participant-disjoint train, validation, and test splits.
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lcccccc}
+\toprule
+Model & PhysioNet-MI & FineMI & Ofner2017ME & Weibo2014 & Ofner2017MI & Jeong2020 \\
+\midrule
+BIOT & 0.266{\scriptsize\,$\pm$0.007} & 0.172{\scriptsize\,$\pm$0.009} & 0.149{\scriptsize\,$\pm$0.020} & 0.161{\scriptsize\,$\pm$0.003} & 0.147{\scriptsize\,$\pm$0.005} & 0.097{\scriptsize\,$\pm$0.003} \\
+LaBraM & 0.447{\scriptsize\,$\pm$0.012} & 0.179{\scriptsize\,$\pm$0.014} & 0.160{\scriptsize\,$\pm$0.008} & 0.185{\scriptsize\,$\pm$0.020} & 0.158{\scriptsize\,$\pm$0.001} & 0.118{\scriptsize\,$\pm$0.008} \\
+CBraMod & 0.587{\scriptsize\,$\pm$0.006} & 0.199{\scriptsize\,$\pm$0.002} & 0.177{\scriptsize\,$\pm$0.026} & 0.183{\scriptsize\,$\pm$0.002} & 0.147{\scriptsize\,$\pm$0.003} & 0.146{\scriptsize\,$\pm$0.000} \\
+CSBrain & 0.552{\scriptsize\,$\pm$0.009} & 0.183{\scriptsize\,$\pm$0.002} & 0.174{\scriptsize\,$\pm$0.008} & 0.162{\scriptsize\,$\pm$0.001} & 0.148{\scriptsize\,$\pm$0.005} & 0.149{\scriptsize\,$\pm$0.006} \\
+REVE & 0.562{\scriptsize\,$\pm$0.001} & 0.190{\scriptsize\,$\pm$0.004} & 0.187{\scriptsize\,$\pm$0.009} & 0.186{\scriptsize\,$\pm$0.008} & 0.154{\scriptsize\,$\pm$0.001} & 0.138{\scriptsize\,$\pm$0.004} \\
+\midrule
+\textbf{MWM (ours)} & \textbf{0.599{\scriptsize\,$\pm$0.005}} & \textbf{0.200{\scriptsize\,$\pm$0.005}} & \textbf{0.202{\scriptsize\,$\pm$0.007}} & \textbf{0.187{\scriptsize\,$\pm$0.005}} & \textbf{0.165{\scriptsize\,$\pm$0.002}} & \textbf{0.158{\scriptsize\,$\pm$0.004}} \\
+\bottomrule
+\end{tabular}
+\caption{Classification accuracy, linear probe. Mean $\pm$ s.d. over 3 seeds.}
+\label{tab:cls-lp}
+\end{table}
+
+\paragraph{Results.}
+As shown in Table~\ref{tab:cls-lp}, \mwm{} achieves the highest balanced accuracy on all \mwmClsWins{} tasks. Averaged across tasks, it improves balanced accuracy by \mwmClsGainPct{}\% over the strongest single baseline.
+
+\subsection{World Models}
+\label{sec:world-action-probe}
+
+We evaluate the pretrained world models by mapping synchronized IMU measurements to their frozen action interfaces. We train the same lightweight IMU adapter for each model and predict frozen DINOv2 features $0.2$\,s ahead under within-recording and held-out-subject splits.
+
+\paragraph{Baselines and Evaluation.}
+We compare \mwm{} with a predictor pretrained using inverse-dynamics latent actions~\citep{garrido2026lawm} and a randomly initialized predictor. All models use the same inputs, targets, predictor architecture, IMU-adapter architecture, and $128$-dimensional action interface. We report L1 error, cosine similarity, and the increase in error after shuffling the IMU actions.
+
+\begin{table}[ht]
+\small
+\setlength{\tabcolsep}{4pt}
+\caption{IMU action probing on held-out next-step prediction. All pretrained models use the same predictor and a $128$-dimensional action interface.}
+\label{tab:wm-probe}
+\begin{center}
+\begin{tabular}{lcccccc}
+\toprule
+& \multicolumn{3}{c}{Within recording}
+& \multicolumn{3}{c}{Held-out subjects} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+Model & L1$\downarrow$ & Cos.$\uparrow$ & $\Delta_{\mathrm{act}}\uparrow$
+& L1$\downarrow$ & Cos.$\uparrow$ & $\Delta_{\mathrm{act}}\uparrow$ \\
+\midrule
+\textbf{\mwm{} (ours)} & 0.5009 & 0.8773 & \textbf{+0.0079} & \textbf{0.4933} & 0.8850 & \textbf{+0.0057} \\
+% Hand action & \textbf{0.5004} & 0.8776 & +0.0068 & -- & -- & -- \\
+Latent action & 0.6520 & 0.8463 & +0.0020 & 0.5543 & 0.8737 & +0.0029 \\
+Random init. & 0.7334 & 0.8334 & +0.0000 & 0.7224 & 0.8407 & +0.0000 \\
+% Copy frame & 0.5036 & \textbf{0.8783} & -- & 0.4961 & \textbf{0.8859} & -- \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\end{table}
+
+\paragraph{Results.}
+Table~\ref{tab:wm-probe} shows that \mwm{} achieves lower L1 error and a larger action gap than the latent-action model on both splits. Relative to the latent-action model, these L1 errors represent reductions of \mwmWMWithinGainPct{}\% within recordings and \mwmWMSubjectGainPct{}\% on held-out subjects. The randomly initialized predictor has a zero action gap, whereas \mwm{} remains sensitive to matched IMU actions on both splits.

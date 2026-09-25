@@ -1,0 +1,65 @@
+\section{Dataset Details}
+\label{app:dataset-details}
+
+We describe the pretraining corpus and the eleven downstream tasks reported in Tables~\ref{tab:reg-pooled-lp} and~\ref{tab:cls-lp}. For each task, all models receive the same one-second EEG input at 200\,Hz and use the same train, validation, and test splits.
+
+\subsection{Pretraining Corpus}
+
+\paragraph{EgoBrain}
+EgoBrain~\citep{lin2026egobrain} records EEG, egocentric video, and wearable IMU from 40 participants performing everyday activities. We use the 32 EEG channels and egocentric video from all participants for pretraining. From each 114-channel EDF recording, we retain the fixed set of 32 EEG channels. We then apply a $0.3$--$75$\,Hz band-pass filter and a 50\,Hz notch filter, resample the signal from 256 to 200\,Hz, convert it to $\mu$V, and clip it to $\pm300\,\mu$V. We do not apply rereferencing, bad-channel detection or interpolation, ICA, or additional artifact rejection. This preprocessing yields 56,950 non-overlapping four-second clips, totaling 63.28 hours.
+
+We estimate EEG--video synchronization independently for each participant. All 40 recordings pass the synchronization quality check. Across participants, the residual median absolute deviation has a median of 7.6\,ms and a maximum of 39.8\,ms. Video frames are resized to a short side of 256 pixels and center-cropped to $224\times224$. Each pretraining example contains a one-second EEG interval ending at an anchor frame, the anchor frame itself, and the target frame $0.2$\,s later. All participants are used for pretraining without a validation split. The four arm- and wrist-mounted IMU units are not used for pretraining; they are used only for the world-model evaluation in Appendix~\ref{app:world-model-probe}.
+
+\subsection{Continuous Motor Regression}
+
+Except for ForceGameReg, the regression tasks use one-second EEG windows with a $0.2$\,s stride and predict movement during the interval from $0.2$ to $0.4$\,s after each window. We standardize every target dimension using statistics computed from the training split only.
+
+\paragraph{ForceGameReg}
+ForceGameReg uses the Force Game dataset~\citep{li2026forcegame}. The study recruited 31 three-person groups; one non-compliant participant was excluded, leaving 64-channel EEG from 92 participants. The released 500\,Hz epochs were filtered at 1--40\,Hz by the dataset authors. We use EEG from $0.8$ to $1.8$\,s of each trial and predict the mean plateau force from $2$ to $4$\,s. We convert the EEG to $\mu$V, resample it to 200\,Hz, apply common-average referencing, and reject examples with $\max |\mathrm{EEG}|>800\,\mu$V. Groups, rather than individual participants, are assigned to splits so that participants sharing a trial remain together. The train, validation, and test splits contain 21,040, 2,681, and 3,556 examples, respectively.
+
+\paragraph{SrisReachME}
+SrisReachME is derived from a discrete center-out reaching study~\citep{srisrisawang2024simultaneous}. We use 60 EEG channels from 19 participants, apply common-average referencing and a zero-phase 0.5\,Hz high-pass filter, and resample the recordings from 500 to 200\,Hz. We reject windows with $\max |\mathrm{EEG}|>800\,\mu$V or mean target-interval validity below 0.5. The target is the mean of the instantaneous planar reaching-speed magnitudes over the prediction interval. We use 13 participants for training, participants \{2, 8, 14\} for validation, and participants \{3, 9, 15\} for testing, resulting in 511,120, 118,314, and 115,879 examples.
+
+\paragraph{OfnerApertureME and OfnerKinME}
+Both tasks use the same 61-channel motor-execution recordings from 15 participants~\citep{ofner2017upper}. We interpolate missing EEG values, apply common-average referencing and a zero-phase 0.5\,Hz high-pass filter, resample from 512 to 200\,Hz, and construct continuous windows that include inter-trial rest. We remove windows with $\max |\mathrm{EEG}|>800\,\mu$V. For OfnerApertureME, we standardize the 11--13 valid CyberGlove sensors within each participant, low-pass filter them at 1\,Hz, and fit the first principal component. The target is the mean absolute rate of change of this component. For OfnerKinME, we derive velocity from three-dimensional hand position sampled at 64\,Hz and predict the mean of the instantaneous three-dimensional speed magnitudes. Participants \{1, 4--13\}, \{2, 14\}, and \{3, 15\} form the train, validation, and test splits for both tasks, containing 175,950, 32,327, and 31,577 examples.
+
+\paragraph{BiomechMag}
+BiomechMag records wrist movements from 45 participants~\citep{perezblanco2026wrist} using eight central electrodes: C3, C1, Cz, C2, C4, CP3, CPz, and CP4. We use runs 3--9, apply common-average referencing, and resample the continuous recordings from 512 to 200\,Hz without additional software filtering. We remove windows with $\max |\mathrm{EEG}|>800\,\mu$V. The target is the magnitude of the mean two-dimensional wrist-velocity vector over the prediction interval. A participant-level split based on participant index gives 27, 9, and 9 participants, corresponding to 369,642, 125,663, and 125,654 train, validation, and test examples. For BiomechMag, BIOT uses its native-montage checkpoint because its published bipolar montage cannot be constructed from the eight available channels. We mark this entry with $\dagger$ in Table~\ref{tab:reg-pooled-lp}.
+
+\subsection{Motor Classification}
+
+Each classification task uses the first one-second interval specified below. All splits are participant-disjoint.
+
+\paragraph{PhysioNet-MI}
+PhysioNet-MI~\citep{schalk2009eegmmidb} contains 64-channel motor-imagery EEG from 109 participants. We use the runs for left fist, right fist, both fists, and both feet, giving four classes. The EEG is common-average referenced, high-pass filtered at 0.3\,Hz, notch filtered at 60\,Hz, and resampled to 200\,Hz. We extract the four seconds following each cue and provide the first second to the model. The train, validation, and test splits contain 6,300, 1,734, and 1,803 examples from 70, 19, and 20 participants, respectively.
+
+\paragraph{FineMI}
+FineMI~\citep{yi2025multimodal} contains eight classes of unilateral upper-limb motor imagery from 18 participants and 62 EEG channels. The released four-second epochs were already common-average referenced and filtered at 4--40\,Hz. Following the benchmark preprocessing, we convert the signals to $\mu$V, apply common-average referencing a second time, resample from 250 to 200\,Hz, and use the first second of each epoch. The train, validation, and test splits contain 3,840, 960, and 960 examples from 12, 3, and 3 participants, respectively.
+
+\paragraph{Ofner2017ME and Ofner2017MI}
+Ofner2017~\citep{ofner2017upper} provides matched motor-execution and motor-imagery sessions from 15 participants with 61 EEG channels. Both tasks classify elbow flexion, elbow extension, forearm supination, forearm pronation, hand closing, hand opening, and rest. We apply common-average referencing, high-pass filter at 0.5\,Hz, resample from 512 to 200\,Hz, and reject trials with $\max |\mathrm{EEG}|>800\,\mu$V. The model receives the first second of the three-second interval following the cue. Participants \{1, 4--13\}, \{2, 14\}, and \{3, 15\} form the train, validation, and test splits. These splits contain 4,452, 839, and 773 examples for motor execution and 4,601, 839, and 838 examples for motor imagery.
+
+\paragraph{Weibo2014}
+Weibo2014~\citep{yi2014evaluation} contains six classes of simple or compound limb motor imagery and one rest class, recorded from 10 participants with 60 EEG channels. We apply common-average referencing without additional filtering or artifact rejection. Under our preprocessing pipeline, the model receives the $[6,7)$\,s interval, which is the final second of motor imagery. The train, validation, and test splits contain 3,294, 1,118, and 1,118 examples from 6, 2, and 2 participants, respectively.
+
+\paragraph{Jeong2020}
+Jeong2020~\citep{jeong2020multimodal} provides motor-imagery recordings for 25 participants; we use participants 1--15 in the fixed participant-disjoint split. After removing EOG and EMG channels, we retain 60 EEG channels, apply common-average referencing, and resample from 1,000 to 200\,Hz without additional filtering or artifact rejection. The eleven classes comprise six reaching directions, three grasp types, and two wrist-twisting movements. The model receives the first second after the cue. Participants \{1, 4--13\}, \{2, 14\}, and \{3, 15\} form the train, validation, and test splits, containing 16,850, 3,350, and 3,300 examples.
+
+\section{World-Model Evaluation Details}
+\label{app:world-model-probe}
+
+\paragraph{Protocol}
+Each example contains frozen DINOv2 patch features for the current frame and the frame $0.2$\,s later, together with three consecutive $0.2$\,s IMU summaries from four arm- and wrist-mounted sensors. We freeze each frame predictor and train only an IMU adapter, implemented as a three-layer MLP with 512-dimensional hidden features and LayerNorm. Inputs are standardized on the training set, and the adapter is trained for 4,000 steps with AdamW, a batch size of 64, and a learning rate of $10^{-3}$. All models use the same inputs, targets, adapter architecture, and training anchors.
+
+\paragraph{Splits}
+The within-recording split reserves the final eleventh of each recording for evaluation and separates it from training by a $300$\,s guard interval. The held-out-subject split evaluates on P0006, P0016, P0026, and P0036. We disable temporal and motion resampling during evaluation.
+
+\paragraph{Comparisons}
+We compare predictors with the same frame-predictor architecture and a $128$-dimensional action interface. For pretraining, \mwm{} uses one second of EEG ending at the current frame. The latent-action model~\citep{garrido2026lawm} instead derives its action from the current and target frames with an inverse-dynamics encoder. We also evaluate a randomly initialized predictor. Because the inverse-dynamics encoder observes the target during pretraining, its pretraining loss is not directly comparable to that of \mwm{}.
+
+\paragraph{Metrics}
+We report the mean L1 error and patch-wise cosine similarity between predicted and target features. To measure action use, we fix the current frame, shuffle IMU actions among held-out examples from the same subject, and compute
+\begin{equation}
+    \Delta_{\mathrm{act}}=E_{\mathrm{shuf}}-E_{\mathrm{true}},
+\end{equation}
+where $E_{\mathrm{true}}$ and $E_{\mathrm{shuf}}$ are the L1 errors under matched and shuffled actions. A positive action gap indicates that matched actions improve prediction, but does not alone establish counterfactual control.

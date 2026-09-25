@@ -58,8 +58,9 @@ We evaluated 19 LLMs, including 5 proprietary models and 14 open-source models, 
 \centering
 \caption{Benchmarking proprietary and open-source LLMs with the \repqa{} metric suite. PL = Professional Language ($\downarrow$ less jargon), FK = Flesch--Kincaid Grade (target $\approx 6$), YD = Yngve Depth ($\downarrow$ simpler syntax), IC = Informative Cosine ($\uparrow$ more informative).}
 \label{tab:repqa-main}
-\tiny
+\small
 \setlength{\tabcolsep}{3pt}
+\resizebox{\linewidth}{!}{
 \begin{tabular}{l cccc cccc cccc cccc}
 \toprule
  & \multicolumn{4}{c}{Suggestion} & \multicolumn{4}{c}{Fact} & \multicolumn{4}{c}{Rationale} & \multicolumn{4}{c}{Definition} \\
@@ -94,6 +95,7 @@ Qwen3-32B & 2.08 & 8.08 & 0.76 & \underline{0.70} & 3.31 & 10.32 & 1.69 & \textb
 Gemma-3-27B & 1.58 & 8.28 & \underline{0.11} & 0.66 & \textbf{1.77} & \underline{9.12} & \textbf{0.14} & 0.74 & \textbf{4.15} & 9.38 & \textbf{0.00} & 0.71 & 5.04 & \underline{9.12} & \textbf{0.00} & 0.78 \\
 \bottomrule
 \end{tabular}
+}
 \end{table*}
 
 \subsection{LLMs struggle to generate responses at a specified reading level}
@@ -102,7 +104,6 @@ People with different educational backgrounds have varying health literacy, so a
 We set a target score, i.e., 6 for the Flesch–Kincaid (FK) grade level and 0 for the professional-language (PL) score, and prompted each model to answer the queries accordingly. $\pi{=}6$ approximates a 5th-grade level intended to be broadly accessible, and $\rho{=}0$ denotes the absence of medical jargon.
 As shown in Table~\ref{tab:repqa-main}, most models struggled to hit the target, often overshooting complexity or, when simplifying, omitting qualifiers.
 Across the four categories, \textit{definition} was the easiest, with the lowest readability scores.
-A more detailed analysis of Table~\ref{tab:repqa-main} is provided in Supplementary Section~\ref{app:exp1_analysis}.
 
 To further probe readability control, we evaluated a set of representative models, spanning non-thinking models (LLaMA~3.1-8B, Qwen-3-30B) and thinking models (DeepSeek-R1-Distill-Qwen, Qwen-3-30B-Thinking, GPT-4.1), focusing on their ability to match requested reading levels.
 We set four target levels, i.e., 5th grade, middle school, high school, and college, corresponding to FK grade levels of 6, 9, 12, and 15.
@@ -130,7 +131,7 @@ As shown in Figure~\ref{fig:analysis}(c), accuracy peaked at Middle School, was 
 This systematic bias toward lower buckets mirrored the undershoot observed for readability control.
 
 We then studied whether LLMs understand differences in the medical knowledge required by a question.
-For each question in \repqa, we prompted GPT-4o to generate two counterparts that vary only in the required domain knowledge (Medium and High); examples are provided in Supplementary Section~\ref{app:example_diffculty}.
+For each question in \repqa, we prompted GPT-4o to generate two counterparts that vary only in the required domain knowledge (Medium and High).
 Each model then classified the resulting variant.
 As shown in Figure~\ref{fig:analysis}(d), performance was uneven across systems, e.g., LLaMA~3.1-8B was relatively strong on Medium but weak on Original, whereas Qwen-3-30B-Thinking excelled on Original yet remained low on High.
 Across models, detection of High difficulty was uniformly poor, indicating limited sensitivity to advanced domain knowledge and helping explain the tendency to default to overly simple outputs.

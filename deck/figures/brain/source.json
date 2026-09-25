@@ -1,0 +1,14 @@
+{
+  "title": "Human-brain.SVG",
+  "authors": [
+    "Hugh Guiney",
+    "James.mcd.nz"
+  ],
+  "source": "https://commons.wikimedia.org/wiki/File:Human-brain.SVG",
+  "download": "https://upload.wikimedia.org/wikipedia/commons/3/33/Human-brain.SVG",
+  "license": "CC BY-SA 3.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+  "modifications": "Recolored to pale gray-blue. All original anatomical path geometry retained. Adapted SVG also licensed CC BY-SA 3.0.",
+  "original_sha256": "61a9f2b936be1fa844be7c29cf7bce9014ae772a65fe503f8b6e93825b604507",
+  "adapted_sha256": "af53ab8afdb45d5dfea8a7f69db10ebc3fe1572adbf3c58d99cbcbf3ade8e003"
+}

@@ -268,64 +268,57 @@
   \draw[backlink] (foundation.south) -- (backout.north)
     node[elab, text=otpurple]{the prior travels back out};
 
-  % ================= PART 2 : which space, then bridge to it ==============
+  % ================= PART 2 : four linked research questions =============
+  % The arrows express motivation, not an integrated set of model weights.
   \node[p2, minimum width=4.05cm, minimum height=\cardh cm] (prism1) at (\cB-2.18,\rowa) {};
-    \pic[scale=1.15] at ([yshift=\iconup cm]prism1.center) {picbalance};
-    \node[clab] at ([yshift=\labdn cm]prism1.center) {PRISM --- I};
+    \pic[scale=1.0] at ([yshift=0.42cm]prism1.center) {picbalance};
+    \node[clab] at ([yshift=-0.46cm]prism1.center) {PRISM I};
+    \node[csub] at ([yshift=-0.84cm]prism1.center) {Choose alignment space};
 
   \node[p2, minimum width=4.05cm, minimum height=\cardh cm] (encoder) at (\cB+2.18,\rowa) {};
-    \pic[scale=1.05] at ([yshift=\iconup cm]encoder.center) {picfmri};
-    \node[clab] at ([yshift=\labdn cm]encoder.center) {Brain Instruction\\Tuning};
+    \pic[scale=0.95] at ([yshift=0.42cm]encoder.center) {picfmri};
+    \node[clab] at ([yshift=-0.46cm]encoder.center) {MindLLM};
+    \node[csub] at ([yshift=-0.84cm]encoder.center) {Align fMRI to language};
+  \draw[link] (prism1.east) -- (encoder.west);
 
   \node[p2, minimum width=8.4cm, minimum height=1.6cm] (space) at (\cB,\rowb) {};
     \pic[scale=1.0] at ([xshift=-3.3cm]space.center) {pictext};
-    \node[anchor=west, font=\sffamily\fontsize{13}{15}\selectfont, align=left, text=otgray!20!black]
-      at ([xshift=-2.5cm,yshift=0.02cm]space.center)
-      {\textcolor{otteal!70!black}{\bfseries obj}\; dog \quad
-       \textcolor{otteal!70!black}{\bfseries attr}\; fluffy \quad
-       \textcolor{otteal!70!black}{\bfseries rel}\; on grass};
-
-  \node[p2, minimum width=4.05cm, minimum height=1.4cm] (prism2) at (\cB-2.18,\rowc) {};
-    \pic[scale=1.05] at ([xshift=-1.45cm]prism2.center) {picobjects};
-    \node[clab, anchor=west] at ([xshift=-0.95cm,yshift=0cm]prism2.center) {PRISM --- II};
-
-  \node[p2, minimum width=4.05cm, minimum height=1.4cm] (dedit) at (\cB+2.18,\rowc) {};
-    \pic[scale=1.05] at ([xshift=-1.45cm]dedit.center) {picitems};
-    \node[clab, anchor=west] at ([xshift=-0.95cm,yshift=0cm]dedit.center) {D-Edit};
-
-  \draw[link] (prism1.south)  -- ([xshift=-2.18cm]space.north) node[elab]{which space?};
+    \node[anchor=west, font=\sffamily\fontsize{12}{14}\selectfont, align=left, text=otgray!20!black]
+      at ([xshift=-2.5cm]space.center)
+      {\textbf{Language representation}\\Read out multiple brain functions};
   \draw[link] (encoder.south) -- ([xshift=2.18cm]space.north);
+
+  \node[p2, minimum width=4.05cm, minimum height=1.8cm] (prism2) at (\cB-2.18,\rowc) {};
+    \node[clab] at ([yshift=0.38cm]prism2.center) {PRISM II};
+    \node[csub, font=\sffamily\fontsize{9}{10.5}\selectfont] at ([yshift=-0.25cm]prism2.center) {Language-to-vision\\Object-centric generation};
+  \node[p2, minimum width=4.05cm, minimum height=1.8cm] (dedit) at (\cB+2.18,\rowc) {};
+    \node[clab] at ([yshift=0.38cm]dedit.center) {D-Edit};
+    \node[csub, font=\sffamily\fontsize{9}{10.5}\selectfont] at ([yshift=-0.25cm]dedit.center) {Item prompts + attention\\Stronger disentanglement};
   \draw[link] ([xshift=-2.18cm]space.south) -- (prism2.north);
   \draw[link] (prism2.east) -- (dedit.west);
 
-  % ================= PART 3 : two branches off the mind side ==============
-  % DySta *is* the controller, so there is no separate control node. PHIL takes
-  % its goal straight from the neural signal, never from DySta, and hands
-  % nothing on to an executor -- it is a parallel slow loop, not a stage.
-  \node[p3, minimum width=8.4cm, minimum height=\cardh cm] (mwm) at (\cC,\rowa) {};
-    \pic[scale=1.55] at ([yshift=\iconup cm]mwm.center) {picmindworld};
-    \node[clab] at ([yshift=\labdn cm]mwm.center) {Mind World Model};
+  % ================= PART 3 : MWM parallel to (PHIL parallel to DySta) ====
+  % Nested groups express research organization, not model input/output.
+  \node[p3, minimum width=4.05cm, minimum height=5.8cm] (mwm) at (\cC-2.18,-1.75) {};
+    \node[clab] at ([yshift=2.14cm]mwm.center) {MWM};
+    \pic[scale=1.6] at ([yshift=0.68cm]mwm.center) {picmindworld};
+    \node[csub, font=\sffamily\fontsize{9}{10.5}\selectfont] at ([yshift=-1.1cm]mwm.center) {Brain signals\\to action meaning\\[4pt]EEG latent actions\\predict visual consequences};
 
-  \node[p3, minimum width=4.05cm, minimum height=2.1cm] (dysta) at (\cC-2.18,\rowbb) {};
-    \pic[scale=1.0] at ([yshift=0.46cm]dysta.center) {pictokens};
-    \node[clab] at ([yshift=-0.16cm]dysta.center) {DySta};
-    \node[csub, align=center] at ([yshift=-0.62cm]dysta.center) {VLA control\\the fast loop};
-
-  \node[ghost, minimum width=4.05cm, minimum height=2.1cm] (phil) at (\cC+2.18,\rowbb) {};
-    \pic[scale=0.95] at ([yshift=0.46cm]phil.center) {picgoal};
-    \node[clab, text=otpurple!35!black] at ([yshift=-0.16cm]phil.center) {PHIL};
-    \node[csub, align=center] at ([yshift=-0.62cm]phil.center) {a path to the goal\\the slow loop};
-
-  \draw[link] ([xshift=-2.18cm]mwm.south) -- (dysta.north)
-    node[elab, text=otorange]{step-by-step actions};
-  \draw[backlink] ([xshift=2.18cm]mwm.south) -- (phil.north)
-    node[elab, text=otpurple]{a goal, not a trajectory};
+  \node[p3, minimum width=4.05cm, minimum height=5.8cm, fill=white] (goalbranch) at (\cC+2.18,-1.75) {};
+    \node[clab] at ([yshift=2.14cm]goalbranch.center) {Act toward\\specified goals};
+  \node[ghost, minimum width=3.45cm, minimum height=1.65cm] (phil) at (\cC+2.18,-1.45) {};
+    \node[clab, text=otpurple!35!black] at ([yshift=0.34cm]phil.center) {PHIL};
+    \node[csub, font=\sffamily\fontsize{9}{10.5}\selectfont] at ([yshift=-0.26cm]phil.center) {Learned heuristic\\for graph search};
+  \node[p3, minimum width=3.45cm, minimum height=1.65cm] (dysta) at (\cC+2.18,-3.5) {};
+    \node[clab] at ([yshift=0.34cm]dysta.center) {DySta};
+    \node[csub, font=\sffamily\fontsize{9}{10.5}\selectfont] at ([yshift=-0.26cm]dysta.center) {Visual policy\\Memory + fast inference};
+  \node[csub] (p3scope) at (\cC,-5.05) {Separately evaluated capabilities};
 
   % ================= part boundaries + headers ============================
   \begin{scope}[on background layer]
     \node[group, fit=(hybrid)(neuro)(faeeg)(foundation)(backout)]      (gA) {};
     \node[group, fit=(prism1)(encoder)(space)(prism2)(dedit)]          (gB) {};
-    \node[group, fit=(mwm)(dysta)(phil)]                              (gC) {};
+    \node[group, fit=(mwm)(goalbranch)(p3scope)]                              (gC) {};
   \end{scope}
   \foreach \g/\c/\t/\s in {%
       gA/otblue/{\partonetitle}/{\partonesub},
@@ -375,7 +368,7 @@
     {the channel is lossy in both directions --- measured in RepQA};
   \node[font=\sffamily\fontsize{13}{15}\selectfont\bfseries, text=otgray!15!black, anchor=north]
     at ($(bC)+(0,-2.96)$)
-    {So: build the path that does not route through language};
+    {So: connect brain signals without requiring verbal instructions};
 
   % fan out from the premise into the three parts
   \coordinate (hub) at ($(bC)+(0,-3.52)$);
@@ -389,7 +382,7 @@
   \draw[-{Stealth[length=5mm,width=4mm]}, line width=3.5pt, otgray!30] (byL) -- (byR);
   \node[font=\sffamily\fontsize{13}{15}\selectfont\bfseries, text=otgray!15!black, fill=white, inner sep=5pt]
     at ($(byL)!0.5!(byR)$)
-    {the direct path: brain signals $\rightarrow$ semantics $\rightarrow$ action, never through language};
+    {brain signals, semantics, and behavior --- complementary research capabilities};
 
 \end{tikzpicture}
 \end{document}

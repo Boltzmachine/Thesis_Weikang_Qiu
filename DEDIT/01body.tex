@@ -254,7 +254,7 @@ It should be noted that the optimizations above are running against only one ima
 \subsection{Editing with Item-Prompt Freestyle}
 After the two-step optimization, the model can exactly reconstruct the original image given the set of prompts corresponding to each item, with an appropriate classifier-free guidance scale.
 We then achieve various disentangled image editing by changing the prompt associated with an item, the mask of an item-prompt pair, and the mapping between items and prompts.
-We discuss four types of image editing operations that can be achieved by varying item-prompt relationships, summarized in Fig. \ref{fig::editingmask}. Details of each operation are discussed in Appendix.
+We discuss four types of image editing operations that can be achieved by varying item-prompt relationships, summarized in Fig. \ref{fig::editingmask}.
 
 
 \begin{figure}[tbp]
@@ -270,7 +270,6 @@ We discuss four types of image editing operations that can be achieved by varyin
 % \xhdr{Pixel-level Item Editing}
 % All the editing operations above are achieved at standard inference time without additional optimization.
 % We then introduce a more precise drag-style pixel editing by introducing additional prompt optimization steps following \cite{dragan}.
-% The details are discussed in Appendix.
 
 
 % \rex{brief mention of computational complexity and efficiency}
@@ -405,7 +404,6 @@ Compared to these methods,
 \dedit{} is capable of seamlessly composing objects into the target while maintaining their identities.
 
 
-We show more image-based editing results of \dedit{} in Fig. \ref{fig::image1} and Appendix. 
 \dedit{} can work well when the reference image contains multiple items that may be hard to separate (like the bag in hand).
 Additionally, \dedit{} doesn't necessitate the reference item to closely resemble its anticipated appearance in the target image, because blending through the prompt space offers smoother transitions compared to pixel-level manipulation, and the prompt-mask correspondence helps standardize the appearance of the reference item.
 For example, in the Ultraman example, the reference and target Ultraman can take completely different postures (kneeling v.s. standing).
@@ -465,7 +463,6 @@ This can be useful when initial masks from the segmentation model do not cover t
 \dedit{} also enables removing items by deleting the mask-item-prompt pairs.
 In Fig. \ref{fig::remove}, by deleting items from the scene image one by one, the resulting blank region will be re-partitioned to nearby masks and join the corresponding item-prompt pair.
 \dedit{} will then use such new associations to imagine the blank regions and therefore lead to reasonable filling results.
-More visual results can be found in Appendix.
 To quantitatively assess the item-removed images, we conducted user studies with a group of 15 annotators. 
 They are asked to score 30 pairs of original and item-removed images from 1 to 5 (higher means better), based on quality (how well the region after removal harmonized with the surrounding scene) and fidelity (the reasonableness of the filling content).
 \dedit{} is compared with SDXL inpaint model by inpainting the region where the item is removed with the surrounding item's caption, and results are shown in Tab. \ref{tab::user_remove}.
@@ -522,7 +519,7 @@ We then study the influence of the number of tokens used to represent each item,
 \begin{table}[h]
 \centering
 \caption{Text-guided editing with different token numbers. }
-\resizebox{0.6\columnwidth}{!}{
+% \resizebox{0.6\columnwidth}{!}{
 \begin{tabular}{lcccc} 
 \toprule
  tokens num. & 1     & 2     & 5                & 10     \\ 
@@ -531,7 +528,7 @@ LPIPS     & 0.183 & 0.204 & \textbf{0.179} & 0.413  \\
 CLIP-T    & 38.5  & 38.2  & \textbf{42.0}  & 30.1   \\
 \bottomrule
 \end{tabular}
-}
+% }
 \vspace{-8pt}
 \label{tab::abl_tokens}
 \end{table}

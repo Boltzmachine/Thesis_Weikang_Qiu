@@ -4,30 +4,32 @@
 % DRAFT, derived from abstract.tex -- please read and make it your own.
 \begin{laysummary}
 
-Before a computer can act on what we mean, we have to put it into words: type a
-prompt, dictate a message, speak to an assistant. Words are a narrow channel.
-We speak far more slowly than we think, and much of what we know---a movement,
-an image, an intention---resists being said at all. This dissertation asks what
+We often tell computers what we mean through words, yet a movement, an image,
+or an intention can be difficult to express. This dissertation asks what
 becomes possible if a machine can read intent more directly, from brain
 activity itself.
 
-The work proceeds in three steps. First, it builds machine-learning models that
-respect how the brain is actually organized, rather than borrowing designs
-meant for photographs and text. Some of these models discover structure that
+The work has three parts. First, it builds machine-learning models that
+respect how the brain is organized. Some of these models discover structure that
 existing brain atlases do not record; others build known biological structure,
 such as the mirror symmetry between imagined left- and right-hand movement,
 directly into the architecture.
 
-Second, it connects recorded brain activity to meaning. Brain data are scarce
-and expensive, so rather than collecting more, this work reuses a decade of
-existing image descriptions, linked to brain recordings through the pictures
-people were shown while being scanned. A model trained this way answers
-open-ended questions about what a person saw or remembered, and reconstructs
-the scene they were looking at.
+Second, it builds a bridge from brain activity to images. Comparing candidate
+representations motivates language as the alignment space. A decoder learns to
+connect brain recordings to language using existing image annotations. Visual
+reconstruction then uses descriptions of separate objects, their attributes,
+and their relationships. This structure motivates a more capable image
+generator that preserves the separation between objects and supports precise
+changes to individual items.
 
-Third, it turns those representations into action, learning to control a robot
-from continuously recorded brain signals and video, without hand-labeled
-trials.
+Third, the work moves from action meaning to goal pursuit. One model links
+brain activity to actions by predicting visual consequences. Task completion
+then motivates specifying a desired result rather than every movement.
+Planning toward a goal image and acting from language with remembered
+observations offer complementary approaches, matching the images and text
+studied earlier. Integrating these independently evaluated models remains
+future work.
 
 Together these results sketch a path toward assistive technology for people who
 cannot easily speak or move, and toward systems that respond to intention

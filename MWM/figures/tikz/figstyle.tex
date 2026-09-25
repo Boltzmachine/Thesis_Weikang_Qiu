@@ -1,0 +1,93 @@
+% ---------------------------------------------------------------------------
+% figstyle.tex -- shared TikZ vocabulary for the MWM method figures.
+% \input this AFTER \usepackage{tikz} in both the paper preamble and in the
+% standalone wrappers, so every figure speaks the same visual language.
+% ---------------------------------------------------------------------------
+\usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric,shapes.misc,
+                decorations.pathreplacing,decorations.pathmorphing,
+                decorations.markings,patterns,fadings,backgrounds,fit,
+                matrix,intersections,math}
+
+% ------------------------------- palette ----------------------------------
+\definecolor{inkgray}  {HTML}{2F3437}   % strokes / body text
+\definecolor{softgray} {HTML}{EDEEF0}   % frozen fills, panel grounds
+\definecolor{eegblue}  {HTML}{3D5A98}   % mind model  (EEG)
+\definecolor{eeglight} {HTML}{DCE4F5}
+\definecolor{vizteal}  {HTML}{1B7F81}   % world model (vision)
+\definecolor{vizlight} {HTML}{D3E9E9}
+\definecolor{latred}   {HTML}{C9483F}   % lateral / equivariant component
+\definecolor{latlight} {HTML}{FADFDC}
+\definecolor{bislate}  {HTML}{4A7FBF}   % bilateral / invariant component
+\definecolor{bilight}  {HTML}{E2ECF9}
+\definecolor{actgold}  {HTML}{E0A02E}   % the neural action a_t
+\definecolor{actlight} {HTML}{FBEBCB}
+\definecolor{losspur}  {HTML}{7A5AA6}   % losses
+\definecolor{losslight}{HTML}{EBE3F5}
+
+% ------------------------------- boxes ------------------------------------
+\tikzset{
+  every node/.append style={font=\small, text=inkgray},
+  box/.style      ={draw=inkgray, line width=0.7pt, rounded corners=2pt,
+                    align=center, inner xsep=4.5pt, inner ysep=4pt,
+                    font=\small},
+  mod/.style      ={box, draw=eegblue, fill=eeglight},          % trainable, EEG side
+  vmod/.style     ={box, draw=vizteal, fill=vizlight},          % trainable, vision side
+  frozen/.style   ={box, draw=inkgray!55, fill=softgray},       % frozen module
+  actbox/.style   ={box, draw=actgold!85!black, fill=actlight}, % latent action
+  lossbox/.style  ={box, draw=losspur, fill=losslight, rounded corners=4pt},
+  latbox/.style   ={box, draw=latred, fill=latlight},
+  bibox/.style    ={box, draw=bislate, fill=bilight},
+  panel/.style    ={draw=inkgray!25, line width=0.6pt, rounded corners=3pt,
+                    fill=softgray!45, inner sep=5pt},
+  tag/.style      ={font=\scriptsize\itshape, text=inkgray!75, inner sep=1.5pt},
+  lbl/.style      ={font=\scriptsize, text=inkgray!85, inner sep=2pt},
+  % --------------------------- connections --------------------------------
+  flow/.style     ={-{Stealth[length=2.1mm,width=1.5mm]}, line width=0.85pt,
+                    draw=inkgray!85, rounded corners=2pt},
+  vflow/.style    ={flow, draw=vizteal},
+  eflow/.style    ={flow, draw=eegblue},
+  aflow/.style    ={flow, draw=actgold!85!black, line width=1.0pt},
+  ghost/.style    ={-{Stealth[length=1.9mm,width=1.4mm]}, line width=0.7pt,
+                    draw=inkgray!45, dashed, dash pattern=on 1.6pt off 1.3pt},
+  lossflow/.style ={ghost, draw=losspur!80},
+  sgmark/.style   ={font=\scriptsize, text=losspur, inner sep=1.5pt},
+}
+
+% --------------------------- small pictograms ------------------------------
+% \snowflake{<size>} -- "frozen" marker, drawn (no emoji, no pifont).
+\newcommand{\snowflake}[1]{%
+  \begin{tikzpicture}[baseline=-0.6ex,scale=#1]
+    \foreach \a in {0,60,120}{\draw[line width=0.45pt,inkgray!70]
+      (\a:0.9ex)--(\a+180:0.9ex);}
+    \foreach \a in {0,60,120,180,240,300}{%
+      \draw[line width=0.4pt,inkgray!70] (\a:0.55ex)--($(\a:0.55ex)+(\a+35:0.3ex)$);
+      \draw[line width=0.4pt,inkgray!70] (\a:0.55ex)--($(\a:0.55ex)+(\a-35:0.3ex)$);}
+  \end{tikzpicture}}
+\newcommand{\frostlabel}[1]{#1\,\snowflake{1}}
+
+% \eegtrace{<width>}{<height>}{<n channels>}{<colour>} -- schematic multichannel EEG
+\newcommand{\eegtrace}[4]{%
+  \begin{scope}
+    \foreach \c [count=\i from 0] in {1,...,#3}{%
+      \pgfmathsetmacro{\yo}{-\i*(#2)/(#3)}
+      % NB: normalise \x/#1 BEFORE multiplying by the frequency, or the
+      % product overflows pgfmath's 16383pt limit once #1 gets large.
+      \draw[line width=0.45pt, draw=#4, opacity=0.9]
+        plot[domain=0:#1, samples=90, smooth]
+        (\x, {\yo + 0.030*(#2)*sin(360*(2.1+0.7*\i)*(\x/(#1)))
+                  + 0.022*(#2)*sin(360*(5.3+1.3*\i)*(\x/(#1))+40*\i)
+                  + 0.014*(#2)*sin(360*(11.0+2.0*\i)*(\x/(#1))+90*\i)});}
+  \end{scope}}
+
+% \headtop{<radius>}{<left colour>}{<right colour>} -- top view of the scalp,
+% nose up, used for the electrode-permutation illustration.
+\newcommand{\headtop}[3]{%
+  \begin{scope}
+    \fill[#2, opacity=0.55] (0,0) -- (90:#1) arc (90:270:#1) -- cycle;
+    \fill[#3, opacity=0.55] (0,0) -- (90:#1) arc (90:-90:#1) -- cycle;
+    \draw[line width=0.6pt, inkgray!80] (0,0) circle (#1);
+    \draw[line width=0.6pt, inkgray!80]
+      (100:#1) -- ++(80:0.22*#1) coordinate (nosetip) -- (80:#1);
+    \draw[line width=0.5pt, inkgray!45, dash pattern=on 1.2pt off 1.2pt]
+      (0,-#1) -- (0,#1);
+  \end{scope}}

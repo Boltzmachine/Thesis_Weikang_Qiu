@@ -15,12 +15,13 @@
 #   CWATCH_SETTLE=15        a file must be untouched this long before it is edited
 #   CWATCH_MAX_ATTEMPTS=2   give up on a note after this many failed passes
 #   CWATCH_MODEL=opus       model for the headless run
+#   CWATCH_BACKUP_DIR       override the local backup directory outside OneDrive
 #
 set -uo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 STATE="$ROOT/.cwatch"
-BACKUPS="$STATE/backups"
+BACKUPS="${CWATCH_BACKUP_DIR:-$HOME/Thesis_Backups/$(basename "$ROOT")/cwatch}"
 ATTEMPTS="$STATE/attempts"
 LOG="$STATE/cwatch.log"
 PIDFILE="$STATE/cwatch.pid"

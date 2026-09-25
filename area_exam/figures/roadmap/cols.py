@@ -32,49 +32,37 @@ def part1(c):
 # ---------------- PART 2 ----------------
 def part2(c):
     G="#1F8A44"
-    box(c,66,2,122,24,"#C9D2DD","#FFFFFF")
-    c.ell(84,14,7,8,"#FFE9D2","#B87423",1)
-    c.txt(148,17,"brain-signal encoder",6.8,"#6B7280","middle")
-    c.txt(148,10,"(from Part 1)",5.8,"#8A93A0","middle")
-    down(c,127,28,50,G); c.txt(133,42,"Brain Instruction Tuning",7.2,G,"start",True)
-    box(c,4,54,150,52,G,"#EDF6F0",3,lw=1.5)
-    for i,(k,v) in enumerate((("obj","dog"),("attr","fluffy"),("rel","on grass"))):
-        c.txt(12,68+i*13,k,7,G,b=True); c.txt(44,68+i*13,v,7,"#6B7280")
-    c.txt(79,50,"the target space",6.2,"#8A93A0","middle")
-    c.line(196,80,160,80,G,1.3,arrow=True)
-    box(c,198,68,52,24,G,"#FFFFFF",3)
-    c.txt(224,79,"PRISM",7.6,G,"middle",True); c.txt(224,88,"which space?",5.8,"#6B7280","middle")
-    down(c,79,108,128,G); c.txt(85,120,"D-Edit",7.2,G,"start",True)
-    box(c,4,130,150,32,"#C2650B","#FBF3EA",3)
-    c.rect(12,136,34,20,"#FFFFFF","#8A93A0",0.9); c.line(29,136,29,156,"#8A93A0",0.8); c.line(29,146,46,146,"#8A93A0",0.8)
-    c.txt(102,143,"per-item",6.8,"#C2650B","middle",True); c.txt(102,153,"controllable generation",6.8,"#C2650B","middle")
+    rows=[(4,"PRISM I","Choose the fMRI alignment space"),
+          (45,"MindLLM","Align fMRI to language"),
+          (86,"PRISM II","Reconstruct visual content from language"),
+          (127,"D-Edit","Item prompts + grouped cross-attention")]
+    for i,(y,title,detail) in enumerate(rows):
+        box(c,4,y,246,31,G,"#EDF6F0",3)
+        c.txt(127,y+12,title,8.4,G,"middle",True)
+        c.txt(127,y+24,detail,6.6,"#6B7280","middle")
+        if i<3: down(c,127,y+33,y+39,G)
+    c.txt(127,168,"Research progression; stronger per-item generation disentanglement",5.3,"#6B7280","middle")
 
 # ---------------- PART 3 ----------------
 def part3(c):
-    R="#C8243C"; A="#B87423"
-    c.txt(127,1,"(intent is represented — now make it act)",6,"#8A93A0","middle")
-    box(c,4,6,246,42,"#C9D2DD","#FFFFFF")
-    c.poly([(14,30),(18,20),(22,36),(26,22),(30,32),(34,26),(38,28)],A,1.2)
-    c.txt(26,44,"EEG",5.8,"#6B7280","middle")
-    c.line(42,28,52,28,"#8A93A0",1,arrow=True)
-    box(c,54,19,34,18,A,"#FFF3E8",2); c.txt(71,31,"mind",6.6,A,"middle",True)
-    c.line(90,28,100,28,"#8A93A0",1,arrow=True)
-    c.rect(102,18,22,18,"#EDF1F5","#8A93A0",1); c.rect(130,18,22,18,"#EDF1F5","#8A93A0",1)
-    c.line(124,27,130,27,R,1.1,"2 2",arrow=True)
-    c.txt(127,44,"predict next frame",5.8,"#6B7280","middle")
-    c.txt(200,24,"Mind World Models",7,A,"middle",True); c.txt(200,35,"label-free supervision",6.2,"#6B7280","middle")
-    down(c,127,50,72,R); c.txt(133,63,"a goal, not a trajectory",7.2,R,"start",True)
-    box(c,4,74,246,32,R,"#FBEDEF",3)
-    for i,x in enumerate((16,28,40,52)):
-        c.circ(x,90,3,("#FDAA4C" if i<2 else ("#4688F1" if i==2 else "#FFFFFF")),"#8A93A0",0.9)
-    c.circ(64,90,4.5,"none",TE,1.4)
-    c.txt(160,87,"PHIL · learned cost-to-go",7.2,R,"middle",True)
-    c.txt(160,98,"turns the goal into a path",6.4,"#6B7280","middle")
-    down(c,127,108,130,R); c.txt(133,121,"a plan",7.2,R,"start",True)
-    box(c,4,134,246,32,R,"#FBEDEF",3)
-    for i in range(3):
-        c.rect(14+i*20,140,16,12,"#EDF1F5","#8A93A0",0.9); c.rect(14+i*20,154,16,4,"#4688F1","none",0)
-    c.rect(14,152,56,2,"#1F8A44","none",0)
-    c.txt(160,147,"SD-VLA · real-time execution",7.2,R,"middle",True)
-    c.txt(160,158,"static cached, dynamic recomputed",6.4,"#6B7280","middle")
+    R="#C8243C"; P="#6B4FA8"
+    c.txt(127,3,"Two research branches",7.3,R,"middle",True)
+    box(c,4,15,116,140,R,"#FBEDEF",3)
+    c.txt(62,36,"MWM",9,R,"middle",True)
+    c.txt(62,66,"Brain signals",7,"#6B7280","middle")
+    c.txt(62,78,"to action meaning",7,"#6B7280","middle")
+    c.txt(62,112,"EEG latent actions",6.6,"#6B7280","middle")
+    c.txt(62,124,"predict visual consequences",5.8,"#6B7280","middle")
+    box(c,130,15,120,140,R,"#FFFFFF",3)
+    c.txt(190,31,"Act toward",7.4,R,"middle",True)
+    c.txt(190,42,"specified goals",7.4,R,"middle",True)
+    box(c,137,51,106,42,P,"#F4F1FA",3)
+    c.txt(190,64,"PHIL",8,P,"middle",True)
+    c.txt(190,76,"Learned heuristic",6.2,"#6B7280","middle")
+    c.txt(190,86,"for graph search",6.2,"#6B7280","middle")
+    box(c,137,104,106,42,R,"#FBEDEF",3)
+    c.txt(190,117,"DySta",8,R,"middle",True)
+    c.txt(190,129,"Visual policy",6.2,"#6B7280","middle")
+    c.txt(190,139,"Memory + fast inference",5.8,"#6B7280","middle")
+    c.txt(127,168,"Separately evaluated; not an integrated model pipeline",5.6,"#6B7280","middle")
 COLS={"col1":part1,"col2":part2,"col3":part3}

@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Rex Ying",
+    "page_url": "https://engineering.yale.edu/research-and-faculty/faculty-directory/rex-zhitao-ying",
+    "image_url": "https://engineering.yale.edu/application/files/thumbnails/custom_720x720_exact/8217/8965/9123/yale-engineering-rex-ying.webp",
+    "file": "rex-ying-yale.webp",
+    "slide_asset": "rex-ying-yale.png",
+    "sha256": "6b155a51ccc56b9c11fc26f424185eb0c517c840a004f40235dfd8ee8d7fcbfc",
+    "native_crop_percent": "10.000000,0,10.000000,0"
+  },
+  {
+    "name": "Arman Cohan",
+    "page_url": "https://nlp.cs.yale.edu/team/",
+    "image_url": "https://nlp.cs.yale.edu/images/teampic/arman_cohan.jpeg",
+    "file": "arman-cohan-yale.jpeg",
+    "slide_asset": "arman-cohan-yale.jpeg",
+    "sha256": "e7c84c8967d4d59cb5dd5d68c650b5454a70d7a52b1ae2213b8c484e3c2d1f2b",
+    "native_crop_percent": "9.746300,0,9.746300,0"
+  },
+  {
+    "name": "Smita Krishnaswamy",
+    "page_url": "https://engineering.yale.edu/research-and-faculty/faculty-directory/smita-krishnaswamy",
+    "image_url": "https://engineering.yale.edu/application/files/thumbnails/custom_720x720_exact/6417/3090/4793/Smita_Krishnaswamy_computer_science.webp",
+    "file": "smita-krishnaswamy-yale.webp",
+    "slide_asset": "smita-krishnaswamy-yale.png",
+    "sha256": "08804a35495526da2b474ab88e78eca695d387caf17b137dab21349e75a5fbaf",
+    "native_crop_percent": "10.000000,0,10.000000,0"
+  },
+  {
+    "name": "Yujun Yan",
+    "page_url": "https://faculty-directory.dartmouth.edu/yujun-yan",
+    "image_url": "https://faculty-directory.dartmouth.edu/sites/faculty_directory.prod/files/styles/profile_portrait/public/faculty_directory/images/yujun_wo_background_high_resolution_1.jpg?itok=5YQfHInR",
+    "file": "yujun-yan-dartmouth.jpg",
+    "slide_asset": "yujun-yan-dartmouth.jpg",
+    "sha256": "f974af422bf4ebcf61b39533c87c338873e0a23f461f8f71772fb10c10c22950",
+    "native_crop_percent": "0,0.193424,0,0.193424"
+  }
+]
