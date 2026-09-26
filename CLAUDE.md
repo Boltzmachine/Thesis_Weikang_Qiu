@@ -94,95 +94,123 @@ overleaf的token在@.latex_token
 
 **Weikang Qiu** · Department of Computer Science, Yale University
 
-> **用户在当前会话中的最新叙事要求优先。** `outline.md` 与本节记录已确认的主线，后续修改时同步两处，不能用旧文件覆盖用户的更正。Part 2 固定为 PRISM I → MindLLM → PRISM II → D-Edit 的研究问题递进；Part 3 为 ACTION LEVEL（MWM）→ GOAL LEVEL（PHIL ∥ DySta）：从动作含义递进到指定期望结果。箭头和并列符号表达研究问题关系，不代表已经整合的模型流水线。章节编号以当前主文件为准，不在可复用说明中写死。
+> **当前确认的主线（2026-09-26）：HyBRiD → MindLLM → MWM → DySta。** 只以这四篇一作作为四个核心研究 chapter，直接按此顺序展开，不再分三个 Part。其他工作只围绕四篇主角提供支撑与延伸（revolve），不承担主线必须经过的转折。用户最新要求优先；`outline.md` 与 `CLAUDE.md` 的 Thesis Outline 同步维护，口播见 `area_exam/part2_versions.md`。
+>
+> **本轮只更新 Markdown 叙事记录。** 论文正文、LaTeX 章节组织与演示文件暂不修改；现有论文结构尚未迁移到新故事，不能用它覆盖本记录。
 
----
+## 核心故事
 
-## 论证主线
+**从脑活动的组织结构出发，通过语义内容和行动相关的世界动态建立脑与世界的联系，最终走向物理世界中的智能行为。**
 
-1. **问题** — 语言真的是 mind 与 world 之间最好的接口吗？现有范式（text-to-X、X-to-text、语音助手）默认是。
-2. **证据** — 不是。这条信道 **两个方向都有损** ：进来的方向是带宽差（说话 100–150 wpm vs 思维 400–800 wpm）与不可言说性，出去的方向由 RepQA 实测论证。
-3. **主张** — 造一条绕开语言的直接通路。这需要三件事。
-4. **结构** — 先真懂脑信号 → 接到世界的语义空间 → 驱动具身。三个 Part。
+四章的研究问题依次是：
 
----
+**脑如何组织信息 → 脑中的世界内容 → 脑与世界变化的联系 → 世界中的行动。**
 
-## 章节骨架
+研究视角沿着 Mind → Mind–World → World 向外展开。这是概念上的移动，不是三个 Part 的章节划分。MindLLM 和 MWM 分别通过语义与动态关系连接脑和世界；DySta 的研究对象完全位于物理世界一端。
 
-### Introduction
+开场直接提出：**机器学习如何从理解脑活动，逐步走向理解并支持世界中的交互？** 不再以“语言有损”或 RepQA 为整篇论证的必要前提。
 
-### The Premise: The Limits of Language as an Interface
+## 四个核心 Chapter
 
-**RepQA** `一作`
+| 核心章节顺序 | 主角 | 核心问题 | 在故事中的位置 |
+| --- | --- | --- | --- |
+| 1 | HyBRiD | 脑活动中，与认知相关的信息如何组织？ | 发现与认知预测相关的高阶脑结构 |
+| 2 | MindLLM | 脑活动包含的世界信息，怎样通过语义读取？ | 建立脑与世界内容的语义联系 |
+| 3 | MWM | 脑活动怎样与行动相关的世界变化建立联系？ | 通过未来预测学习脑与世界动态的联系 |
+| 4 | DySta | 智能体怎样组织持续到来的观测，高效地行动？ | 纯物理世界中的时间表征、记忆与行动 |
 
-把「语言有损」从修辞变成测量。prospectus 目前用 wpm 统计和维特根斯坦支撑前提，那是引文不是证据。
+这里的 1–4 表示四个核心研究 chapter 的相对顺序；论文正式编号在后续修改正文时确定。每篇作为完整的一章，不拆成跨章的贡献片段。
 
-* **用机制，不用效应量。** case study 中模型为降低阅读难度，把胆固醇药物的五个类别压成一句不加区分的话，只留下 statins；酒精依赖那例只留 craving。这是信息在压缩中被丢掉的字面演示。
-* **别领着讲数字。** grade level 降 41.4%、professional score 降 73.3%，而准确率只掉 3–5 点（Fact 74.56% → 69.82%），Qwen 上只掉 1.3 点。拿这组数论证「语言有损」，敌意读法立刻来：3 个点换 73%，说明语言是条挺划算的信道。
-* **该讲方向与普遍性。** 所有模型、所有类别方向一致，没有配置能免费拿到可读性。论点是 trade-off 系统性、绕不开，不是它很大。这个说法不依赖效应量，砸不掉。
+### HyBRiD — Discovering Meaningful Neural Structure
 
----
+起点是脑信号本身：观测到了许多脑区的活动，哪些脑区应该放在一起理解，才能提取与认知预测有关的信息？
 
-### PART 1 · The Foundation — Models for Brain Signals
+HyBRiD 用可学习的加权超边表示高阶脑区关系，避免先枚举一小部分候选关系再筛选。通过 maximally informative and minimally redundant（MIMR）目标与 multi-head drop-bottleneck，端到端学习与指定表型相关的结构及其权重。跨受试者共享的 feature-agnostic masks 决定脑区组合，个人的脑信号决定这些组合的权重。
 
-> **挑战** ：现有方法基本照搬 CV/NLP 模型，不带神经先验，既给不出神经科学洞见，性能也次优。
+本章的角色是 **neural organization**：发现对任务有用的组织结构，为理解高维脑观测提供一种方法。这里的结果是与预测相关的候选结构，不扩大为已确定的因果脑机制；其输入仍可来自两两相关特征，高阶性体现在学到的组合与关系。
 
-脑网络的约定：节点是按某个图谱分好的脑区（区内体素取平均），边是两两之间的 Pearson 相关。
+**通向 MindLLM：** 为一个指定的认知指标发现有用结构之后，进一步追问：脑活动包含了什么关于外部世界的信息，能否以可理解、可灵活查询的形式读取？
 
-三个方向：**发现**（图谱没记录的结构）→ **内建**（已确立的结构搭进架构）→ **反向搬出**。
+### MindLLM — Reading Semantic Content from Brain Activity
 
-**1. HyBRiD** `一作` — 发现。
+研究从为预先定义的指标筛选信息，推进到根据不同问题读取脑活动中的语义内容。
 
-大部分脑网络工作只做两两交互，但绝大多数脑功能是多个脑区同时参与；高阶关系的数量是指数的，枚举不了，现有做法要么只枚举低阶（度 ≤ 3）要么按邻近/可重构性挑，超边数量还被固定成节点数——所以只能学出来。目标是 MIMR：对结果尽可能有信息量（直接最大化 I(H;Y)）、彼此尽可能不冗余（multi-head drop-bottleneck 给 I(H;X) 一个可计算上界），两项端到端一起优化。用 CPM 衡量超边质量：ABIDE 平均 +8.8%，ABCD 七个数据集平均 +12.1%。
+MindLLM 作为完整的一章，包含 subject-agnostic neuro-informed encoder 与 Brain Instruction Tuning（BIT）。编码器用 learnable queries 聚合数量和空间分布因人而异的体素；keys 编码位置与多套脑区先验，values 承载实际 fMRI 信号。BIT 利用共享刺激图像连接脑记录与已有标注，扩展多任务语义监督，支持多种文本读出任务。
 
-**2. Neuro-informed attention（MindLLM 编码器）** `一作` — 内建，fMRI。
+HyBRiD 与 MindLLM 的方法联系是：把可共享的组织方式与具体观测值分开建模。HyBRiD 学习脑区组合，MindLLM 利用位置和功能分区组织体素信息；两者没有组成同一模型，也不共享一套已验证的统一优化理论。
 
-障碍是每个被试的响应体素在数量和空间分布上都不一样；现有做法用不可学的池化或采样把尺寸对齐，信息和空间含义一起丢。做法：可学习 query 跨注意力聚合体素；**key 里不放 fMRI 值，只放位置**——一个体素的位置本身就编码了它的功能角色；再把多套脑图谱的分区嵌入拼进 key，把已确立的分区当先验。收敛更快，且该先验跨被试可共享。
+本章的角色是 **semantic content**：通过语义建立脑活动与世界内容的联系。Neuro-informed encoder 保留在 MindLLM 内部，不再抽出来放入独立的“基础”部分。BIT 中的知识和推理类任务不等于直接恢复了被试脑内真实的推理过程，也不是对被试想说的词逐字解码。
 
-**3. FA-EEG** — 内建，EEG。
+**通向 MWM：** 世界不仅有可以描述的内容，还会随行为不断变化。能否从语义对应进一步走向动态联系，让脑信号提供关于接下来世界变化的信息？
 
-左右手运动想象产生的是互为镜像的 EEG。普通编码器得从稀缺数据里把这个对称性重新学出来；用 frame averaging 在镜像群上做平均，对称性是**精确**成立的，不是学出来的软偏好，对任何输入、任何 backbone 都成立。省下的容量留给真正的偏侧化信号。
+### MWM — Grounding Neural Representations in World Dynamics
 
-**4. SWA** — 反过来：把脑网络的性质搬到一个跟脑完全无关的模型上。
+MWM 从脑与世界内容的语义联系，推进到脑与行动相关的世界变化之间的联系。给定当前视觉状态，脑活动能够提供哪些预测未来视觉状态的信息？
 
-以注意力头为节点、以流体推理题上的激活相似度为边建图：小世界指数越高、流体推理越好，六个开源模型上顺序一致。再用剪枝验证：按 core/bridge 分数决定每个头和每一层的稀疏度，SWA 在六个模型上都把小世界指数保住得最好，WikiText 困惑度在每一个「模型 × 稀疏度」的格子里都最优。
+Mind model 将截至当前帧的 EEG 编码为 latent action，world model 以当前视觉状态和该 latent action 为条件预测未来视觉表征。训练使用同步 EEG 与第一视角视频，无需动作标注；未来预测与跨模态对齐、偏侧化相关监督共同学习运动相关表征。Lateralization-Aware Transformer 区分 bilateral 与 lateral 成分，在 EEG–视频联合变换中保留共享信息并变换侧别相关信息。
 
-### PART 2 · The Bridge — From Signals to Representations
+**FA-EEG 是 MWM 工作自身的内容**，在 MWM 章内讲述其 EEG 编码、左右结构与神经先验；不列为围绕 MWM 的周边工作，也不另设独立章节。
 
-**统一主线：PRISM I → MindLLM → PRISM II → D-Edit。** 四步依次回答对齐空间、语言对齐、语言驱动的视觉重建，以及更强的生成解耦。不要把它们拆成互不相关的语言／重建／编辑三条线。
+MindLLM 与 MWM 建立两种互补联系：前者通过已有语义标注联系脑活动与世界内容，后者通过同步经验和未来预测联系脑活动与世界动态。这里从语义内容推进到动态过程，不把 fMRI 与 EEG 写成同一条已经串接的解码流水线。
 
-**1. PRISM — I（选择对齐空间）** `三作`
+本章的角色是 **mind–world dynamics**。MWM 位于 MindLLM 之后、DySta 之前，是从脑走向物理世界的桥接研究。评估分别落在 mind model 的下游运动解码，以及通过独立 IMU 适配 world model 动作接口的未来预测；不把它描述为已完成机器人执行、反事实控制或脑控闭环。
 
-比较 fMRI 与预训练的视觉、语言、视觉–语言表示。在所测候选空间中，语言模型语义表示更适合作为 fMRI 的对齐目标。这为语言对齐提供依据，不是说大脑本身是语言式的，也不把论证顺序当作论文发表时间线。
+**通向 DySta：** 建立脑活动与世界动态的联系之后，研究视角进一步移向物理交互本身：智能体应该怎样组织不断到来的观测，才能兼顾历史记忆与及时行动？
 
-**2. MindLLM（将 fMRI 对齐到语言）** `一作`
+### DySta — Acting Efficiently in the Physical World
 
-通过脑指令微调，把 fMRI 与语言表征对齐，使感知、记忆与知识、语言与符号、复杂推理能用统一的文本格式读出。它不是语音或被试想说的词的解码。NSD 与 MSCOCO 的共享图像连接 fMRI 和既有标注，构成 980,610 段多轮对话，无须新增扫描。
+DySta 是 **pure physical-world research**：研究对象是物理世界中的视觉–语言–动作智能体。它根据语言指令和视觉历史预测动作，输入不包含 EEG，也不依靠脑解码输出来确立研究意义。
 
-**3. PRISM — II（基于语言重建视觉内容）** `三作`
+本章先讲“应该记住什么、更新什么”：行动可能需要过去的观测，但不断追加完整图像会增加上下文和重复计算。DySta 通过静态／动态 token 分解，保留时间上稳定的信息并组织多帧动态信息；复用静态 KV cache，通过 learned recache gate 按需刷新。
 
-从 fMRI 解码的语言信息还可以用于恢复视觉内容。PRISM 把描述组织为物体、属性、关系，再用 object-centric generation 生成并组合场景。它将语言表征用于视觉重建，同时显出保持物体结构对生成端的重要性。
+本章的角色是 **physical-world interaction**：利用时间结构同时支持有效记忆与高效推理。加速是这种表征设计带来的结果之一，多帧整合与时间依赖任务同样是核心贡献。
 
-**4. D-Edit（加强生成端的逐物体解耦）** `二作`
+DySta 是四章的终点。它不是 MWM 的下游控制器、MindLLM 的脑控应用，也不是 PHIL 的执行模块。MWM → DySta 表达研究对象从脑与世界动态的联系，转向物理世界中的行动；不再以“动作层 → 目标层”或“PHIL ∥ DySta”组织主线。
 
-PRISM 的物体中心生成进一步引出更明确的 object-disentangled generator。D-Edit 为每个 item 学习独立 soft prompt，用 grouped cross-attention 分开不同区域与条件的交互，从 prompt 与 attention 两层加强局部控制。文本、图像、mask 编辑及物体移除是这种生成能力的验证；不要只把它写成一个独立图像编辑工具。
+## 三个章节过渡
 
-这里“更强”指解耦机制，不暗示已经在 PRISM 的脑重建任务上取得更高指标，也不宣称 MindLLM、PRISM、D-Edit 的模型权重或输出已被整合评测。
+### HyBRiD → MindLLM：从脑内结构到语义内容
 
----
+HyBRiD 研究哪些脑区组合对认知预测有用。接下来，我们进一步追问：脑活动包含了什么关于外部世界的信息，能否以可理解、可灵活查询的形式读取？MindLLM 将研究从任务相关结构的发现，推进到跨个体、多任务的语义解码。
 
-### PART 3 · The Embodiment — From Representations to Interactions
+> HyBRiD identifies neural structures that are informative for a specified cognitive or phenotypic outcome. MindLLM extends the question to semantic content: how can brain activity be represented so that different questions can read out different aspects of information about the world?
 
-**结构：ACTION LEVEL（MWM）→ GOAL LEVEL（PHIL ∥ DySta）。** 动作层中，MWM 联合学习 mind model 和 world model，通过动作的视觉后果把脑信号与动作含义连接起来。完成任务时，人往往更希望指定期望结果，而不必表达每一步动作；这一需求把研究问题推进到目标层。PHIL 与 DySta 在目标层研究两个互补接口：**PHIL：goal image → target graph state → graph search**；**DySta：language instruction + multi-frame visual history → policy actions**。图像与语言目标对应第二部分解码出的图像与文本。箭头表示研究范围递进，不是 MWM 输出流向后两者；PHIL 与 DySta 也不是规划器—执行器串接，不能写成快环／慢环。
+### MindLLM → MWM：从语义联系到动态联系
 
-**MWM** `一作` 把当前 EEG 映射为 latent action，以此预测未来视觉表征。同步 EEG 与第一视角视频提供无需动作标注的预训练数据，损失包括未来预测、跨模态对齐和偏侧化相关监督。mind model 用于运动解码，world model 的动作接口通过独立 IMU 适配评估。不要声称预测损失是唯一监督、模型保证排除全部伪迹，或已经完成 EEG 到机器人的闭环。
+MindLLM 通过刺激图像关联的标注，把脑活动与世界的语义内容联系起来。MWM 将这种联系推进到时间维度：给定当前视觉状态，利用脑信号预测接下来的视觉变化，通过世界动态学习运动相关表征。
 
-**PHIL** `二作` 在论文具身接口中以 **goal image** 指定期望结果；图像所表达的结果需要对应状态图中的目标节点及其特征。给定起点、目标节点和状态图时，PHIL 用局部图结构及搜索记忆预测到目标的距离，指导 greedy best-first search。原方法实验评估给定 graph/start/goal 的搜索任务；将第二部分解码图像转换成可规划目标是未来整合。不要把这一接口对应写成已经评估的图像输入或脑控系统，也不要改写原方法的图搜索定义。PHIL 不是 DySta 的前置模块。
+> MindLLM connects brain activity to semantic information about the world. MWM extends this connection to dynamics, learning motor-related neural representations by using EEG-derived latent actions to predict future visual states.
 
-**DySta** `一作` 的目标输入是 **language instruction**，对应第二部分的文本输出；策略根据语言指令与视觉观察直接预测动作。静态／动态 token 分解、静态 KV cache 复用与 learned recache gate 降低推理开销，多帧动态信息支持需要记忆的任务。它与 PHIL 分别评估；将脑解码文本作为指令仍是未来整合，输入不是 PHIL 路径或 MWM latent action。
+### MWM → DySta：从脑与世界的联系到物理交互本身
 
----
+MWM 把研究推进到脑活动与世界变化的联系。接下来，DySta 将研究对象完全移向物理世界中的智能体：为了持续而及时地行动，应该保留哪些历史信息，更新哪些变化，并复用哪些计算？
 
-### Conclusion
+> After studying the relationship between neural activity and world dynamics, we turn to physical interaction itself. DySta asks how an embodied agent can organize a stream of observations to support both temporal memory and efficient action.
 
-总结脑信号建模、语义对齐与具身行为的研究贡献，并明确各自的验证范围，以及把这些能力整合为脑控系统仍需完成的工作。
+## 其他工作：围绕主角展开（Revolve）
+
+其他工作只用于相关动机、支持证据、方法呼应或能力延伸，不与四个核心 chapter 并列，也不作为章间过渡的必要中间步骤。拿掉这些工作，四篇主角仍应能独立讲完整。
+
+| 周边工作 | 围绕的主角 | 支撑或延伸的位置 |
+| --- | --- | --- |
+| SWA | HyBRiD | 结构建模思想向人工网络的延伸；不另立“神经科学与 ML 双向交换”主线 |
+| PRISM | MindLLM | 对齐空间比较与视觉重建，为语义联系提供补充讨论；不作为 MindLLM 必须依赖的前置章节 |
+| D-Edit | MindLLM | 物体级生成控制的延伸；编辑评估不等于已接入脑解码系统 |
+| PHIL | DySta | 物理世界目标实现中显式图搜索的相关方法；原评估使用给定 graph/start/goal，不是 DySta 的规划前级 |
+| RepQA | 引言或讨论 | 与语言接口有关的补充动机；不再独立承担整篇成立的前提 |
+
+周边工作的具体篇幅与位置在后续改论文时决定；本轮不移动或删除其论文内容。
+
+## 可直接使用的开场
+
+我的研究从脑活动的组织结构出发，逐步走向物理世界中的智能行为。首先，我研究如何发现与认知相关的高阶脑结构；随后，通过语义解码和动作条件的未来预测，分别建立脑活动与世界内容、世界动态之间的联系；最后，我将研究推进到物理交互本身，研究智能体如何组织时间信息，实现有记忆且高效的行动。
+
+## 写作约束
+
+- 主线固定为 **HyBRiD → MindLLM → MWM → DySta**，四篇一作各占一个完整的核心 chapter，不再设置三个 Part。
+- MindLLM 的 encoder 与 BIT 留在同一章；MWM 必须在 DySta 前；DySta 明确定位为纯物理世界研究。
+- 箭头表示研究问题与视角的递进，不表示模型权重、输出或监督信号已经逐章串接，也不表示论文发表时间顺序。
+- 四篇各有独立验证范围；脑控整合属于未来工作，不作为已有贡献或统一实验结果。
+- HyBRiD → MindLLM 不是静态到动态的转折；时间动态的推进放在 MindLLM → MWM。
+- 其他工作只 revolve，不恢复 PRISM I → MindLLM → PRISM II → D-Edit 或 ACTION LEVEL（MWM）→ GOAL LEVEL（PHIL ∥ DySta）的旧主线。
+- 后续若修改叙事，同步本文件与 `CLAUDE.md` 的 Thesis Outline，并更新相应口播；用户另行要求之前，不据此修改论文或演示文件。
