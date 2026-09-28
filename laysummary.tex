@@ -1,38 +1,21 @@
 % Lay summary --- required by the Registrar since 2026.
 % "Addressing a lay audience, provide a 250-word maximum description of the
 %  significance of your dissertation."
-% DRAFT, derived from abstract.tex -- please read and make it your own.
+% Plain-language summary of the four core studies.
 \begin{laysummary}
 
-We often tell computers what we mean through words, yet a movement, an image,
-or an intention can be difficult to express. This dissertation asks what
-becomes possible if a machine can read intent more directly, from brain
-activity itself.
+We usually tell computers what we want through words, but putting an image, thought, or intended movement into words can be difficult. This dissertation develops machine-learning methods that bring us closer to communicating intentions through brain activity and turning those intentions into useful actions.
 
-The work has three parts. First, it builds machine-learning models that
-respect how the brain is organized. Some of these models discover structure that
-existing brain atlases do not record; others build known biological structure,
-such as the mirror symmetry between imagined left- and right-hand movement,
-directly into the architecture.
+A preliminary study examines how language models communicate health information, showing the difficulty of making answers easier to read while preserving their content. Four main studies then follow a progression from brain signals, through meaning, to action.
 
-Second, it builds a bridge from brain activity to images. Comparing candidate
-representations motivates language as the alignment space. A decoder learns to
-connect brain recordings to language using existing image annotations. Visual
-reconstruction then uses descriptions of separate objects, their attributes,
-and their relationships. This structure motivates a more capable image
-generator that preserves the separation between objects and supports precise
-changes to individual items.
+HyBRiD learns which groups of brain regions carry useful information together. Accounting for these relationships improves predictions about people's cognitive characteristics.
 
-Third, the work moves from action meaning to goal pursuit. One model links
-brain activity to actions by predicting visual consequences. Task completion
-then motivates specifying a desired result rather than every movement.
-Planning toward a goal image and acting from language with remembered
-observations offer complementary approaches, matching the images and text
-studied earlier. Integrating these independently evaluated models remains
-future work.
+MindLLM connects brain recordings to meaning across perception, language, and knowledge-related tasks. It uses images to link brain recordings with existing descriptions and questions, creating training material that helps one model work across different people.
 
-Together these results sketch a path toward assistive technology for people who
-cannot easily speak or move, and toward systems that respond to intention
-rather than instruction.
+MWM uses the visible effects of behavior to teach a model to recognize action intentions from brain activity. It learns from paired brain recordings and video without labeling each action by hand.
+
+DySta then studies how robots can carry out people's intended tasks effectively and efficiently. Remembering recent observations and reusing previous calculations help robots complete tasks with less repeated processing.
+
+Together, these studies support more direct ways for people to communicate and act through machines. Such interfaces could help people regain independence and expand human abilities.
 
 \end{laysummary}

@@ -1,6 +1,6 @@
 \begin{table}[t]
     \centering
-    \caption{Results on the temporal-dependent tasks for multi-frame integration. All models use OpenVLA-OFT \cite{kim2025fine} as the base model. OpenVLA-OFT$^\dagger$ denotes a naive baseline that packs as many frames as possible into the context.}
+    \caption{Results on the temporal-dependent tasks for multi-frame integration. All models use OpenVLA-OFT \citep{kim2025fine} as the base model. OpenVLA-OFT$^\dagger$ denotes a naive baseline that packs as many frames as possible into the context.}
     \label{tab:stove_res}
     \resizebox{\linewidth}{!}{
     \begin{tabular}{lccc}
@@ -8,10 +8,10 @@
         Models & On Stove $\uparrow$ & Position Reset $\uparrow$ & Doneness (seconds) $\downarrow$ \\
     \midrule
         OpenVLA-OFT$^\dagger$ & $39.0\%$ & $78.0\%$ & $0.44$ \\
-        TTF-VLA \cite{liu2025ttf} & $7.8\%$ & $1.5\%$ & $1.51$ \\
-        TraceVLA \cite{zheng2024tracevla} & $2.0\%$ & $3.0\%$ & $1.41$ \\
-        MemoryVLA \cite{shi2025memoryvlaperceptualcognitivememoryvisionlanguageaction} & $23.0\%$ & $2.0\%$ & $1.49$ \\
-        ContextVLA \cite{jang2025contextvla} & $50.8\%$ & $22.3\%$ & $0.37$ \\
+        TTF-VLA \citep{liu2025ttf} & $7.8\%$ & $1.5\%$ & $1.51$ \\
+        TraceVLA \citep{zheng2024tracevla} & $2.0\%$ & $3.0\%$ & $1.41$ \\
+        MemoryVLA \citep{shi2025memoryvlaperceptualcognitivememoryvisionlanguageaction} & $23.0\%$ & $2.0\%$ & $1.49$ \\
+        ContextVLA \citep{jang2025contextvla} & $50.8\%$ & $22.3\%$ & $0.37$ \\
         \dysta{} (Ours) & $\mathbf{69.8}\%$ & $\mathbf{83.0}\%$ &  $\mathbf{0.26}$ \\
     \bottomrule
     \end{tabular}

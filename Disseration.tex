@@ -56,12 +56,12 @@
 	% is a different person from the dissertation adviser.
 	\committeechair{}
 	% Month and year the degree is AWARDED (not the submission month); no comma.
-	\date{September 2026}
+	\date{December 2026}
 	% Year of PhD conferral -- printed on the abstract and copyright pages.
 	\conferralyear{2026}
 	% For a DECEMBER degree the copyright year is the following year; uncomment
 	% and set it in that case.  Otherwise it follows \conferralyear.
-	% \copyrightyear{2027}
+	\copyrightyear{2027}
 
     %-----------------------------------------------------------------------
     % Front matter.  Required order (Registrar): title, copyright, abstract,
@@ -91,15 +91,10 @@
 
     \input{REPQA/main}
 
-    \input{Parts/part1.tex}
-    % Part II argument: PRISM I (space) -> MindLLM (alignment) ->
-    % PRISM II (language-based reconstruction) -> D-Edit (disentangled generator).
-    \input{Parts/part2.tex}
-    % Part III progresses from action meaning (MWM) to goal realization:
-    % goal images -> graph states -> PHIL search, and language instructions
-    % + visual history -> DySta policy. These are complementary goal-level
-    % approaches linked to Part II images/text, not a tested model pipeline.
-    \input{Parts/part3.tex}
+    \input{HYBRID/main}
+    \input{MINDLLM/main}
+    \input{MWM/main}
+    \input{DYSTA/main}
 
     \include{Conclusion}
 

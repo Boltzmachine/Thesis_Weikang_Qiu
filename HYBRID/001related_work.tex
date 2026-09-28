@@ -1,7 +1,7 @@
 \section{Related Work}
 \paragraph{Hypergraph Construction}
  Existing hypergraph construction methods are mostly based on neighbor reconstruction and neighbor distances. For example, the $k$ nearest neighbor-based method \citep{huang2009video} connects a centroid node and its $k$ nearest neighbors in the feature space to form a hyperedge. \citet{wang2015visual,liu2017elastic,jin2019robust,xiao2019multi} further refine these neighbor connections through various regularization. However, the number of hyperedges of these methods is restricted to the number of nodes, and hyperedges obtained by these methods are inconsistent across instances. 
- Cluster-based approaches learn community structure in a graph \cite{bannadabhavi2023community,ying2018hierarchical}, which can also be used to form hyperedges.
+ Cluster-based approaches learn community structure in a graph \citep{bannadabhavi2023community,ying2018hierarchical}, which can also be used to form hyperedges.
  \citet{zhang2022deep,zhang2018dynamic} proposed to iteratively refine a noisy hypergraph, which is obtained by the aforementioned methods. Therefore, they share the same limitations as the aforementioned methods. In addition, these methods are unable to learn MIMR hyperedges due to the absence of a tractable objective. Other methods, such as attributed-based methods~\citep{huang2015learning, joslyn2019high}, are ill-adapted to our context since they require discrete labels. 
  %or a prior graph topology, which is usually very noisy.
  Different from these methods, we provide a way to learn a consistent hypergraph through a deep-learning model. Furthermore, thanks to the proposed \multiheadname, these hyperedges are theoretically ensured MIMR.

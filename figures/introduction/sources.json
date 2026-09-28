@@ -1,0 +1,23 @@
+{
+  "source_deck": "deck/dissertationv3.pptx",
+  "assets": [
+    {
+      "file": "long_prompt_slide.png",
+      "slide": 3,
+      "pptx_part": "ppt/media/image13.png",
+      "description": "Original composite portrait and image-generation prompt; the paper retypes an excerpt for legibility."
+    },
+    {
+      "file": "composition_vii.png",
+      "slide": 3,
+      "pptx_part": "ppt/media/image14.png",
+      "description": "Wassily Kandinsky, Composition VII (1913), as reproduced in the supplied slides."
+    },
+    {
+      "file": "practical_impact_scenes.png",
+      "slide": 5,
+      "pptx_part": "ppt/media/image18.png",
+      "description": "Original conceptual four-scene illustration. Quadrants are displayed using LaTeX clipping; original pixels are unchanged."
+    }
+  ]
+}

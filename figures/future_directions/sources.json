@@ -1,0 +1,35 @@
+{
+  "figures": [
+    {
+      "file": "multimodal_brain_world_model.pdf",
+      "slide": 50,
+      "slide_part": "ppt/slides/slide50.xml",
+      "trim_bp_left_bottom_right_top": [
+        28,
+        184,
+        8,
+        110
+      ],
+      "sha256": "6d2ab744fecdb345ecf17581dd55eb000dbc93da57e4177747fb227aefed7a03",
+      "source": "deck/dissertationv3.pptx",
+      "source_sha256": "a5cf11ab01c89995a7d0c1502fec6effa0e1a73c8b2a8dc05d2af0f1bfd67436",
+      "export_method": "Native Keynote PDF export of an unmodified copy of the PPTX; vector-preserving crop with pdflatex graphicx",
+      "exported_at": "2026-09-27",
+      "page_size_bp": [
+        960,
+        540
+      ]
+    },
+    {
+      "file": "brain_closed_loop.pdf",
+      "source_tex": "figures/future_directions/brain_closed_loop.tex",
+      "content_source": "Conclusion.tex, Closed-Loop Intervention through Predicted Brain Dynamics",
+      "render_method": "pdflatex; make figure-brain-loop",
+      "updated_at": "2026-09-27",
+      "layout": "Two paper panels: actor-critic learning and closed-loop intervention; no slide content embedded",
+      "style_base": "OpenTikZ system-block-diagram, CC0-1.0",
+      "sha256": "f5a436ca1ea3b07f3491348379a66de5c684a9e3e5c7a2e2adc10d53c578a334",
+      "source_tex_sha256": "51eeb44c2d492f8059c5b973c5cabe85fea521e329ede41b7591899311a63893"
+    }
+  ]
+}

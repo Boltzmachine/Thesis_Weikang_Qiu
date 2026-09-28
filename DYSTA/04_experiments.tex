@@ -6,14 +6,14 @@ In this section, we evaluate the model’s inference efficiency as well as its m
 In this study, we validate our method's performance under acceleration by enabling KV caching of static components. 
 
 \noindent\textbf{Baselines}
-For baselines, we compare to those that also adopt temporal information reuse. \emph{FlashVLA} \cite{tan2025think} simply reuses the previous action based on a heuristic criterion.
-\emph{TTF-VLA} \cite{liu2025ttf} and \emph{VLA-cache} \cite{xu2025vla} identify reusable visual patches using hand-designed heuristics and cache the corresponding embeddings from previous steps; however, these cached patches are not guaranteed to remain static in the hidden representation space. All methods are based on the same VLA base model (i.e., CogACT~\cite{li2024cogact}), with all other necessary variables controlled consistently.
+For baselines, we compare to those that also adopt temporal information reuse. \emph{FlashVLA} \citep{tan2025think} simply reuses the previous action based on a heuristic criterion.
+\emph{TTF-VLA} \citep{liu2025ttf} and \emph{VLA-cache} \citep{xu2025vla} identify reusable visual patches using hand-designed heuristics and cache the corresponding embeddings from previous steps; however, these cached patches are not guaranteed to remain static in the hidden representation space. All methods are based on the same VLA base model (i.e., CogACT~\citep{li2024cogact}), with all other necessary variables controlled consistently.
 \input{DYSTA/tables/simplerenv}
 
 
 \begin{table}[t]
 \centering
-\caption{Results on the LIBERO benchmark. Policy inputs: third-person image, language instruction. All baselines and our method are applied to the same VLA base model (i.e., OpenVLA-OFT~\cite{kim2025fine}).}
+\caption{Results on the LIBERO benchmark. Policy inputs: third-person image, language instruction. All baselines and our method are applied to the same VLA base model (i.e., OpenVLA-OFT~\citep{kim2025fine}).}
 \label{tab:libero}
 \resizebox{\linewidth}{!}{
 \begin{tabular}{lccccc|ccc}
@@ -25,12 +25,12 @@ Models & Spatial & Object & Goal & Long & Average & FLOPs & Latency (ms) & Speed
 % DiT Policy \cite{hou2410diffusion} & 84.2 & 96.3 & 85.4 & 63.8 & 82.4 & $-$ & $-$& $-$\\
 % OpenVLA \cite{kim2024openvla} & 84.7 & 88.4 & 79.2 & 53.7 & 76.5 & $-$ & $-$& $-$\\
 % \midrule
-OpenVLA-OFT \cite{kim2025fine} & $\underline{96.2}$ & $\mathbf{98.3}$ & $\mathbf{96.2}$ & $\underline{90.7}$ & $\underline{95.4}$ & $100.0\%$ & $741$ & $1.00\times$\\
+OpenVLA-OFT \citep{kim2025fine} & $\underline{96.2}$ & $\mathbf{98.3}$ & $\mathbf{96.2}$ & $\underline{90.7}$ & $\underline{95.4}$ & $100.0\%$ & $741$ & $1.00\times$\\
 % \midrule
-+ FlashVLA \cite{tan2025think} & $71.8$ & $90.0$ &  $79.2$& $78.8$ & $80.0$ &  $88.7\%$& $657$ & $1.13\times$  \\
-+ TTF \cite{liu2025ttf} & $95.8$ & $94.2$ &   $93.6$ &  $86.0$  & $92.4$ & $75.0\%$ & $575$ & $1.29\times$\\
++ FlashVLA \citep{tan2025think} & $71.8$ & $90.0$ &  $79.2$& $78.8$ & $80.0$ &  $88.7\%$& $657$ & $1.13\times$  \\
++ TTF \citep{liu2025ttf} & $95.8$ & $94.2$ &   $93.6$ &  $86.0$  & $92.4$ & $75.0\%$ & $575$ & $1.29\times$\\
 % EfficientVLA & & & & 89.8 & \\
-+ VLA-Cache \cite{xu2025vla} & $95.6$ & $92.8$ & $94.0$ & $89.6$ & $93.0$ & $85.5\%$ & $652$ & $1.14\times$ \\
++ VLA-Cache \citep{xu2025vla} & $95.6$ & $92.8$ & $94.0$ & $89.6$ & $93.0$ & $85.5\%$ & $652$ & $1.14\times$ \\
 + \dysta{} (Ours) & $\mathbf{97.8}$ & $\underline{97.6}$ & $\mathbf{96.2}$ & $\mathbf{92.4}$ & $\mathbf{96.0}$ & $\mathbf{63.4}\%$ & $\mathbf{437}$ & $\mathbf{1.70}\times$ \\
 \bottomrule
 \end{tabular}
@@ -38,9 +38,9 @@ OpenVLA-OFT \cite{kim2025fine} & $\underline{96.2}$ & $\mathbf{98.3}$ & $\mathbf
 \end{table}
 
 \noindent\textbf{Simulation benchmark}
-We use SimplerEnv~\cite{li2024evaluating} and LIBERO~\cite{liu2023libero} task suite to evaluate the performance and acceleration. \citet{kim2025fine} offers two settings for LIBERO, one using only a third-person image and a language instruction as inputs, and another that additionally includes an extra camera view and proprioceptive state. We adopt the former setting, as it offers broader applicability and aligns more closely with standard VLA deployment scenarios. For the LIBERO benchmark, we finetune the model to the corresponding downstream datasets. For the SimplerEnv benchmark, we use Open X-Embodiment (OXE) \cite{vuong2023open} as the training dataset. All settings are consistent with the corresponding original base model.
+We use SimplerEnv~\citep{li2024evaluating} and LIBERO~\citep{liu2023libero} task suite to evaluate the performance and acceleration. \citet{kim2025fine} offers two settings for LIBERO, one using only a third-person image and a language instruction as inputs, and another that additionally includes an extra camera view and proprioceptive state. We adopt the former setting, as it offers broader applicability and aligns more closely with standard VLA deployment scenarios. For the LIBERO benchmark, we finetune the model to the corresponding downstream datasets. For the SimplerEnv benchmark, we use Open X-Embodiment (OXE) \citep{vuong2023open} as the training dataset. All settings are consistent with the corresponding original base model.
 
-\noindent\textbf{Real-World benchmark} We evaluate \dysta{} with Cobot Magic robots on 7 tasks across 3 categories, each with 20 trials. This evaluation scale is consistent with prior work~\cite{shi2025memoryvlaperceptualcognitivememoryvisionlanguageaction,li2024cogact}.
+\noindent\textbf{Real-World benchmark} We evaluate \dysta{} with Cobot Magic robots on 7 tasks across 3 categories, each with 20 trials. This evaluation scale is consistent with prior work~\citep{shi2025memoryvlaperceptualcognitivememoryvisionlanguageaction,li2024cogact}.
 
 \noindent\textbf{Evaluation} The performance is measured by success rate, and acceleration is measured by the FLOPs reduction rate and the inference latency.
 
@@ -52,12 +52,12 @@ Table~\ref{tab:simplerenv}  and Table~\ref{tab:libero} summarize the performance
 \subsection{Multi-Frame Integration for Temporal-dependency Modeling} 
 
 \noindent\textbf{Baselines}
-We consider the following baselines: \emph{OpenVLA-OFT$^\dagger$} incorporates full image tokens from historical observations. Since this baseline incurs a prohibitively large context length compared with standard models, we allocate the maximum available resources and tune it for the best achievable performance. \emph{TTF-VLA} \cite{liu2025ttf} mixes the current observation with past observations in a patch-wise manner. \emph{TraceVLA} \cite{zheng2024tracevla} visualizes the trajectories of active points by overlaying them onto the image using distinct colors, referred to as visual traces. \emph{MemoryVLA} \cite{shi2025memoryvlaperceptualcognitivememoryvisionlanguageaction} feeds the LLM backbone with images from each timestep independently and extracts a representation for each; only the multi-timestep representations are provided to the decoder. \emph{ContextVLA} \cite{jang2025contextvla} pools historical observations into a fixed number of tokens and prepends them to the image tokens of the current observation. All methods are applied to the same VLA base model (i.e., OpenVLA-OFT~\cite{kim2025fine}), with all other necessary variables controlled consistently.
+We consider the following baselines: \emph{OpenVLA-OFT$^\dagger$} incorporates full image tokens from historical observations. Since this baseline incurs a prohibitively large context length compared with standard models, we allocate the maximum available resources and tune it for the best achievable performance. \emph{TTF-VLA} \citep{liu2025ttf} mixes the current observation with past observations in a patch-wise manner. \emph{TraceVLA} \citep{zheng2024tracevla} visualizes the trajectories of active points by overlaying them onto the image using distinct colors, referred to as visual traces. \emph{MemoryVLA} \citep{shi2025memoryvlaperceptualcognitivememoryvisionlanguageaction} feeds the LLM backbone with images from each timestep independently and extracts a representation for each; only the multi-timestep representations are provided to the decoder. \emph{ContextVLA} \citep{jang2025contextvla} pools historical observations into a fixed number of tokens and prepends them to the image tokens of the current observation. All methods are applied to the same VLA base model (i.e., OpenVLA-OFT~\citep{kim2025fine}), with all other necessary variables controlled consistently.
 
 
 \begin{table}[t]
 \centering
-\caption{Success rate (\%) on real-world experiments with the Cobot Magic robot. All baselines and our method are applied to the same VLA base model (i.e., OpenVLA-OFT~\cite{kim2025fine}).}
+\caption{Success rate (\%) on real-world experiments with the Cobot Magic robot. All baselines and our method are applied to the same VLA base model (i.e., OpenVLA-OFT~\citep{kim2025fine}).}
 \label{tab:real_res}
 \resizebox{\linewidth}{!}{
 \begin{tabular}{l|cccc|cc|c|ccc}
@@ -171,7 +171,6 @@ To validate the effectiveness of the proposed components, we conduct ablation st
     \centering
         \caption{Ablation studies. \emph{w/o Contrast} removes the contrastive learning objective during training. \emph{w/o L2 cache} ablates the multi-level design by retaining only a single static cache level. \emph{Fixed step} replaces the learnable recache gate by forcing the refresh of the cache at fixed intervals. The refresh interval is set to match the average recaching interval of \dysta{} (first row).}
     \label{tab:dysta-ablation}
-    \resizebox{\linewidth}{!}{
     \begin{tabular}{cccccc}
     \toprule
          & \multicolumn{2}{c}{visual matching} && \multicolumn{2}{c}{variant aggregation}  \\
@@ -185,7 +184,6 @@ To validate the effectiveness of the proposed components, we conduct ablation st
         fixed step & $87.7$ & $81.7$ & & $85.3$ & $74.8$ \\
     \bottomrule
     \end{tabular}
-    }
 \end{table}
 
 \subsection{Visualizations}

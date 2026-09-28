@@ -69,7 +69,7 @@
 \newcolumntype{M}{>{\raggedleft\arraybackslash}p{0.1\linewidth}}
 \newcommand{\cchead}[1]{\multicolumn{1}{c}{#1}}
     \centering\textbf{}
-\caption{Results on the SimplerEnv benchmark. Task suites follow the setting of \citet{qu2025spatialvla}. All baselines and our method are applied to the same VLA base model (i.e., CogACT~\cite{li2024cogact}).}
+\caption{Results on the SimplerEnv benchmark. Task suites follow the setting of \citet{qu2025spatialvla}. All baselines and our method are applied to the same VLA base model (i.e., CogACT~\citep{li2024cogact}).}
 \label{tab:simplerenv}
     \resizebox{\linewidth}{!}{
 \begin{tabular}{lcccccc|ccc}
@@ -84,10 +84,10 @@
   % SpatialVLA \cite{qu2025spatialvla} & $81.0$ & $69.6$ & $59.3$ & $89.5$ & $71.7$ & $36.2$ & $-$ & $-$ & $-$ \\
   % $\pi_0$ \cite{black2024pi0visionlanguageactionflowmodel} & $88.0$ & $80.3$ & $56.0$ & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ \\
   % \midrule
- CogACT \cite{li2024cogact} & $91.3$ & $\underline{85.0}$ & $71.8$ &$89.6$ & $\underline{80.8}$ & $28.3$  & 100\% & $1360$ & $1.00\times$ \\
-  + FlashVLA \cite{tan2025think} & $80.0$ & $57.1$ & $\underline{73.6}$ & $82.5$ & $60.8$ & $28.6$ & $83.4\%$ & $1024$ & $1.33\times$\\
- + TTF \cite{liu2025ttf} & $89.3$ & $71.3$ & $58.4$ & $88.0$ & $62.7$ & $\underline{34.0}$ & $86.5\%$ & $1051$ & $1.29\times$  \\
- + VLA-Cache \cite{xu2025vla} &  $\underline{92.0}$ & $83.3$  & $70.5$ & $\underline{91.7}$ & $79.3$  & $32.5$ & $80.1\%$ & $985$ & $1.38\times$ \\
+ CogACT \citep{li2024cogact} & $91.3$ & $\underline{85.0}$ & $71.8$ &$89.6$ & $\underline{80.8}$ & $28.3$  & 100\% & $1360$ & $1.00\times$ \\
+  + FlashVLA \citep{tan2025think} & $80.0$ & $57.1$ & $\underline{73.6}$ & $82.5$ & $60.8$ & $28.6$ & $83.4\%$ & $1024$ & $1.33\times$\\
+ + TTF \citep{liu2025ttf} & $89.3$ & $71.3$ & $58.4$ & $88.0$ & $62.7$ & $\underline{34.0}$ & $86.5\%$ & $1051$ & $1.29\times$  \\
+ + VLA-Cache \citep{xu2025vla} &  $\underline{92.0}$ & $83.3$  & $70.5$ & $\underline{91.7}$ & $79.3$  & $32.5$ & $80.1\%$ & $985$ & $1.38\times$ \\
  + \dysta{} (Ours) & $\mathbf{92.7}$ & $\mathbf{88.8}$ & $\mathbf{75.0}$ & $\mathbf{92.4}$  & $\mathbf{81.0}$ & $\mathbf{38.9}$ & $\mathbf{43.4\%}$ & $\mathbf{601}$ & $\mathbf{2.26\times}$ \\
  \bottomrule
 \end{tabular}

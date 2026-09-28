@@ -99,37 +99,39 @@
 
 % the window stops exactly at the current frame it is paired with
 
-\node[mod, minimum width=2.00cm, minimum height=0.98cm, align=center] (femb)
-     at (4.05,1.52) {$f_{\mathrm{emb}}$\\[2pt] \scriptsize patch embedding};
-\node[mod, minimum width=3.30cm, minimum height=0.98cm, align=center] (enc)
-     at (7.30,1.52) {Lateralization-Aware\\Transformer (LAT)};
-\node[mod, minimum width=0.86cm, minimum height=0.66cm] (hh) at (9.90,1.52)
+% f_emb sits under p_phi at the same width; the chain then runs to the panel's
+% right inset (0.39cm, matching the left) with equal 0.60cm arrows
+\node[mod, minimum width=2.25cm, minimum height=0.98cm, align=center] (femb)
+     at (4.62,1.52) {$f_{\mathrm{emb}}$\\[2pt] \scriptsize patch embedding};
+\node[mod, minimum width=3.70cm, minimum height=0.98cm, align=center] (enc)
+     at (8.195,1.52) {Lateralization-Aware\\Transformer (LAT)};
+\node[mod, minimum width=0.86cm, minimum height=0.66cm] (hh) at (11.075,1.52)
      {$\mathbf{H}$};
-\node[tag, anchor=north, align=center, text width=2.10cm] at (9.85,1.05)
-     {EEG representation};
-\node[actbox, minimum width=1.05cm, minimum height=0.66cm] (at) at (11.40,1.52)
+\node[tag, anchor=north, align=center] at (11.075,1.05)
+     {EEG\\representation};
+\node[actbox, minimum width=1.05cm, minimum height=0.66cm] (at) at (12.63,1.52)
      {$\mathbf{a}_t$};
-\node[tag, anchor=north, align=center, text width=1.20cm,
-      text=actgold!75!black] at (11.40,1.05) {latent action};
+\node[tag, anchor=north, align=center,
+      text=actgold!75!black] at (12.63,1.05) {latent\\action};
 
-\draw[eflow] (2.88,1.52) -- (3.05,1.52);
-\draw[eflow] (5.05,1.52) -- (5.65,1.52);
-\node[lbl, anchor=south] at (5.35,2.02) {$\mathbf{Z}$ tokens};
-\draw[eflow] (8.95,1.52) -- (9.47,1.52);
-\draw[eflow] (10.33,1.52) -- (10.87,1.52);
+\draw[eflow] (2.88,1.52) -- (3.495,1.52);
+\draw[eflow] (5.745,1.52) -- (6.345,1.52);
+\node[lbl, anchor=south] at (6.045,2.05) {$\mathbf{Z}$ tokens};
+\draw[eflow] (10.045,1.52) -- (10.645,1.52);
+\draw[eflow] (11.505,1.52) -- (12.105,1.52);
 
 % the latent action rises into the frame predictor: EEG in the action slot
-\draw[aflow] (11.40,1.85) -- (11.40,3.20) -- (4.62,3.20) -- (4.62,4.59);
+\draw[aflow] (12.63,1.85) -- (12.63,3.20) -- (4.62,3.20) -- (4.62,4.59);
 \node[lbl, anchor=west, text=actgold!70!black] at (4.72,4.30) {$\mathbf{a}_t$};
 
-% legend
-\fill[eeglight, draw=eegblue, line width=0.6pt, rounded corners=1pt]
-      (12.10,2.02) rectangle (12.36,2.16);
-\node[note, anchor=west] at (12.42,2.09) {trainable};
-\fill[softgray, draw=inkgray!55, line width=0.6pt, rounded corners=1pt]
-      (12.10,1.52) rectangle (12.36,1.66);
-\node[note, anchor=west] at (12.42,1.59) {frozen\,\snowflake{1}};
-\draw[aflow, line width=1.0pt] (12.10,1.09) -- (12.40,1.09);
-\node[note, anchor=west] at (12.46,1.09) {action};
+% % legend
+% \fill[eeglight, draw=eegblue, line width=0.6pt, rounded corners=1pt]
+%       (12.10,2.02) rectangle (12.36,2.16);
+% \node[note, anchor=west] at (12.42,2.09) {trainable};
+% \fill[softgray, draw=inkgray!55, line width=0.6pt, rounded corners=1pt]
+%       (12.10,1.52) rectangle (12.36,1.66);
+% \node[note, anchor=west] at (12.42,1.59) {frozen\,\snowflake{1}};
+% \draw[aflow, line width=1.0pt] (12.10,1.09) -- (12.40,1.09);
+% \node[note, anchor=west] at (12.46,1.09) {action};
 
 \end{tikzpicture}

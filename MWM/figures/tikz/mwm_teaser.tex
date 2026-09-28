@@ -25,7 +25,7 @@
      \fill[#3, draw=#4, line width=0.25pt]
        ({(\gi-1)*#2-\gh},{\gh-(\gj-1)*#2}) rectangle ({\gi*#2-\gh},{\gh-\gj*#2});}}}
 % bilateral / lateral feature stack centred on (0,0); #1 = +1 (as recorded)
-% or -1 (flipped): only the lateral half turns round (as in the flip figure, panel e)
+% or -1 (mirrored): only the lateral half turns round (as in the mirror figure, panel e)
 \newcommand{\tztstack}[1]{%
   \draw[fill=bilight,  draw=bislate, line width=0.6pt] (-0.20,0) rectangle (0.20,0.22);
   \draw[fill=latlight, draw=latred,  line width=0.6pt] (-0.20,-0.22) rectangle (0.20,0);
@@ -87,7 +87,7 @@
 \draw[inkgray!15, line width=0.6pt] (9.36,0.62) -- (9.36,3.25);
 
 % column headers: the three challenges
-\node[colhead] at (2.58,6.12)  {(1) Labels \& data};
+\node[colhead] at (2.58,6.12)  {(1) Scalability \& Labels};
 \node[colhead] at (7.03,6.12)  {(2) Pretraining target};
 \node[colhead] at (11.48,6.12) {(3) Lateralization};
 
@@ -99,7 +99,7 @@
 \foreach \mx/\te/\tm in {
     0.81/{costly trials, coarse labels}/{no manual annotations, full observation},
     5.46/{target: the EEG itself}/{target: behavior's consequences},
-    9.72/{no explicit lateral modelling}/{explicit lateral modelling}}{
+    9.72/{no explicit lateral modeling}/{explicit lateral modeling}}{
   \node[capE] at ({\mx+0.20},4.10) {\te};
   \node[capM] at ({\mx+0.20},0.80) {\tm};
   \tztno{(\mx,4.10)}
@@ -218,9 +218,9 @@
   \node[mtag] at (-0.18,-0.63) {fused into one feature};
 \end{scope}
 
-% ================= (3) MWM: paired flip, only H^lat is swapped ===========
+% ================= (3) MWM: paired mirror, only H^lat is swapped ===========
 % The recorded frame and its mirror image sit above their EEG features:
-% flipping the video pairs with keeping H^bi and swapping only H^lat.
+% mirroring the video pairs with keeping H^bi and swapping only H^lat.
 % (the mirrored frame uses the mirrored crop, so it is an exact mirror image)
 \node[shot] (fA) at (10.30,2.40)
   {\includegraphics[width=0.82cm, trim=54 34 0 20, clip]{ego_anchor}};
@@ -228,7 +228,7 @@
   {\includegraphics[width=0.82cm, trim=0 34 54 20, clip]{ego_anchor_flip}};
 \draw[flow, hop, draw=inkgray!70, line width=0.8pt]
   ([xshift=0.08cm]fA.east) -- ([xshift=-0.08cm]fB.west);
-\node[mtag, anchor=base] at (11.47,2.58) {paired flip};
+\node[mtag, anchor=base] at (11.47,2.58) {paired mirror};
 \node[mtag, anchor=base] at (10.30,2.98) {as recorded};
 \node[mtag, anchor=base] at (12.64,2.98) {mirrored};
 \begin{scope}[shift={(10.30,1.60)}] \tztstack{1} \end{scope}

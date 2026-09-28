@@ -1,10 +1,12 @@
 \chapter{\dysta{}: Static-Dynamic Disentanglement for Efficient Multi-Frame Vision-Language-Action Models}
 \label{chapter:dysta}
 
-At the goal level, an agent must determine how to realize a desired outcome without a person specifying every action. Chapter~\ref{chapter:phil} studies graph search toward a state specified by a goal image. This chapter studies a complementary policy approach: \dysta{} takes a language instruction as its goal specification and generates actions directly from that instruction and multi-frame visual history. Its language interface corresponds to the text decoded in Part~\ref{part:bridge}, while the visual history describes the environment in which the policy acts. In this setting, effective behavior requires the policy to remember earlier observations and make decisions efficiently. A single image may not reveal whether an object has already been moved or a step has already been completed, but repeatedly processing a long image history is expensive. \dysta{} addresses both requirements through static--dynamic disentanglement. It retains temporally persistent information once, integrates dynamic information across frames, and reuses computation through an adaptive cache. This combination of multi-frame memory and efficient inference improves task completion while reducing latency. The experiments evaluate this policy with supplied language instructions in simulation and on real robots.
+Chapter~\ref{chapter:mwm} used the visual consequences of behavior to learn neural representations of action. We now ask how machines can translate human intentions into physical action, enabling them to carry out tasks effectively and efficiently on behalf of their users. This chapter introduces \dysta{}, which addresses two obstacles to this capability: limited temporal memory and costly repeated inference. By separating persistent and changing visual information, the method supports multi-frame task reasoning and reuses computation across control steps.
 
 \input{DYSTA/01_intro}
 \input{DYSTA/02_related_work}
 \input{DYSTA/03_method}
 \input{DYSTA/04_experiments}
 \input{DYSTA/05_conclusion}
+
+\input{DYSTA/additional_work}

@@ -1,6 +1,11 @@
-% Mind World Model chapter (ICLR 2027 submission; source: github.com/Boltzmachine/iclr2027-paper).
-% The \chapter heading and its transition paragraph live in Parts/part3.tex.
-% 006_appendix.tex is kept in this directory but not \input.
+\chapter{Mind World Models: Joint Learning of Motor EEG Representations and Action-Conditioned World Dynamics}
+\label{chapter:mwm}
+
+Chapter~\ref{chapter:mindllm} connected brain activity to semantic representations including text and images. This chapter takes the next step from semantics to action: visual consequences provide semantic supervision for learning motor-related action representations. \mwm{} learns from synchronized EEG and egocentric video, training an EEG encoder to produce latent actions that allow a world model to predict future visual features. Predicting these consequences trains the EEG encoder to retain information about the actions that produced them, without requiring explicit action labels. In this way, \mwm{} connects semantics to action, using visual consequences to learn action representations that support motor decoding. Chapter~\ref{chapter:dysta} then turns from representing actions to carrying out tasks, introducing \dysta{} to study how robotic policies can translate human intentions into effective and efficient task execution.
+
+% Source: https://www.overleaf.com/project/6a736986680ecc7e91861ff9
+% Overleaf revision: 61c25b86a19eb3951657a51db93e648fa96867c1 (imported 2026-09-27).
+% Appendix and submission statements are retained but not included.
 \input{MWM/001_intro}
 \input{MWM/002_related_works}
 \input{MWM/003_method}

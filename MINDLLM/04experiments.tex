@@ -4,7 +4,7 @@ In this section, we first evaluate our model on various downstream tasks, demons
 \subsection{Settings}
 
 \noindent\textbf{fMRI Datasets} 
-We use the widely used Natural Scenes Dataset (NSD) \cite{allen2022massive}, a large-scale dataset consisting of fMRI measurements of $8$ healthy adult subjects. During data collection, subjects viewed images from the MS-COCO dataset \cite{lin2014microsoft} and were instructed to press buttons to indicate whether they had previously seen each image.
+We use the widely used Natural Scenes Dataset (NSD) \citep{allen2022massive}, a large-scale dataset consisting of fMRI measurements of $8$ healthy adult subjects. During data collection, subjects viewed images from the MS-COCO dataset \citep{lin2014microsoft} and were instructed to press buttons to indicate whether they had previously seen each image.
 
 % \textit{Instruction datasets}
 % COCO Caption \cite{chen2015microsoft}, Paragraph Captioning \cite{krause2017hierarchical},
@@ -91,13 +91,13 @@ OK-VQA &Accuracy $\uparrow$&22.98\% & 10.35\% &17.22\%&27.63\% &18.63\% &27.70\%
 \endgroup
 
 \subsection{Brain Captioning}
-To evaluate the model's performance on downstream tasks, we start with the widely used brain captioning benchmark \cite{xia2024umbrae}. The task, built upon COCO Caption \cite{chen2015microsoft} requires the model to predict captions of given images as fMRI stimuli.
+To evaluate the model's performance on downstream tasks, we start with the widely used brain captioning benchmark \citep{xia2024umbrae}. The task, built upon COCO Caption \citep{chen2015microsoft} requires the model to predict captions of given images as fMRI stimuli.
 
 \noindent\textbf{Baselines}
-The following baselines are considered in this experiment: SDRecon \cite{takagi2023high}, UniBrain \cite{mai2023unibrain}, and BrainCap \cite{ferrante2023brain} employs a linear regression, mapping the fMRI to the inputs of an image caption model \cite{li2023blip}. OneLLM \cite{han2024onellm} is a multimodal large language models that align $8$ modalities (including fMRI) with language all in one model. For fair and efficient comparison, we only finetune the encoder, given that we freeze the LLM in our method as well. UMBRAE learns an encoder that maps fMRIs to images through an encoder similar to the MLP mixer \cite{tolstikhin2021mlp}. BrainChat \cite{huang2024brainchat} segments the flattened voxels into 16 patches and employs a transformer to decode text conditioned on the patches.
+The following baselines are considered in this experiment: SDRecon \citep{takagi2023high}, UniBrain \citep{mai2023unibrain}, and BrainCap \citep{ferrante2023brain} employs a linear regression, mapping the fMRI to the inputs of an image caption model \citep{li2023blip}. OneLLM \citep{han2024onellm} is a multimodal large language models that align $8$ modalities (including fMRI) with language all in one model. For fair and efficient comparison, we only finetune the encoder, given that we freeze the LLM in our method as well. UMBRAE learns an encoder that maps fMRIs to images through an encoder similar to the MLP mixer \citep{tolstikhin2021mlp}. BrainChat \citep{huang2024brainchat} segments the flattened voxels into 16 patches and employs a transformer to decode text conditioned on the patches.
 It is worth noting that all of these baselines require subject-specific layers or parameters. In contrast, our model is subject-agnostic, thus with the potential to generalize on novel subjects.
 
-\noindent\textbf{Metric} Following previous works, we use five standard metrics for text generation: BLEU-$k$ \cite{papineni2002bleu}, ROUGE-L \cite{lin2004rouge}, CIDEr \cite{vedantam2015cider}, SPICE \cite{anderson2016spice}, METEOR \cite{banerjee2005meteor}.
+\noindent\textbf{Metric} Following previous works, we use five standard metrics for text generation: BLEU-$k$ \citep{papineni2002bleu}, ROUGE-L \citep{lin2004rouge}, CIDEr \citep{vedantam2015cider}, SPICE \citep{anderson2016spice}, METEOR \citep{banerjee2005meteor}.
 
 Table \ref{tab:caption} shows that our model outperforms baselines in terms of most metrics, with an average improvement of $3.32\%$, even if our model does not have any subject-specific layers. We argue that this is attributed to both the novel architecture design and the introduction of BIT, which will be evident in the next experiment.
 
@@ -179,11 +179,11 @@ OK-VQA &Accuracy $\uparrow$&21.94 &17.09 &\bfseries 25.44 \\
 The purpose of experiments in this section is two-fold: 1) To investigate the impact of our model design and the introduction of BIT on performance improvement. 2) To evaluate the versatility of the model, i.e., its performance on various downstream tasks.
 
 \noindent\textbf{Baselines} Besides baselines that could be adapted to this experiment from the previous one, we further consider the following subject-agnostic models as baselines.
-1) MindBridge \cite{wang2024mindbridge} flattens the voxels and adaptively adjusts the padding and stride to pool the voxels into a fixed dimension. The original implementation of MindBridge has subject-specific parameters. However, since those parameters are of the same size, we make them shared across subjects and thus make the model subject-agnostic.
-2) UniBrain \cite{wang2024unibrain} samples voxels into a fixed number of groups and employs a transformer where groups are treated as tokens. This UniBrain is unrelated to the UniBrain in the previous section; they just share the same name.
+1) MindBridge \citep{wang2024mindbridge} flattens the voxels and adaptively adjusts the padding and stride to pool the voxels into a fixed dimension. The original implementation of MindBridge has subject-specific parameters. However, since those parameters are of the same size, we make them shared across subjects and thus make the model subject-agnostic.
+2) UniBrain \citep{wang2024unibrain} samples voxels into a fixed number of groups and employs a transformer where groups are treated as tokens. This UniBrain is unrelated to the UniBrain in the previous section; they just share the same name.
 
 \noindent\textbf{Datasets \& Metric}
-We use the test split of all QA \& caption datasets in the BIT dataset. We strictly adhere to the official metrics on all datasets. In summary, for sentence generation, we use BLEU-$k$~\cite{papineni2002bleu}, ROUGE-L~\cite{lin2004rouge}, CIDEr~\cite{vedantam2015cider}, SPICE~\cite{anderson2016spice}, METEOR~\cite{banerjee2005meteor}. For QA-related tasks, we use VQA accuracy~\cite{antol2015vqa} as well as special metrics proposed in the original paper (e.g. ANLS for ST-VQA~\cite{biten2019scene}).
+We use the test split of all QA \& caption datasets in the BIT dataset. We strictly adhere to the official metrics on all datasets. In summary, for sentence generation, we use BLEU-$k$~\citep{papineni2002bleu}, ROUGE-L~\citep{lin2004rouge}, CIDEr~\citep{vedantam2015cider}, SPICE~\citep{anderson2016spice}, METEOR~\citep{banerjee2005meteor}. For QA-related tasks, we use VQA accuracy~\citep{antol2015vqa} as well as special metrics proposed in the original paper (e.g. ANLS for ST-VQA~\citep{biten2019scene}).
 
 The results on subject 1 are shown in Table~\ref{tab:versatile}. Our model outperforms baselines, with an average improvement of $12.0\%$. Further, by comparing instruction tuning and from-scratch models, we find that instruction tuning has a significant positive effect, with an average improvement of $28.0\%$. The results remain stable across different random seeds; for instance, according to our observations, the BLEU-1 score for paragraph captioning exhibits a maximum of $\pm 0.3$ variance.
 
@@ -200,7 +200,7 @@ detect-weight=true,detect-inline-weight=math
     \label{tab:new_task}
 \vskip 0.1in
     \centering
-    \resizebox{\linewidth}{!}{
+    % \resizebox{\linewidth}{!}{
     \begin{tabular}{cSSSS}
     \toprule
     \multirow{2}{*}{Method} &  \multicolumn{2}{c}{Overall} & {Sentiment Understanding} & {Utility/Affordance} \\
@@ -214,19 +214,19 @@ detect-weight=true,detect-inline-weight=math
          \mindllm{}& \bfseries 54.08\% &  \bfseries 45.43\% & \bfseries 80.77\% & \bfseries 50.00\% \\
     \bottomrule
     \end{tabular}
-    }
-    \vspace{-1em}
+    % }
+    % \vspace{-1em}
 \end{table}
 \endgroup
 
 
 \subsection{Unseen Subject Generalization}
-Our neuroscience-informed, subject-agnostic design enhances generalization to novel subjects, a crucial factor in real-world applications where training a model for each individual is impractical. To evaluate it, we perform instruction tuning on $7$ out of the $8$ subjects in the natural scene dataset \cite{allen2022massive}, and evaluate generalization on the held-out subject. Table~\ref{tab:subj8} shows our model outperforms two other subject-agnostic baselines in most cases, with an average improvement of $24.5\%$ compared to the second-best model. We anticipate further performance gains through the application of domain adaptation techniques \cite{xiao2023spa,ganin2015unsupervised,ganin2016domain,gong2012geodesic}, which we leave as a direction for future work.
+Our neuroscience-informed, subject-agnostic design enhances generalization to novel subjects, a crucial factor in real-world applications where training a model for each individual is impractical. To evaluate it, we perform instruction tuning on $7$ out of the $8$ subjects in the natural scene dataset \citep{allen2022massive}, and evaluate generalization on the held-out subject. Table~\ref{tab:subj8} shows our model outperforms two other subject-agnostic baselines in most cases, with an average improvement of $24.5\%$ compared to the second-best model. We anticipate further performance gains through the application of domain adaptation techniques \citep{xiao2023spa,ganin2015unsupervised,ganin2016domain,gong2012geodesic}, which we leave as a direction for future work.
 
 \subsection{Adapting to New Tasks}
 It is common that users want to adapt the \mindllm{} to their own specific use cases. To this end, we aim to assess our model's adaptability to new tasks.
 
-\noindent\textbf{Dataset \& Metrics} We use TDIUC \cite{kafle2017analysis}, a QA dataset consisting of $12$ types of questions, as a benchmark to evaluate the model's various capabilities comprehensively. Additionally, we further select $2$ task types-\textit{sentiment understanding} and \textit{utility/affordance} tasks, that are particularly relevant to BCI applications as sub-datasets. The \textit{utility/affordance} task, for instance, enables the model to identify useful objects in a given scene and autonomously decide whether to utilize them. Following their paper, we compute the accuracy of each type and report the arithmetic mean-per-type (A-MPT) and the harmonic mean-per-type (H-MPT). For the $2$ selected types, we report the accuracy respectively. 
+\noindent\textbf{Dataset \& Metrics} We use TDIUC \citep{kafle2017analysis}, a QA dataset consisting of $12$ types of questions, as a benchmark to evaluate the model's various capabilities comprehensively. Additionally, we further select $2$ task types-\textit{sentiment understanding} and \textit{utility/affordance} tasks, that are particularly relevant to BCI applications as sub-datasets. The \textit{utility/affordance} task, for instance, enables the model to identify useful objects in a given scene and autonomously decide whether to utilize them. Following their paper, we compute the accuracy of each type and report the arithmetic mean-per-type (A-MPT) and the harmonic mean-per-type (H-MPT). For the $2$ selected types, we report the accuracy respectively. 
 
 Table~\ref{tab:new_task} shows our model achieves balanced (high harmonic mean) and consistently improved performances with an average of $13.5\%$. We could also observe the performance benefits from BIT, with $25.0\%$ absolute improvement.
 
@@ -366,9 +366,9 @@ We conduct ablation studies on the design of key embeddings in the neuroscience-
 \end{figure}
 
 
-Unlike previous deep learning models \cite{scotti2024mindeye2,mai2023unibrain}, our model allows interpretations by investigating how \textit{queries} work in the neuroscience-informed attention layer. We inspect the attention weights between queries and voxels in Figure~\ref{fig:query}. 
+Unlike previous deep learning models \citep{scotti2024mindeye2,mai2023unibrain}, our model allows interpretations by investigating how \textit{queries} work in the neuroscience-informed attention layer. We inspect the attention weights between queries and voxels in Figure~\ref{fig:query}. 
 % Weight values are scaled by min-max normalization and results are presented in Figure \ref{fig:query}. 
 
-We found that some queries primarily focus on processing single brain regions, such as Parahippocampal Place Area (PPA) (Figure~\ref{fig:query}a) and Fusiform Face Area (FFA) (\ref{fig:query}b). As previous research has shown, PPA is related to conceptual association, semantic processing and environmental memory \cite{epstein1999parahippocampal,kohler2002differential,bar2008scenes,epstein2010reliable} and FFA is known for its critical role in expertise recognition, social cognition and identity memory \cite{schultz2003role,tsantani2021ffa,xu2005revisiting}. Both are important brain regions for the conceptualization of visual information and are responsible for the interaction between real-time stimulus and past memory \cite{brewer1998making,ranganath2004category,golarai2007differential}. 
+We found that some queries primarily focus on processing single brain regions, such as Parahippocampal Place Area (PPA) (Figure~\ref{fig:query}a) and Fusiform Face Area (FFA) (\ref{fig:query}b). As previous research has shown, PPA is related to conceptual association, semantic processing and environmental memory \citep{epstein1999parahippocampal,kohler2002differential,bar2008scenes,epstein2010reliable} and FFA is known for its critical role in expertise recognition, social cognition and identity memory \citep{schultz2003role,tsantani2021ffa,xu2005revisiting}. Both are important brain regions for the conceptualization of visual information and are responsible for the interaction between real-time stimulus and past memory \citep{brewer1998making,ranganath2004category,golarai2007differential}. 
 
-Moreover, there are some queries that attend to multiple brain regions, revealing the information transmission between low- and high-level brain regions. For instance, interactions between early visual areas and higher-level regions like PPA and IntraParietal Sulcus (IPS) (Figure~\ref{fig:query}e), revealing a potential pattern for human attention-guided actions \cite{tunik2007beyond,connolly2016coding}. Additionally, queries are also found responsible for communications between high-level brain regions (Figure \ref{fig:query}c,\ref{fig:query}f). Together, these findings indicate that the learnable queries may reflect the dynamics of human brain activities in the visual task, from seeing and thinking about the image to pressing the button for the visual recall task in NSD \cite{allen2022massive}. 
+Moreover, there are some queries that attend to multiple brain regions, revealing the information transmission between low- and high-level brain regions. For instance, interactions between early visual areas and higher-level regions like PPA and IntraParietal Sulcus (IPS) (Figure~\ref{fig:query}e), revealing a potential pattern for human attention-guided actions \citep{tunik2007beyond,connolly2016coding}. Additionally, queries are also found responsible for communications between high-level brain regions (Figure \ref{fig:query}c,\ref{fig:query}f). Together, these findings indicate that the learnable queries may reflect the dynamics of human brain activities in the visual task, from seeing and thinking about the image to pressing the button for the visual recall task in NSD \citep{allen2022massive}. 

@@ -31,7 +31,7 @@ Standard VLA vision backbones typically encode the image $\bs{X}_t$ into $N$ ima
 where $\bs{Z}^{s_l}_t$ denotes static tokens at level $l$, and $\bs{Z}^{d}_t$ are dynamic tokens. The ratio between static and dynamic tokens is set as a predefined hyperparameter. Under this design, dynamic tokens capture timestep-specific information and are recomputed at every timestep, whereas static tokens at each level are selectively reused through a learned caching mechanism, described later.
 
 \noindent\textbf{Temporal dependency modeling}
-Most VLAs \cite{kim2024openvla,li2024cogact,qu2025spatialvla} are only able to process the current observation ($T=0$),
+Most VLAs \citep{kim2024openvla,li2024cogact,qu2025spatialvla} are only able to process the current observation ($T=0$),
 \begin{equation}
     \bs{a}_t, \bs{a}_{t+1}, \cdots = \pi_\text{LLM}(\bs{Z}_t),
 \end{equation}
@@ -51,7 +51,7 @@ A key challenge is deciding when cached static tokens should be refreshed. Naive
     g_l(\bs{Z}_{t-\Delta}, \bs{Z}_t) \in [0, 1],\quad \Delta=1,2,\cdots, 
 \end{equation}
 
-which predicts the probability that static tokens should be recomputed given the current observation and a cached reference from $\Delta$ timesteps earlier. During training, we use the Gumbel-softmax trick \cite{jang2016categorical,maddison2016concrete} to allow end-to-end differentiable binary decisions. At inference time, static tokens are refreshed if the probability is greater than a threshold, i.e., $g_l > \delta_l$; otherwise, the previous cache is reused. It is also worth noting that if the higher-level cache (e.g., L1) should be refreshed, the lower-level cache (e.g., L2) should also be refreshed during both training and inference.
+which predicts the probability that static tokens should be recomputed given the current observation and a cached reference from $\Delta$ timesteps earlier. During training, we use the Gumbel-softmax trick \citep{jang2016categorical,maddison2016concrete} to allow end-to-end differentiable binary decisions. At inference time, static tokens are refreshed if the probability is greater than a threshold, i.e., $g_l > \delta_l$; otherwise, the previous cache is reused. It is also worth noting that if the higher-level cache (e.g., L1) should be refreshed, the lower-level cache (e.g., L2) should also be refreshed during both training and inference.
 
 
 \noindent\textbf{Computational and Acceleration Analysis}
@@ -70,7 +70,7 @@ Let $N$ be the total number of tokens per observation, $r$ the fraction of cache
 
 Besides the standard task loss of the underlying VLA base model $\mathcal{L}_\text{task}$, we introduce two additional training objectives. The first promotes temporally persistent static tokens, and the second trains the cache gate that adaptively determines when cached representations should be refreshed.
 
-\noindent\textbf{Learning static tokens} As illustrated in Figure~\ref{fig:contrastive}, to ensure that static tokens can be safely and effectively reused across time, they must remain stable over a temporal window while still encoding task-relevant information. To encourage this property, we apply a contrastive term to the static tokens. Specifically, observations from different timesteps within the same trajectory are treated as positive pairs, while observations from different trajectories are treated as negative pairs. We employ InfoNCE loss~\cite{oord2018representation} $\mathcal{L}_{\text{InfoNCE}}^{l}$ to perform contrastive learning for static tokens at level $l$.
+\noindent\textbf{Learning static tokens} As illustrated in Figure~\ref{fig:contrastive}, to ensure that static tokens can be safely and effectively reused across time, they must remain stable over a temporal window while still encoding task-relevant information. To encourage this property, we apply a contrastive term to the static tokens. Specifically, observations from different timesteps within the same trajectory are treated as positive pairs, while observations from different trajectories are treated as negative pairs. We employ InfoNCE loss~\citep{oord2018representation} $\mathcal{L}_{\text{InfoNCE}}^{l}$ to perform contrastive learning for static tokens at level $l$.
 
 
 
@@ -101,11 +101,11 @@ where $\alpha_l$ and $\beta$ weight the auxiliary regularization terms.
 
 \subsection{LIBERO-Memory Benchmark}
 
-Existing VLA simulation benchmarks \cite{liu2023libero, li2024evaluating} are designed for memoryless tasks, which do not require multi-frame integration, and the current observation alone is theoretically sufficient to predict the next action. For example, in a task with the goal “put X in the basket”, \cite{liu2023libero} the agent can act optimally without retaining information from previous frames. As a result, it is unclear whether the reported performance of existing models for modeling temporal dependency \cite{jang2025contextvla,shi2025memoryvlaperceptualcognitivememoryvisionlanguageaction} truly stems from improved temporal modeling or from other artifacts. This highlights the absence of a strong and fair benchmark for temporal dependency modeling and multi-frame integration.
+Existing VLA simulation benchmarks \citep{liu2023libero, li2024evaluating} are designed for memoryless tasks, which do not require multi-frame integration, and the current observation alone is theoretically sufficient to predict the next action. For example, in a task with the goal “put X in the basket”, \citep{liu2023libero} the agent can act optimally without retaining information from previous frames. As a result, it is unclear whether the reported performance of existing models for modeling temporal dependency \citep{jang2025contextvla,shi2025memoryvlaperceptualcognitivememoryvisionlanguageaction} truly stems from improved temporal modeling or from other artifacts. This highlights the absence of a strong and fair benchmark for temporal dependency modeling and multi-frame integration.
 
 To address this gap, we introduce a new simulation benchmark designed to test multi-frame integration explicitly. Our benchmark includes tasks that require a robot to retain and utilize information from past observations, thereby directly evaluating a model's temporal dependency modeling ability.
 
-Following the setup of LIBERO, the robot operates in a tabletop environment containing three objects: two visually distinct cans and a stove. As illustrated in Figure~\ref{fig:libero_stove}, each episode consists of three tasks which reflects the structure of episodic memory \cite{tulving1972episodic,clayton1998episodic}.
+Following the setup of LIBERO, the robot operates in a tabletop environment containing three objects: two visually distinct cans and a stove. As illustrated in Figure~\ref{fig:libero_stove}, each episode consists of three tasks which reflects the structure of episodic memory \citep{tulving1972episodic,clayton1998episodic}.
 
 \begin{figure}[t]
     \centering
@@ -119,6 +119,6 @@ Following the setup of LIBERO, the robot operates in a tabletop environment cont
 \noindent\textbf{Tasks}
 Each trial consists of three subtasks, each intentionally designed to require the model to retain and reason over information from previous observations at different aspects: 1) Grasp one of the cans, as specified by the instruction, and place it on the stove to heat. 2) After a period of time (given in the instructions), remove the can from the stove and return it to its original location. 3) Once the position of the first can has been restored, grasp the remaining can and place it on the stove.
 
-This task design requires the model to retain \emph{episodic memory}, integrating information about what happened, where it occurred, and when it took place \cite{tulving1972episodic,clayton1998episodic}. First, the robot must remember the initial spatial layout in order to return the first can to its original position (where). Second, it must track the elapsed time since the can was placed on the stove to determine when to remove it (when). Third, it must remember which can has already been heated in order to correctly select the remaining one for the final step (what).
+This task design requires the model to retain \emph{episodic memory}, integrating information about what happened, where it occurred, and when it took place \citep{tulving1972episodic,clayton1998episodic}. First, the robot must remember the initial spatial layout in order to return the first can to its original position (where). Second, it must track the elapsed time since the can was placed on the stove to determine when to remove it (when). Third, it must remember which can has already been heated in order to correctly select the remaining one for the final step (what).
 
-These requirements prevent the task from being solved using only the current observation or a short observation history. We use Robosuite \cite{zhu2025robosuitemodularsimulationframework} as the simulation framework to produce the dataset. The layout and the oracle demonstrations are programmatically generated.
+These requirements prevent the task from being solved using only the current observation or a short observation history. We use Robosuite \citep{zhu2025robosuitemodularsimulationframework} as the simulation framework to produce the dataset. The layout and the oracle demonstrations are programmatically generated.

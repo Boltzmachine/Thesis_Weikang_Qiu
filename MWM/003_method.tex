@@ -2,56 +2,38 @@
 
 Our central design is to use neural activity in place of an externally recorded action within a predictive world model. The mind model observes EEG only up to the current visual state and must encode the information needed to predict what happens next. We first formulate this prediction task and its two model components, then describe the Lateralization-Aware Transformer (LAT) and training objectives.
 
-\begin{figure}[t]
+\begin{figure}[!tbp]
 \centering
-\includegraphics[width=\linewidth]{figures/mwm_overview.pdf}
+\includegraphics[width=\linewidth]{MWM/figures/mwm_overview.pdf}
 \caption{\textbf{The Mind World Model.} \textbf{(a)} A frozen encoder $g$ maps the current
 frame to patch features that a residual predictor advances; the same frozen $g$ builds
 the target from the next frame. \textbf{(b)} The mind model encodes the EEG window, which
 ends on the current frame; its LAT encoder is detailed in
-Figure~\ref{fig:fliparch}. The EEG reaches the predictor only as AdaLN modulation, never as an
+Figure~\ref{fig:mwm-mirrorarch}. The EEG reaches the predictor only as AdaLN modulation, never as an
 input token: it occupies the slot a recorded action would.}
 \label{fig:mwm-framework}
 \end{figure}
 
-\subsection{Overview}
+\subsection{World Model}
 
-We propose the Mind World Model (\mwm{}) to jointly learn motor-related EEG representations and action-conditioned visual dynamics from synchronized EEG and egocentric video without action annotations. As illustrated in Figure~\ref{fig:mwm-framework}, \mwm{} consists of a world model and a mind model. Given an EEG segment $\mathbf{X}_t$ and a current frame $\mathbf{I}_t$, the mind model encodes the EEG into a latent action $\mathbf{a}_t$. The world model then predicts the representation of a future frame:
+As illustrated in Figure~\ref{fig:mwm-framework}, the Mind World Model (\mwm{}) jointly learns motor-related EEG representations and visual dynamics from synchronized EEG and egocentric video without action annotations. Given an EEG segment $\mathbf{X}_t\in\mathbb{R}^{C\times T}$ and a current RGB frame $\mathbf{I}_t\in\mathbb{R}^{3\times H_v\times W_v}$, the mind model uses LAT (Section~\ref{sec:mwm-mind-model}) to encode the EEG into a latent action $\mathbf{a}_t\in\mathbb{R}^{D_a}$, which conditions the world model's prediction of the future visual state. Here, $C$ is the number of EEG channels, $T$ the number of time samples, $H_v$ and $W_v$ the image height and width, and $D_a$ the action dimension.
+
+\noindent\textbf{Image Encoder.}
+As shown in Figure~\ref{fig:mwm-framework}(a), the current frame $\mathbf{I}_t$ and its future frame $\mathbf{I}_{t+1}\in\mathbb{R}^{3\times H_v\times W_v}$ are independently encoded by a frozen DINOv2 encoder $g$~\citep{oquab2024dinov2}:
+\begin{equation}
+    \mathbf{S}_t=g(\mathbf{I}_t)\in\mathbb{R}^{P\times D_v}, \qquad
+    \mathbf{S}_{t+1}=g(\mathbf{I}_{t+1})\in\mathbb{R}^{P\times D_v},
+\end{equation}
+where $P$ is the number of visual patches and $D_v$ is their feature dimension. We use DINOv2 to balance performance and computational efficiency. Freezing $g$ provides stable targets and reduces training compute and memory by eliminating encoder backpropagation.
+
+\noindent\textbf{Frame Predictor.}
+The frame predictor $p_{\phi}$ advances the current visual state using the EEG-derived latent action:
 \begin{equation}
     \hat{\mathbf{S}}_{t+1}
     =
-    p_{\phi}(\mathbf{S}_t,\mathbf{a}_t),
-    \qquad
-    \mathbf{S}_t=g(\mathbf{I}_t),
+    p_{\phi}(\mathbf{S}_t,\mathbf{a}_t)\in\mathbb{R}^{P\times D_v}.
 \end{equation}
-where $g$ is a frozen image encoder and $p_{\phi}$ is a frame predictor. Future prediction both encourages the mind model to capture neural activity related to upcoming visual changes and trains the world model's dynamics and action interface.
-
-In addition, we introduce LAT, an EEG encoder that explicitly models the lateralization of motor activity. It decomposes EEG features into bilateral and lateral components, which are respectively invariant and equivariant to swaps between homologous electrodes.
-
-\subsection{Architecture}
-
-A frozen visual encoder maps the current and future frames to patch tokens, and the world model advances the current token grid using a latent action encoded by LAT. Both models are trained jointly and retained separately. Motor decoders use the mind model; world-model evaluation freezes the predictor and maps IMU measurements to its action interface (Section~\ref{sec:world-action-probe}).
-
-\subsubsection{World Model}
-
-\paragraph{Image Encoder.}
-
-Given a current frame $\mathbf{I}_t$ and its future frame $\mathbf{I}_{t+1}$, we use a frozen DINOv2 encoder $g$ to extract their spatial patch representations:
-\begin{equation}
-    \mathbf{S}_t=g(\mathbf{I}_t), \qquad
-    \mathbf{S}_{t+1}=g(\mathbf{I}_{t+1}),
-\end{equation}
-where $\mathbf{S}_t,\mathbf{S}_{t+1}\in\mathbb{R}^{P\times D_v}$ and $P$ denotes the number of visual patches. We use patch-level features instead of a global feature because visual changes caused by hand and object movements are often spatially localized. The image encoder is kept frozen during training, providing a stable prediction target and preventing representation collapse.
-
-\paragraph{Frame Predictor.}
-
-The frame predictor models the transition from the current visual state to the future visual state, conditioned on EEG:
-\begin{equation}
-    \hat{\mathbf{S}}_{t+1}
-    =
-    p_{\phi}(\mathbf{S}_t,\mathbf{a}_t).
-\end{equation}
-We first project the EEG tokens into a compact conditioning vector $\mathbf{a}_t$. The current-frame tokens are then processed by a lightweight Transformer whose layers are modulated by $\mathbf{a}_t$ through adaptive layer normalization (AdaLN)~\citep{peebles2023scalable}:
+The mind-model pathway in Figure~\ref{fig:mwm-framework}(b) aggregates EEG tokens into $\mathbf{a}_t$, which enters the frame predictor only through modulation. The current-frame tokens are then processed by a lightweight Transformer whose layers are modulated by $\mathbf{a}_t$ through adaptive layer normalization (AdaLN)~\citep{peebles2023scalable}. For a hidden token $\mathbf{h}\in\mathbb{R}^{D_p}$, where $D_p$ is the predictor width, the action produces a scale $\gamma(\mathbf{a}_t)\in\mathbb{R}^{D_p}$ and a shift $\beta(\mathbf{a}_t)\in\mathbb{R}^{D_p}$:
 \begin{equation}
     \operatorname{AdaLN}(\mathbf{h},\mathbf{a}_t)
     =
@@ -60,7 +42,7 @@ We first project the EEG tokens into a compact conditioning vector $\mathbf{a}_t
     +
     \beta(\mathbf{a}_t).
 \end{equation}
-This design treats EEG as a latent action that controls the predicted visual transition. We further adopt residual prediction,
+This design treats EEG as a latent action that controls the predicted visual transition. The residual connection in Figure~\ref{fig:mwm-framework}(a) adds a predicted change tensor $\Delta_{\phi}(\mathbf{S}_t,\mathbf{a}_t)\in\mathbb{R}^{P\times D_v}$ to the current state:
 \begin{equation}
     \hat{\mathbf{S}}_{t+1}
     =
@@ -70,38 +52,37 @@ such that the predictor focuses on dynamic changes instead of reconstructing the
 
 To avoid temporal leakage, the EEG window ends at the current frame, while the prediction target is sampled from the subsequent time interval. Therefore, the target visual change is not already contained in the EEG observation window.
 
-\subsubsection{Mind Model}
+\subsection{Mind Model}
+\label{sec:mwm-mind-model}
 
-\paragraph{Transformers.}
-
-Given an EEG segment $\mathbf{X}_t\in\mathbb{R}^{C\times T}$, we divide each channel into non-overlapping temporal patches. A channel-wise CNN embeds each patch by combining its temporal waveform and spectral representation, producing
+\noindent\textbf{Transformers.}
+Figure~\ref{fig:mwm-mirrorarch}(a) shows how each channel of $\mathbf{X}_t$ is divided into non-overlapping temporal patches. A channel-wise CNN embeds each patch by combining its temporal waveform and spectral representation, producing
 \begin{equation}
     \mathbf{Z}_t
     =
     f_{\mathrm{emb}}(\mathbf{X}_t)
     \in\mathbb{R}^{C\times N\times D_e},
 \end{equation}
-where $C$ and $N$ denote the numbers of channels and temporal patches, respectively.
+where $N$ is the number of temporal patches per channel and $D_e$ is the EEG token width.
 
-The EEG tokens are processed by a stack of criss-cross Transformer blocks. Each block separately performs temporal attention across patches and spatial attention across EEG channels. This factorization preserves the channel--time structure of EEG while reducing the cost of full attention. The resulting patch tokens are aggregated into the latent action $\mathbf{a}_t$ used by the frame predictor.
+The criss-cross Transformer block in Figure~\ref{fig:mwm-mirrorarch}(c) alternates temporal attention across patches with spatial attention across EEG channels. This factorization preserves the channel--time structure of EEG while reducing the cost of full attention. The resulting patch tokens are aggregated into the latent action $\mathbf{a}_t$ used by the frame predictor.
 
-\begin{figure}[t]
+\begin{figure}[!tbp]
 \centering
-\includegraphics[width=\linewidth]{figures/mwm_flip.pdf}
+\includegraphics[width=\linewidth]{MWM/figures/mwm_flip.pdf}
 \caption{\textbf{The Lateralization-Aware Transformer (LAT) for EEG encoding.} \textbf{(a)} Patch embedding, applied within each channel,
-\textbf{(b)} the learned gate $\mathbf{G}$ and the electrode permutation $\Pi$, which act
+\textbf{(b)} the learned gate $\mathbf{G}\in[0,1]^{C\times N\times D_e}$ and the electrode permutation $\Pi\in\{0,1\}^{C\times C}$, which act
 on the embedded tokens before any Transformer block, \textbf{(c)} a criss-cross block,
-\textbf{(d)} frame averaging into an invariant and an equivariant feature, and
-\textbf{(e)} the paired EEG--video flip. Only the learned lateral component is exchanged
+\textbf{(d)} a shared Transformer with invariant and equivariant readout heads, and
+\textbf{(e)} the paired EEG--video mirror. Only the learned lateral component is exchanged
 across hemispheres; the raw signal is never permuted.}
-\label{fig:fliparch}
+\label{fig:mwm-mirrorarch}
 \end{figure}
 
-\paragraph{Paired Flip Augmentation and LAT.}
+\noindent\textbf{LAT and Paired Mirror Augmentation.}
+LAT encodes the lateralization prior described in the introduction: corresponding movement patterns over opposite hemispheres indicate opposite acting sides. Modeling this correspondence explicitly allows LAT to learn shared movement structure across left--right counterparts.
 
-EgoBrain contains substantially more right-hand than left-hand movements, reflecting the natural handedness distribution of its participants. Naively training on this dataset may therefore bias the learned representation toward right-hand activity. We alleviate this imbalance through paired EEG--video flip augmentation, realised by LAT in Figure~\ref{fig:fliparch}.
-
-Let $\Pi$ denote the permutation that exchanges homologous electrodes across hemispheres, such as C3 and C4. Instead of directly swapping the raw EEG, we learn a gate $\mathbf{G}$ that decomposes each EEG token into bilateral and lateral components:
+Raw EEG mixes bilateral activity with lateralized motor activity; swapping entire channels would exchange both, although only the latter should change sides under our motor prior. We therefore learn the decomposition in feature space, as shown in Figure~\ref{fig:mwm-mirrorarch}(b). Let $\Pi\in\{0,1\}^{C\times C}$ exchange homologous electrodes, such as C3 and C4, along the channel axis, and write $\mathbf{Z}=\mathbf{Z}_t\in\mathbb{R}^{C\times N\times D_e}$. An elementwise gate $\mathbf{G}\in[0,1]^{C\times N\times D_e}$ separates bilateral and lateral components $\mathbf{Z}^{\mathrm{bi}},\mathbf{Z}^{\mathrm{lat}}\in\mathbb{R}^{C\times N\times D_e}$:
 \begin{equation}
     \mathbf{Z}^{\mathrm{lat}}
     =
@@ -111,100 +92,60 @@ Let $\Pi$ denote the permutation that exchanges homologous electrodes across hem
     =
     (1-\mathbf{G})\odot\mathbf{Z}.
 \end{equation}
-We define the flip operation as
+We define the mirror operation as
 \begin{equation}
     \mathcal{P}(\mathbf{Z})
     =
     \mathbf{Z}^{\mathrm{bi}}
     +
-    \Pi\mathbf{Z}^{\mathrm{lat}}.
+    \Pi\mathbf{Z}^{\mathrm{lat}}
+    \in\mathbb{R}^{C\times N\times D_e}.
 \end{equation}
 Thus, bilateral activity is preserved, while lateral activity is exchanged between the two hemispheres.
 
-For a Transformer encoder $\mathcal{T}$, we apply frame averaging over the original and flipped representations:
-\begin{align}
-    \mathbf{H}^{\mathrm{bi}}
-    &=
-    \frac{1}{2}
-    \left[
-    \mathcal{T}(\mathbf{Z})
-    +
-    \mathcal{T}(\mathcal{P}(\mathbf{Z}))
-    \right], \\
-    \mathbf{H}^{\mathrm{lat}}
-    &=
-    \frac{1}{2}
-    \left[
-    \mathcal{T}(\mathbf{Z})
-    -
-    \Pi\mathcal{T}(\mathcal{P}(\mathbf{Z}))
-    \right].
-\end{align}
-The final EEG representation concatenates the bilateral and lateral features:
+Bilateral features capture movement structure shared by both sides and should remain invariant under mirroring, while lateral features encode the acting side and should transform equivariantly. Inspired by frame averaging (FA)~\citep{puny2022frame}, we wrap a shared Transformer with invariant and equivariant readouts (Figure~\ref{fig:mwm-mirrorarch}(d)). The same Transformer $\mathcal{T}$ encodes the original and mirrored inputs into $\mathbf{Z}_1,\mathbf{Z}_2\in\mathbb{R}^{C\times N\times D_e}$:
 \begin{equation}
-    \mathbf{H}
-    =
-    \left[
-    \mathbf{H}^{\mathrm{bi}};
-    \mathbf{H}^{\mathrm{lat}}
-    \right].
+    \mathbf{Z}_1=\mathcal{T}(\mathbf{Z}), \qquad
+    \mathbf{Z}_2=\mathcal{T}(\mathcal{P}(\mathbf{Z})).
 \end{equation}
-By construction, the bilateral component is invariant to the flip, whereas the lateral component transforms equivariantly.
+The invariant head averages these outputs; the equivariant head takes their signed difference after aligning homologous channels. Each head uses a linear feature readout $r_{\mathrm{inv}},r_{\mathrm{eq}}:\mathbb{R}^{D_e}\to\mathbb{R}^{D_e/2}$, applied at each channel and time location, to produce $\mathbf{H}^{\mathrm{bi}},\mathbf{H}^{\mathrm{lat}}\in\mathbb{R}^{C\times N\times D_e/2}$:
+\begin{equation}
+    \mathbf{H}^{\mathrm{bi}}
+    = r_{\mathrm{inv}}\!\left(\frac{\mathbf{Z}_1+\mathbf{Z}_2}{2}\right), \qquad
+    \mathbf{H}^{\mathrm{lat}}
+    = r_{\mathrm{eq}}\!\left(\frac{\mathbf{Z}_1-\Pi\mathbf{Z}_2}{2}\right).
+\end{equation}
+Concatenating them yields the final EEG representation $\mathbf{H}=\left[\mathbf{H}^{\mathrm{bi}};\mathbf{H}^{\mathrm{lat}}\right]\in\mathbb{R}^{C\times N\times D_e}$.
 
-During training, we randomly flip each video horizontally and apply the corresponding operation $\mathcal{P}$ to its EEG representation. This augmentation balances left- and right-oriented movements while preserving their cross-modal correspondence.
+Egocentric recordings can overrepresent dominant-hand movements because people preferentially use one hand, with right-handedness more common in the population~\citep{papadatou2020handedness}. To address this sampling bias, we randomly mirror each video horizontally during training and apply the corresponding operation $\mathcal{P}$ to its EEG representation, as illustrated in Figure~\ref{fig:mwm-mirrorarch}(e). This produces paired left--right counterparts while preserving their cross-modal correspondence.
 
 \subsection{Training Objective}
 
-\paragraph{Alignment Loss.}
+\noindent\textbf{Alignment Loss.}
+We align global EEG and synchronized-frame representations using symmetric InfoNCE~\citep{oord2018representation}, denoted $\mathcal{L}_{\mathrm{align}}$. EEG features are projected into the visual feature space, and both modalities are $\ell_2$-normalized before computing similarities.
 
-We first align the global EEG representation $\mathbf{m}_i$ with the representation $\mathbf{v}_i$ of its synchronized frame. After projection and normalization, we compute their similarities as
-\begin{equation}
-    s_{ij}
-    =
-    \frac{
-    \bar{\mathbf{m}}_i^\top\bar{\mathbf{v}}_j
-    }{\tau},
-\end{equation}
-where $\tau$ is a temperature parameter. We use a symmetric InfoNCE objective:
-\begin{equation}
-    \mathcal{L}_{\mathrm{align}}
-    =
-    \frac{1}{2}
-    \left[
-    \operatorname{CE}(\mathbf{S},\mathbf{y})
-    +
-    \operatorname{CE}(\mathbf{S}^{\top},\mathbf{y})
-    \right],
-\end{equation}
-where $\mathbf{y}_i=i$ denotes the matched EEG--frame pair.
-
-The global image feature is nearly invariant to horizontal flipping and therefore provides limited supervision for lateralization. We additionally construct a flip-sensitive image representation by pooling the left and right spatial regions of the image-token grid. The representations of the original and mirrored frames are used as same-sample hard negatives, encouraging the lateral EEG features to distinguish the two orientations. We denote this objective as $\mathcal{L}_{\mathrm{flip}}$.
-
-\paragraph{Prediction Loss.}
-
-The primary world-model objective predicts the frozen representation of the future frame. We minimize the patch-level $\ell_1$ distance:
+\noindent\textbf{Prediction Loss.}
+The prediction loss in Figure~\ref{fig:mwm-framework}(a) compares the predicted state with the frozen representation of the future frame. For each sample, we average the $\ell_1$ distance over the $P$ patches:
 \begin{equation}
     \mathcal{L}_{\mathrm{pred}}
     =
-    \frac{1}{BP}
-    \sum_{i=1}^{B}
+    \frac{1}{P}
     \sum_{p=1}^{P}
     \left\|
-    \hat{\mathbf{S}}_{i,t+1}^{p}
+    \hat{\mathbf{S}}_{t+1}^{p}
     -
-    \mathbf{S}_{i,t+1}^{p}
-    \right\|_1,
+    \mathbf{S}_{t+1}^{p}
+    \right\|_1.
 \end{equation}
 Because the DINOv2 encoder $g$ is frozen, the visual target remains fixed throughout training. Minimizing this loss therefore requires the mind model to extract EEG information that explains the upcoming visual transition.
 
-The overall objective is
+The overall training objective combines the standard masked EEG patch reconstruction loss $\mathcal{L}_{\mathrm{mask}}$ with visual alignment and prediction, weighted by nonnegative coefficients $\lambda_{\mathrm{align}}$ and $\lambda_{\mathrm{pred}}$:
 \begin{equation}
     \mathcal{L}
     =
-    \lambda_{\mathrm{align}}\mathcal{L}_{\mathrm{align}}
+    \mathcal{L}_{\mathrm{mask}}
     +
-    \lambda_{\mathrm{flip}}\mathcal{L}_{\mathrm{flip}}
+    \lambda_{\mathrm{align}}\mathcal{L}_{\mathrm{align}}
     +
     \lambda_{\mathrm{pred}}\mathcal{L}_{\mathrm{pred}}.
 \end{equation}
-An auxiliary masked EEG reconstruction loss can be included to preserve low-level signal information, but future-state prediction remains the defining objective of \mwm{}.
