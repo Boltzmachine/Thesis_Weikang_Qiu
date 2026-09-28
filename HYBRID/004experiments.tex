@@ -170,6 +170,16 @@ Further, the comparison between our model and the pairwise baseline demonstrates
 \paragraph{Ablation Studies}
 We conduct an ablation study on the effect of our masking mechanism. Specifically, we compare our model with $3$ variants: 1) \hybrid$_\mathrm{RndMask}$: Replace the learnable masks with random masks with the same sparsity, initialized at the beginning of training. 2) \hybrid$_\mathrm{NoMask}$: Do not mask at all, which means all nodes and their features are visible to each head. 3) \hybrid$_\mathrm{SoftMask}$: Remove the indicator function and use $p^k_{\theta, i}$ directly in Equation \ref{equ:shallow}. Ablation results are shown in Table \ref{tab:ablation_mask}. We find the original \hybrid{} and the \hybrid$_\mathrm{SoftMask}$ outperform all other variants, which demonstrates the effect of learnable masks. Moreover, the original \hybrid{} is better than its soft version \hybrid$_\mathrm{SoftMask}$, which demonstrates our sparse and succinct representations preserve better information than smooth ones.
 
+\paragraph{Additional Experiments on Synthetic Dataset}
+Since there are no ground-truth hyperedges in real-world datasets of learning informative hyperedges towards a specific outcome, we construct a synthetic dataset to verify if our model can recover the correct hyperedge structure under the MIMR objective. We use the precision, recall, and F1 score to measure the correctness of the learned hyperedges with respect to the ground truth. Although it is challenging to learn hyperedges when only supervised by the task label, we find that our model reaches high performances, with an average improvement of 28.3\% in terms of the F1 score, compared to the strongest baselines.
+
+
+\subsection{Further Analysis}
+% \subsubsection{Hyperedge Profiles}
+In this subsection, we analyze the results of our model. We mainly use the ABCD dataset in the analysis since it is much larger than the ABIDE dataset.
+\paragraph{Hyperedge Degree Distribution}
+We plot the hyperedge degree distribution in Figure \ref{fig:degree_dist}. We find there are two distinct clusters in the figure. The first cluster is hyperedges with degree $\leq 5$. $1$-degree and $2$-degree hyperedges are special cases of our method: $1$-degree hyperedges are individual nodes, which imply the contribution of individual regions to the cognition. $2$-degree hyperedges reveal the importance of traditional pairwise connectivity. The other cluster concentrates around degree $25$, which implies the importance of relationships of multiple regions.
+
 \begin{figure*}
 % \vspace{-0.5em}
 \begin{center}
@@ -196,17 +206,6 @@ We conduct an ablation study on the effect of our masking mechanism. Specificall
     % \vskip -0.1in
     \end{center}
 \end{figure*}
-
-
-\paragraph{Additional Experiments on Synthetic Dataset}
-Since there are no ground-truth hyperedges in real-world datasets of learning informative hyperedges towards a specific outcome, we construct a synthetic dataset to verify if our model can recover the correct hyperedge structure under the MIMR objective. We use the precision, recall, and F1 score to measure the correctness of the learned hyperedges with respect to the ground truth. Although it is challenging to learn hyperedges when only supervised by the task label, we find that our model reaches high performances, with an average improvement of 28.3\% in terms of the F1 score, compared to the strongest baselines.
-
-
-\subsection{Further Analysis}
-% \subsubsection{Hyperedge Profiles}
-In this subsection, we analyze the results of our model. We mainly use the ABCD dataset in the analysis since it is much larger than the ABIDE dataset.
-\paragraph{Hyperedge Degree Distribution}
-We plot the hyperedge degree distribution in Figure \ref{fig:degree_dist}. We find there are two distinct clusters in the figure. The first cluster is hyperedges with degree $\leq 5$. $1$-degree and $2$-degree hyperedges are special cases of our method: $1$-degree hyperedges are individual nodes, which imply the contribution of individual regions to the cognition. $2$-degree hyperedges reveal the importance of traditional pairwise connectivity. The other cluster concentrates around degree $25$, which implies the importance of relationships of multiple regions.
 
 % To further understand the relationship between hyperedge degree and its significance, we next plot their correlation in Figure \ref{fig:degree_sig}. \jialin{can be removed}
 % \begin{wrapfigure}{R}{0.49\textwidth}

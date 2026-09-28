@@ -9,7 +9,7 @@ Given a timestep $t$, the corresponding observation of the environment is denote
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=0.9\linewidth]{figs/arch.pdf}
+    \includegraphics[width=0.75\linewidth]{figs/arch.pdf}
     \caption{Model architecture overview. We illustrate the design using two levels of static cache. At each level, a recache gate determines whether the cached static tokens should be reused or refreshed. If the L1 cache is refreshed, the L2 cache is also forcibly refreshed.}
     \label{fig:dysta-arch}
     % \vspace{-1em}
@@ -59,7 +59,7 @@ Let $N$ be the total number of tokens per observation, $r$ the fraction of cache
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=0.5\linewidth]{figs/contrastive.pdf}
+    \includegraphics[width=0.4\linewidth]{figs/contrastive.pdf}
     \caption{Contrastive loss used to train static tokens to be temporally persistent. Observations from the same trajectory form positive pairs, while observations from different trajectories form negative pairs.}
     \label{fig:contrastive}
     % \vspace{-1em}

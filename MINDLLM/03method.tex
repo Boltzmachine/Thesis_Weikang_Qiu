@@ -67,43 +67,6 @@ To enable versatile fMRI-to-text decoding, an appropriate BIT dataset is require
 
 We ended up with a brain instruction tuning dataset consisting of $980,610$ conversations associated with fMRI recordings from $15$ datasets. The instruction tuning enables versatile fMRI-to-text decoding. In particular, the introduction of tasks like \textit{previous caption} empowers the model to perform a broader range of tasks beyond vision-related ones, which the previous model \citep{xia2024umbrae} fails.
 
-\begingroup
-\sisetup{
-  table-format=2.2,  % 3 digits before the decimal, 2 after
-  table-align-text-pre=false,
-  propagate-math-font=true,
-  table-number-alignment=center,
-  detect-weight=true,detect-inline-weight=math
-}
-\def\Uline#1{#1\llap{\uline{\phantom{#1}}}}
-\begin{table*}[bp]
-    \centering
-    % \vspace{-1.7em}
-    \caption{Results of brain captioning. The CIDEr metric is scaled by a factor of 100 for consistency with Table~\ref{tab:caption} and baselines.}
-    \label{tab:caption}
-    \vskip 0.1in
-    \resizebox{\linewidth}{!}{
-    \begin{tabular}{lcSSSSSSSS}
-    \toprule
- % \multirow{2}{*}{Method}&  \multirow{2}{*}{cross-subject}&\multicolumn{5}{c}{fMRI caption} & &  &\\
-   {Method} & {\makecell{subject\\agnostic}}  &{{BLEU-1} $\uparrow$} & {BLEU-2 $\uparrow$} & {BLEU-3 $\uparrow$} & {{BLEU-4} $\uparrow$} &{METEOR $\uparrow$}&{ROUGE $\uparrow$}& {CIDEr $\uparrow$}&{SPICE $\uparrow$}\\
-    \midrule
-    SDRecon \citep{takagi2023high}    & {\xmark} &36.21 & 17.11 & 7.22 & 3.43   &10.03&  25.13&13.83 &5.02 \\
-    OneLLM  \citep{han2024onellm}  & {\xmark} &47.04 & 26.97 & 15.49 & 9.51   &13.55&  35.05&22.99 & 6.26\\
-    UniBrain \citep{mai2023unibrain}   & {\xmark} & {$-$}   & {$-$}    & {$-$}  & {$-$}     &16.90&  22.20& {$-$} & {$-$}\\
-    BrainCap \citep{ferrante2023brain}  & {\xmark} &55.96 & 36.21 & 22.70 & 14.51   &16.68& 40.69&41.30 & 9.06\\
-     BrainChat \citep{huang2024brainchat} & {\xmark}   &52.30& 29.20& 17.10& 10.70 &14.30& 45.70&26.10 & {$-$}\\
-    UMBRAE \citep{xia2024umbrae}    & {\xmark} & 59.44& 40.48& 27.66&19.03&19.45&  43.71&\bfseries 61.06&\bfseries 12.79\\
-% \midrule
-UniBrain \citep{wang2024unibrain}  & {\cmark} & 59.08 & 39.64 & 26.36 & 17.68 & 17.49 & 43.48 & 48.20 & 9.38\\
-    \mindllm{} (Ours)  & {\cmark} & \bfseries 61.75 &  \bfseries42.84 & \bfseries29.86&\bfseries21.24  & 
-\bfseries 19.54 &\bfseries45.82 & 60.97  & 11.79\\
-    \bottomrule
-    \end{tabular}}
-\end{table*}
-\endgroup
-
-
 To train the model with the BIT dataset, for each sample $\boldsymbol{v}$, we sample a multi-run conversation $X_t = (X_u^1, X_a^1, \cdots, X_u^T, X_a^T)$ from all conversations associated with it, where $T \geq 1$ represents the number of turns. $a$ indicates the message from the assistant and $u$ indicates the message is from the user. The training objective is to maximize the probability of the assistant's response only
 $$
 \arg\max_\theta p(X_a | X_v, X_{\text{inst}}) = \prod_{t=1}^T p({\color{magenta}X_a^t} | X_u^{\leq t}, X_a^{\le t }, X_\text{inst}, X_v)

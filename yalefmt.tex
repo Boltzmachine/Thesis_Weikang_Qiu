@@ -419,4 +419,23 @@
   \addcontentsline{toc}{chapter}{\listtablename}}{}{}
 \makeatother
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 10. FLOAT PLACEMENT
+%
+% Not a Registrar rule.  The class keeps LaTeX's defaults, under which a float
+% taller than 70% of the text block cannot sit above text and any float filling
+% half a page may be set alone; the merged chapters then produced runs of
+% half-empty figure/table pages.  These values let a large float share its page
+% with text and keep float-only pages for floats that nearly fill one.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.5}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\floatpagefraction}{0.8}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+
 % EOF

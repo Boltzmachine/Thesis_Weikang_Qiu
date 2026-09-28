@@ -15,6 +15,63 @@ We use the widely used Natural Scenes Dataset (NSD) \citep{allen2022massive}, a 
 
 \noindent\textbf{Downstream Datasets} The downstream dataset will be discussed within each experiment section.
 
+\subsection{Brain Captioning}
+To evaluate the model's performance on downstream tasks, we start with the widely used brain captioning benchmark \citep{xia2024umbrae}. The task, built upon COCO Caption \citep{chen2015microsoft} requires the model to predict captions of given images as fMRI stimuli.
+
+\noindent\textbf{Baselines}
+The following baselines are considered in this experiment: SDRecon \citep{takagi2023high}, UniBrain \citep{mai2023unibrain}, and BrainCap \citep{ferrante2023brain} employs a linear regression, mapping the fMRI to the inputs of an image caption model \citep{li2023blip}. OneLLM \citep{han2024onellm} is a multimodal large language models that align $8$ modalities (including fMRI) with language all in one model. For fair and efficient comparison, we only finetune the encoder, given that we freeze the LLM in our method as well. UMBRAE learns an encoder that maps fMRIs to images through an encoder similar to the MLP mixer \citep{tolstikhin2021mlp}. BrainChat \citep{huang2024brainchat} segments the flattened voxels into 16 patches and employs a transformer to decode text conditioned on the patches.
+It is worth noting that all of these baselines require subject-specific layers or parameters. In contrast, our model is subject-agnostic, thus with the potential to generalize on novel subjects.
+
+\noindent\textbf{Metric} Following previous works, we use five standard metrics for text generation: BLEU-$k$ \citep{papineni2002bleu}, ROUGE-L \citep{lin2004rouge}, CIDEr \citep{vedantam2015cider}, SPICE \citep{anderson2016spice}, METEOR \citep{banerjee2005meteor}.
+
+\begingroup
+\sisetup{
+  table-format=2.2,  % 3 digits before the decimal, 2 after
+  table-align-text-pre=false,
+  propagate-math-font=true,
+  table-number-alignment=center,
+  detect-weight=true,detect-inline-weight=math
+}
+\def\Uline#1{#1\llap{\uline{\phantom{#1}}}}
+\begin{table*}[tb]
+    \centering
+    % \vspace{-1.7em}
+    \caption{Results of brain captioning. The CIDEr metric is scaled by a factor of 100 for consistency with Table~\ref{tab:caption} and baselines.}
+    \label{tab:caption}
+    \vskip 0.1in
+    \resizebox{\linewidth}{!}{
+    \begin{tabular}{lcSSSSSSSS}
+    \toprule
+ % \multirow{2}{*}{Method}&  \multirow{2}{*}{cross-subject}&\multicolumn{5}{c}{fMRI caption} & &  &\\
+   {Method} & {\makecell{subject\\agnostic}}  &{{BLEU-1} $\uparrow$} & {BLEU-2 $\uparrow$} & {BLEU-3 $\uparrow$} & {{BLEU-4} $\uparrow$} &{METEOR $\uparrow$}&{ROUGE $\uparrow$}& {CIDEr $\uparrow$}&{SPICE $\uparrow$}\\
+    \midrule
+    SDRecon \citep{takagi2023high}    & {\xmark} &36.21 & 17.11 & 7.22 & 3.43   &10.03&  25.13&13.83 &5.02 \\
+    OneLLM  \citep{han2024onellm}  & {\xmark} &47.04 & 26.97 & 15.49 & 9.51   &13.55&  35.05&22.99 & 6.26\\
+    UniBrain \citep{mai2023unibrain}   & {\xmark} & {$-$}   & {$-$}    & {$-$}  & {$-$}     &16.90&  22.20& {$-$} & {$-$}\\
+    BrainCap \citep{ferrante2023brain}  & {\xmark} &55.96 & 36.21 & 22.70 & 14.51   &16.68& 40.69&41.30 & 9.06\\
+     BrainChat \citep{huang2024brainchat} & {\xmark}   &52.30& 29.20& 17.10& 10.70 &14.30& 45.70&26.10 & {$-$}\\
+    UMBRAE \citep{xia2024umbrae}    & {\xmark} & 59.44& 40.48& 27.66&19.03&19.45&  43.71&\bfseries 61.06&\bfseries 12.79\\
+% \midrule
+UniBrain \citep{wang2024unibrain}  & {\cmark} & 59.08 & 39.64 & 26.36 & 17.68 & 17.49 & 43.48 & 48.20 & 9.38\\
+    \mindllm{} (Ours)  & {\cmark} & \bfseries 61.75 &  \bfseries42.84 & \bfseries29.86&\bfseries21.24  & 
+\bfseries 19.54 &\bfseries45.82 & 60.97  & 11.79\\
+    \bottomrule
+    \end{tabular}}
+\end{table*}
+\endgroup
+
+Table \ref{tab:caption} shows that our model outperforms baselines in terms of most metrics, with an average improvement of $3.32\%$, even if our model does not have any subject-specific layers. We argue that this is attributed to both the novel architecture design and the introduction of BIT, which will be evident in the next experiment.
+
+\subsection{Versatile Decoding}
+The purpose of experiments in this section is two-fold: 1) To investigate the impact of our model design and the introduction of BIT on performance improvement. 2) To evaluate the versatility of the model, i.e., its performance on various downstream tasks.
+
+\noindent\textbf{Baselines} Besides baselines that could be adapted to this experiment from the previous one, we further consider the following subject-agnostic models as baselines.
+1) MindBridge \citep{wang2024mindbridge} flattens the voxels and adaptively adjusts the padding and stride to pool the voxels into a fixed dimension. The original implementation of MindBridge has subject-specific parameters. However, since those parameters are of the same size, we make them shared across subjects and thus make the model subject-agnostic.
+2) UniBrain \citep{wang2024unibrain} samples voxels into a fixed number of groups and employs a transformer where groups are treated as tokens. This UniBrain is unrelated to the UniBrain in the previous section; they just share the same name.
+
+\noindent\textbf{Datasets \& Metric}
+We use the test split of all QA \& caption datasets in the BIT dataset. We strictly adhere to the official metrics on all datasets. In summary, for sentence generation, we use BLEU-$k$~\citep{papineni2002bleu}, ROUGE-L~\citep{lin2004rouge}, CIDEr~\citep{vedantam2015cider}, SPICE~\citep{anderson2016spice}, METEOR~\citep{banerjee2005meteor}. For QA-related tasks, we use VQA accuracy~\citep{antol2015vqa} as well as special metrics proposed in the original paper (e.g. ANLS for ST-VQA~\citep{biten2019scene}).
+
 \begingroup
 \sisetup{
   table-format=3.2,  % 3 digits before the decimal, 2 after
@@ -90,16 +147,10 @@ OK-VQA &Accuracy $\uparrow$&22.98\% & 10.35\% &17.22\%&27.63\% &18.63\% &27.70\%
 \end{table*}
 \endgroup
 
-\subsection{Brain Captioning}
-To evaluate the model's performance on downstream tasks, we start with the widely used brain captioning benchmark \citep{xia2024umbrae}. The task, built upon COCO Caption \citep{chen2015microsoft} requires the model to predict captions of given images as fMRI stimuli.
+The results on subject 1 are shown in Table~\ref{tab:versatile}. Our model outperforms baselines, with an average improvement of $12.0\%$. Further, by comparing instruction tuning and from-scratch models, we find that instruction tuning has a significant positive effect, with an average improvement of $28.0\%$. The results remain stable across different random seeds; for instance, according to our observations, the BLEU-1 score for paragraph captioning exhibits a maximum of $\pm 0.3$ variance.
 
-\noindent\textbf{Baselines}
-The following baselines are considered in this experiment: SDRecon \citep{takagi2023high}, UniBrain \citep{mai2023unibrain}, and BrainCap \citep{ferrante2023brain} employs a linear regression, mapping the fMRI to the inputs of an image caption model \citep{li2023blip}. OneLLM \citep{han2024onellm} is a multimodal large language models that align $8$ modalities (including fMRI) with language all in one model. For fair and efficient comparison, we only finetune the encoder, given that we freeze the LLM in our method as well. UMBRAE learns an encoder that maps fMRIs to images through an encoder similar to the MLP mixer \citep{tolstikhin2021mlp}. BrainChat \citep{huang2024brainchat} segments the flattened voxels into 16 patches and employs a transformer to decode text conditioned on the patches.
-It is worth noting that all of these baselines require subject-specific layers or parameters. In contrast, our model is subject-agnostic, thus with the potential to generalize on novel subjects.
-
-\noindent\textbf{Metric} Following previous works, we use five standard metrics for text generation: BLEU-$k$ \citep{papineni2002bleu}, ROUGE-L \citep{lin2004rouge}, CIDEr \citep{vedantam2015cider}, SPICE \citep{anderson2016spice}, METEOR \citep{banerjee2005meteor}.
-
-Table \ref{tab:caption} shows that our model outperforms baselines in terms of most metrics, with an average improvement of $3.32\%$, even if our model does not have any subject-specific layers. We argue that this is attributed to both the novel architecture design and the introduction of BIT, which will be evident in the next experiment.
+\subsection{Unseen Subject Generalization}
+Our neuroscience-informed, subject-agnostic design enhances generalization to novel subjects, a crucial factor in real-world applications where training a model for each individual is impractical. To evaluate it, we perform instruction tuning on $7$ out of the $8$ subjects in the natural scene dataset \citep{allen2022massive}, and evaluate generalization on the held-out subject. Table~\ref{tab:subj8} shows our model outperforms two other subject-agnostic baselines in most cases, with an average improvement of $24.5\%$ compared to the second-best model. We anticipate further performance gains through the application of domain adaptation techniques \citep{xiao2023spa,ganin2015unsupervised,ganin2016domain,gong2012geodesic}, which we leave as a direction for future work.
 
 \begingroup
 \sisetup{
@@ -108,17 +159,18 @@ Table \ref{tab:caption} shows that our model outperforms baselines in terms of m
   table-number-alignment=center,
 detect-weight=true,detect-inline-weight=math
 }
-\begin{table}[t]
+\begin{table}[tb]
 \centering
-% At body size this table is ~26pt taller than the text block.  Trimming the
-% padding booktabs puts around each \midrule keeps it on the page without
-% shrinking the type (the \resizebox below is deliberately left off).
+% Set as two side-by-side panels (rows in their original order, header row
+% repeated) so the table takes about half a page; as a single column it was
+% taller than the text block and could only sit on a page of its own.
 \setlength{\aboverulesep}{1pt}\setlength{\belowrulesep}{1.5pt}
 \caption{Model generalization, compared with subject-agnostic model. We train the models on subject $1-7$ and evaluate on subject $8$, which is the held-out subject.}
 \label{tab:subj8}
 
-% \resizebox{\linewidth}{!}{
-\begin{tabular}{ccSSS}\toprule
+\small\setlength{\tabcolsep}{3pt}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}[t]{ccSSS}\toprule
 & & {MindBridge} & {UniBrain} & {\mindllm{}} \\
 \midrule
 COCO-QA &Accuracy $\uparrow$&35.88 &24.95 &\bfseries 38.96 \\
@@ -136,7 +188,7 @@ OK-VQA &Accuracy $\uparrow$&21.94 &17.09 &\bfseries 25.44 \\
 \multirow{2}{*}{TallyQA} &Accuracy $\uparrow$&38.92 &32.51 &\bfseries 42.29 \\
 &RMSE $\downarrow$&2.12 &\bfseries 2.02 & 2.11 \\
 \midrule
-\multirow{8}{*}{COCO-Caption} &BLEU-1 $\uparrow$&39.84 &41.90 &\bfseries 44.60 \\
+\multirow{8}{*}{\makecell{COCO-\\Caption}} &BLEU-1 $\uparrow$&39.84 &41.90 &\bfseries 44.60 \\
 &BLEU-2 $\uparrow$&19.55 &19.67 &\bfseries 24.04 \\
 &BLEU-3 $\uparrow$&9.29 &8.89 &\bfseries 12.79 \\
 &BLEU-4 $\uparrow$&5.24 &4.33 &\bfseries 7.52\\
@@ -144,8 +196,12 @@ OK-VQA &Accuracy $\uparrow$&21.94 &17.09 &\bfseries 25.44 \\
 &ROUGE $\uparrow$&31.10 &31.54 &\bfseries 33.47 \\
 &CIDEr $\uparrow$& 8.70 &6.40 & \bfseries 13.22 \\
 &SPICE $\uparrow$&2.67 &2.39 &\bfseries 3.82 \\
+\bottomrule
+\end{tabular}\hspace{1.5em}%
+\begin{tabular}[t]{ccSSS}\toprule
+& & {MindBridge} & {UniBrain} & {\mindllm{}} \\
 \midrule
-\multirow{6}{*}{Paragraph Caption} &BLEU-1 $\uparrow$&23.18 &21.73 &\bfseries 26.07 \\
+\multirow{6}{*}{\makecell{Paragraph\\Caption}} &BLEU-1 $\uparrow$&23.18 &21.73 &\bfseries 26.07 \\
 &BLEU-2 $\uparrow$&10.71 &8.94 &\bfseries 12.64 \\
 &BLEU-3 $\uparrow$&4.61 &3.72 &\bfseries 6.27 \\
 &BLEU-4 $\uparrow$&2.22 &1.92 &\bfseries 3.46 \\
@@ -170,22 +226,14 @@ OK-VQA &Accuracy $\uparrow$&21.94 &17.09 &\bfseries 25.44 \\
 &METEOR $\uparrow$&45.84 &45.24 &\bfseries 47.94 \\
 &CIDEr $\uparrow$&428.39 &587.78 &\bfseries 646.30 \\
 \bottomrule
-\end{tabular}
-% }
+\end{tabular}}
 \end{table}
 \endgroup
 
-\subsection{Versatile Decoding}
-The purpose of experiments in this section is two-fold: 1) To investigate the impact of our model design and the introduction of BIT on performance improvement. 2) To evaluate the versatility of the model, i.e., its performance on various downstream tasks.
+\subsection{Adapting to New Tasks}
+It is common that users want to adapt the \mindllm{} to their own specific use cases. To this end, we aim to assess our model's adaptability to new tasks.
 
-\noindent\textbf{Baselines} Besides baselines that could be adapted to this experiment from the previous one, we further consider the following subject-agnostic models as baselines.
-1) MindBridge \citep{wang2024mindbridge} flattens the voxels and adaptively adjusts the padding and stride to pool the voxels into a fixed dimension. The original implementation of MindBridge has subject-specific parameters. However, since those parameters are of the same size, we make them shared across subjects and thus make the model subject-agnostic.
-2) UniBrain \citep{wang2024unibrain} samples voxels into a fixed number of groups and employs a transformer where groups are treated as tokens. This UniBrain is unrelated to the UniBrain in the previous section; they just share the same name.
-
-\noindent\textbf{Datasets \& Metric}
-We use the test split of all QA \& caption datasets in the BIT dataset. We strictly adhere to the official metrics on all datasets. In summary, for sentence generation, we use BLEU-$k$~\citep{papineni2002bleu}, ROUGE-L~\citep{lin2004rouge}, CIDEr~\citep{vedantam2015cider}, SPICE~\citep{anderson2016spice}, METEOR~\citep{banerjee2005meteor}. For QA-related tasks, we use VQA accuracy~\citep{antol2015vqa} as well as special metrics proposed in the original paper (e.g. ANLS for ST-VQA~\citep{biten2019scene}).
-
-The results on subject 1 are shown in Table~\ref{tab:versatile}. Our model outperforms baselines, with an average improvement of $12.0\%$. Further, by comparing instruction tuning and from-scratch models, we find that instruction tuning has a significant positive effect, with an average improvement of $28.0\%$. The results remain stable across different random seeds; for instance, according to our observations, the BLEU-1 score for paragraph captioning exhibits a maximum of $\pm 0.3$ variance.
+\noindent\textbf{Dataset \& Metrics} We use TDIUC \citep{kafle2017analysis}, a QA dataset consisting of $12$ types of questions, as a benchmark to evaluate the model's various capabilities comprehensively. Additionally, we further select $2$ task types-\textit{sentiment understanding} and \textit{utility/affordance} tasks, that are particularly relevant to BCI applications as sub-datasets. The \textit{utility/affordance} task, for instance, enables the model to identify useful objects in a given scene and autonomously decide whether to utilize them. Following their paper, we compute the accuracy of each type and report the arithmetic mean-per-type (A-MPT) and the harmonic mean-per-type (H-MPT). For the $2$ selected types, we report the accuracy respectively. 
 
 \begingroup
 \sisetup{
@@ -218,15 +266,6 @@ detect-weight=true,detect-inline-weight=math
     % \vspace{-1em}
 \end{table}
 \endgroup
-
-
-\subsection{Unseen Subject Generalization}
-Our neuroscience-informed, subject-agnostic design enhances generalization to novel subjects, a crucial factor in real-world applications where training a model for each individual is impractical. To evaluate it, we perform instruction tuning on $7$ out of the $8$ subjects in the natural scene dataset \citep{allen2022massive}, and evaluate generalization on the held-out subject. Table~\ref{tab:subj8} shows our model outperforms two other subject-agnostic baselines in most cases, with an average improvement of $24.5\%$ compared to the second-best model. We anticipate further performance gains through the application of domain adaptation techniques \citep{xiao2023spa,ganin2015unsupervised,ganin2016domain,gong2012geodesic}, which we leave as a direction for future work.
-
-\subsection{Adapting to New Tasks}
-It is common that users want to adapt the \mindllm{} to their own specific use cases. To this end, we aim to assess our model's adaptability to new tasks.
-
-\noindent\textbf{Dataset \& Metrics} We use TDIUC \citep{kafle2017analysis}, a QA dataset consisting of $12$ types of questions, as a benchmark to evaluate the model's various capabilities comprehensively. Additionally, we further select $2$ task types-\textit{sentiment understanding} and \textit{utility/affordance} tasks, that are particularly relevant to BCI applications as sub-datasets. The \textit{utility/affordance} task, for instance, enables the model to identify useful objects in a given scene and autonomously decide whether to utilize them. Following their paper, we compute the accuracy of each type and report the arithmetic mean-per-type (A-MPT) and the harmonic mean-per-type (H-MPT). For the $2$ selected types, we report the accuracy respectively. 
 
 Table~\ref{tab:new_task} shows our model achieves balanced (high harmonic mean) and consistently improved performances with an average of $13.5\%$. We could also observe the performance benefits from BIT, with $25.0\%$ absolute improvement.
 
@@ -346,7 +385,7 @@ detect-weight=true,detect-inline-weight=math
 \subsection{Ablation Study}
 We conduct ablation studies on the design of key embeddings in the neuroscience-informed attention module in Figure~\ref{fig:ablation}. The results strongly validate our design. The vanilla cross attention (\textit{Pos Enc.+fMRI}) leads to poor performance, while removing fMRI values from the key embeddings (\textit{Pos Enc.}) yields a significant improvement. Replacing positional encoding with region encodings (\textit{Reg. Enc.}) accelerates convergence in the early stages since it is grounded by neuroscientific principles. However, it is eventually outperformed by \textit{Pos Enc.} due to the lack of finer-grained information. Combining the positional encoding and region encodings (\textit{Pos Enc.+Reg Enc.}) achieves the best model design. In addition, replacing positional encoding with an MLP that maps coordinates to embeddings results in poor performance (\textit{(x,y,z)+MLP}), which indicates the amount of high-frequency spatial information in fMRI signals.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 % \vspace{-0.8em}
     \centering
     \includegraphics[width=\linewidth]{figures/ablation.pdf}

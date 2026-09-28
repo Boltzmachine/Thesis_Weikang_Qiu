@@ -98,9 +98,9 @@ overleaf的token在@.latex_token
 >
 > **当前确认的主线（2026-09-26）：HyBRiD → MindLLM → MWM → DySta。** 只以这四篇一作作为四个核心研究 chapter，直接按此顺序展开，不再分三个 Part。其他工作只围绕四篇主角提供支撑与延伸（revolve），不承担主线必须经过的转折。用户最新要求优先；`outline.md` 与 `CLAUDE.md` 的 Thesis Outline 同步维护，口播见 `area_exam/part2_versions.md`。
 >
-> **当前实施阶段：调整 Abstract 与 Introduction 的挑战层次（2026-09-28）。** 按作者要求交换两处挑战段：Abstract 使用原 Introduction 的三项高层研究问题，Introduction 使用展开版，解释高维脑信号中的结构与先验、数据与监督稀缺及个体差异，以及任务执行中的时间记忆与计算成本。两处均服务于 HyBRiD → MindLLM → MWM → DySta 的四项工作主线。
+> **当前实施阶段：按批注精简 D-Edit 摘要并明确其与 PRISM 的关系（2026-09-28）。** D-Edit 的角色是为 PRISM 提供更具表达力的 object-disentangled generation model：独立物体提示与分组交叉注意力支持结构化描述中物体及其属性的独立控制。保留主要方法与实验结论，删除实现版本和测试样本数量等过细信息。
 >
-> **本轮修改范围。** 交换 `abstract.tex` 与 `Introduction.tex` 中现有的两个挑战段，不改写其内容；同步本文件与 CLAUDE.md。Abstract 概括研究问题，Introduction 解释具体困难。摘要继续按四项核心工作组织，不沿用旧三部分结构、周边工作链或图像／语言目标叙事，也不附加未整合或尚待验证的限定。
+> **本轮修改范围。** 仅修改 MindLLM 章末 Additional Work 的 D-Edit 段落，解决两条作者批注；同步本文件与 CLAUDE.md。四项核心工作与章间过渡保持既定主线，D-Edit 与 PRISM 的联系属于 MindLLM 周边工作的内部关系。
 
 ## 核心故事
 
@@ -209,11 +209,11 @@ MWM 利用行动的视觉后果学习支持行动意图解码的动作表征。�
 | --- | --- | --- |
 | SWA | HyBRiD | 结构建模思想向人工网络的延伸；不另立“神经科学与 ML 双向交换”主线 |
 | PRISM | MindLLM | 对齐空间比较与视觉重建，为语义联系提供补充讨论；不作为 MindLLM 必须依赖的前置章节 |
-| D-Edit | MindLLM | 物体级生成控制的延伸；编辑评估不等于已接入脑解码系统 |
-| PHIL | DySta | 按 slides 的目标实现关系并置：PHIL 为目标状态的显式规划，DySta 为语言指令引导的执行；目标图像是概念例子，PHIL 实际评估使用 graph/start/goal |
+| D-Edit | MindLLM | 为 PRISM 提供更具表达力的物体解耦生成模型，以独立提示和分组交叉注意力控制结构化描述中的物体及其属性 |
+| PHIL | DySta | 围绕意图的实现并置：PHIL 为目标状态的显式规划，DySta 为基于策略的任务执行；目标图像是概念例子，PHIL 实际评估使用 graph/start/goal |
 | RepQA | 引言与既有 prologue | 保留原 Motivation 中的语言接口论证及可读性／信息保留动机，现有正文章节与位置不变 |
 
-**PHIL 与 DySta 的关联依据。** `dissertationv3.pptx` 第 33 页将二者并列为 goal level，第 38 页用目标图像解释 target-state planning，第 39 页及 notes 明确说明这是实现目标的两种方式（target-state planning 与 language-guided execution），第 49 页 notes 再次呼应。6.6 应先承接本章以语言指定目标的方式，再引入目标状态的显式搜索；不以共享记忆或效率机制推导二者关系。此关联用于 DySta 章末的 Additional Work，不改变四个核心 chapter 的顺序，也不把 PHIL 写成 DySta 的规划前级。
+**PHIL 与 DySta 的关联依据。** `dissertationv3.pptx` 第 33 页将二者并列为 goal level，第 38 页用目标图像解释 target-state planning，第 39 页及 notes 明确说明这是实现目标的两种方式（target-state planning 与 language-guided execution），第 49 页 notes 再次呼应。按作者 2026-09-28 的新要求，6.6 以基于策略的意图执行承接 DySta，再引入目标状态的显式搜索；语言接口不作为两项工作的高层区分，也不以共享记忆或效率机制推导二者关系。此关联用于 DySta 章末的 Additional Work，不改变四个核心 chapter 的顺序，也不把 PHIL 写成 DySta 的规划前级。
 
 用户于 2026-09-27 授权将 SWA、PRISM、D-Edit、PHIL 以 **Additional Work** 小节重新纳入对应核心章末。Additional Work 下不再划分 subsection：单项工作直接写正文，多项工作用 paragraph 标题区分并连续排版。每项约 180–220 英文词，概述问题、方法、主要证据及与主角的联系：HyBRiD 后为 SWA；MindLLM 后为 PRISM 与 D-Edit；DySta 后为 PHIL。保留四项研究的完整源材料，仅输入短摘要，不恢复原有完整章节或章间过渡。MWM 不另设 side-work 小节，FA-EEG 属于其自身方法；RepQA 的原研究正文及位置不变，章节包装前言与过渡按最新授权精简。
 
@@ -243,6 +243,6 @@ MWM 利用行动的视觉后果学习支持行动意图解码的动作表征。�
 - 箭头表示研究问题与视角的递进，不表示模型权重、输出或监督信号已经逐章串接，也不表示论文发表时间顺序。
 - Summary 与总体贡献积极说明四项工作如何推进整体目标；不主动添加 separate settings、尚未整合或仍待验证的限定，也不声称已经实现联合系统。
 - HyBRiD → MindLLM 从神经结构推进到语义内容；MindLLM → MWM 必须表述为 semantics → action。visual consequences 提供语义监督，世界模型预测是动作表征学习的机制，不把 MWM 的主线定位写成 world dynamics。
-- 其他工作只 revolve，不恢复 PRISM I → MindLLM → PRISM II → D-Edit 的旧章节链。PHIL 的目标状态规划与 DySta 的语言引导执行，按 slides 作为两种目标实现方式在 Additional Work 中讨论。
+- 其他工作只 revolve，不恢复 PRISM I → MindLLM → PRISM II → D-Edit 的旧章节链。PHIL 的目标状态规划与 DySta 的基于策略的任务执行，作为两种实现意图的方式在 Additional Work 中讨论。
 - 四篇故事只改变工作之间的组织与串联；Introduction 原有动机框架应保留，局部措辞与三项挑战按作者 comments 修改；长期目标按最新批注聚焦无缝人机共生、人类能力增强及宏观未来应用。Practical Impact 与长期愿景合并为一个 paragraph，删除四场景配图，积极展开更广泛的人类能力增强应用。
 - 后续若修改叙事，同步本文件与 `CLAUDE.md` 的 Thesis Outline。MWM 最新稿、Conclusion 的 future work、对应章末 Additional Work 及 paragraph 格式均保持现状。工作之间的过渡写在各独立工作的章标题之后、正式 Introduction 之前，参照 Rex thesis 的短前言写法，不在 Thesis Outline 中补写；RepQA 前言保持精简。

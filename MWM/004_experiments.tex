@@ -80,18 +80,18 @@ In Table~\ref{tab:mwm-cls-lp}, \mwm{} improves task-averaged balanced accuracy b
 
 We examine hand-motion readouts and motor-imagery topographies of the bilateral and lateral representations. The control, \emph{w/o FA}, removes the frame-averaging (FA) wrapper, leaving a plain Transformer.
 
-\noindent\textbf{Hand-motion readouts.}
-We fit ridge readouts to frozen EgoBrain representations for relative hand use and total hand speed, using targets extracted from WiLoR~\citep{potamias2025wilor} hand tracks in synchronized video. In Figure~\ref{fig:mwm-laterality-analysis}(a,b), exchanging homologous raw EEG channels under the same readout reverses the lateral correlation for relative hand use from $0.096$ to $-0.091$, versus $0.078$ to $-0.011$ for the corresponding control block. The bilateral total-speed correlation changes little ($0.463$ to $0.451$). Both blocks encode both targets, but their contrasting responses support LAT's design of invariant bilateral and equivariant lateral readouts.
-
-\noindent\textbf{Motor-imagery topographies.}
-Figure~\ref{fig:mwm-laterality-analysis}(c--e) visualizes channel-wise feature-energy contrasts on held-out PhysioNet-MI data~\citep{schalk2009eegmmidb}. The left--right fist contrast is predominantly mirror-antisymmetric in the lateral block (fraction $0.811$), compared with $0.152$ for the bilateral block and $0.329$ for the corresponding control features. The bilateral both-fists versus both-feet contrast is predominantly symmetric. These patterns are consistent with LAT's different treatment of shared and side-specific activity.
-
 \begin{figure}[!tbp]
 \centering
 \includegraphics[width=\linewidth]{MWM/figures/laterality_analysis.pdf}
 \caption{\textbf{Lateralization analysis.} \textbf{(a,b)} Hand-motion correlations with 95\% confidence intervals estimated by bootstrap resampling, using participants as the resampling unit. \textbf{(c--e)} Participant-averaged motor-imagery feature-energy contrasts, normalized by channel-wise mean energy; left--right contrasts share a color scale. Control features $\mathbf{h}^{(1)}$ and $\mathbf{h}^{(2)}$ are equal-sized halves of $\mathbf{h}$.}
 \label{fig:mwm-laterality-analysis}
 \end{figure}
+
+\noindent\textbf{Hand-motion readouts.}
+We fit ridge readouts to frozen EgoBrain representations for relative hand use and total hand speed, using targets extracted from WiLoR~\citep{potamias2025wilor} hand tracks in synchronized video. In Figure~\ref{fig:mwm-laterality-analysis}(a,b), exchanging homologous raw EEG channels under the same readout reverses the lateral correlation for relative hand use from $0.096$ to $-0.091$, versus $0.078$ to $-0.011$ for the corresponding control block. The bilateral total-speed correlation changes little ($0.463$ to $0.451$). Both blocks encode both targets, but their contrasting responses support LAT's design of invariant bilateral and equivariant lateral readouts.
+
+\noindent\textbf{Motor-imagery topographies.}
+Figure~\ref{fig:mwm-laterality-analysis}(c--e) visualizes channel-wise feature-energy contrasts on held-out PhysioNet-MI data~\citep{schalk2009eegmmidb}. The left--right fist contrast is predominantly mirror-antisymmetric in the lateral block (fraction $0.811$), compared with $0.152$ for the bilateral block and $0.329$ for the corresponding control features. The bilateral both-fists versus both-feet contrast is predominantly symmetric. These patterns are consistent with LAT's different treatment of shared and side-specific activity.
 
 \subsection{Ablation Studies}
 \label{sec:mwm-ablations}

@@ -8,8 +8,11 @@ In this study, we validate our method's performance under acceleration by enabli
 \noindent\textbf{Baselines}
 For baselines, we compare to those that also adopt temporal information reuse. \emph{FlashVLA} \citep{tan2025think} simply reuses the previous action based on a heuristic criterion.
 \emph{TTF-VLA} \citep{liu2025ttf} and \emph{VLA-cache} \citep{xu2025vla} identify reusable visual patches using hand-designed heuristics and cache the corresponding embeddings from previous steps; however, these cached patches are not guaranteed to remain static in the hidden representation space. All methods are based on the same VLA base model (i.e., CogACT~\citep{li2024cogact}), with all other necessary variables controlled consistently.
-\input{DYSTA/tables/simplerenv}
 
+\noindent\textbf{Simulation benchmark}
+We use SimplerEnv~\citep{li2024evaluating} and LIBERO~\citep{liu2023libero} task suite to evaluate the performance and acceleration. \citet{kim2025fine} offers two settings for LIBERO, one using only a third-person image and a language instruction as inputs, and another that additionally includes an extra camera view and proprioceptive state. We adopt the former setting, as it offers broader applicability and aligns more closely with standard VLA deployment scenarios. For the LIBERO benchmark, we finetune the model to the corresponding downstream datasets. For the SimplerEnv benchmark, we use Open X-Embodiment (OXE) \citep{vuong2023open} as the training dataset. All settings are consistent with the corresponding original base model.
+
+\input{DYSTA/tables/simplerenv}
 
 \begin{table}[t]
 \centering
@@ -36,9 +39,6 @@ OpenVLA-OFT \citep{kim2025fine} & $\underline{96.2}$ & $\mathbf{98.3}$ & $\mathb
 \end{tabular}
 }
 \end{table}
-
-\noindent\textbf{Simulation benchmark}
-We use SimplerEnv~\citep{li2024evaluating} and LIBERO~\citep{liu2023libero} task suite to evaluate the performance and acceleration. \citet{kim2025fine} offers two settings for LIBERO, one using only a third-person image and a language instruction as inputs, and another that additionally includes an extra camera view and proprioceptive state. We adopt the former setting, as it offers broader applicability and aligns more closely with standard VLA deployment scenarios. For the LIBERO benchmark, we finetune the model to the corresponding downstream datasets. For the SimplerEnv benchmark, we use Open X-Embodiment (OXE) \citep{vuong2023open} as the training dataset. All settings are consistent with the corresponding original base model.
 
 \noindent\textbf{Real-World benchmark} We evaluate \dysta{} with Cobot Magic robots on 7 tasks across 3 categories, each with 20 trials. This evaluation scale is consistent with prior work~\citep{shi2025memoryvlaperceptualcognitivememoryvisionlanguageaction,li2024cogact}.
 
@@ -142,12 +142,10 @@ We evaluated \dysta{} with Cobot Magic robots on three tasks requiring memory or
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\linewidth]{figs/real_demo_mem.jpg}
+    \includegraphics[width=0.85\linewidth]{figs/real_demo_mem.jpg}
     \caption{Real-world tasks for multi-frame integration with the Cobot Magic robot: Press Buttons (top), Pour Twice (middle), and Heat Vegetables (bottom). Each task was evaluated over 20 trials.}
     \label{fig:dysta-real-mem}
 \end{figure}
-
-\input{DYSTA/tables/real_mem}
 
 
 \noindent\textbf{Implementation details} We use one static level. The ratio of static tokens is set to $0.9$, corresponding to $230$ static tokens and $26$ dynamic tokens. The number of observations is set to $20$, with a sampling interval of $20$ frames (1 frame per second), resulting in $750$ context tokens.
@@ -159,6 +157,8 @@ Single-image methods such as TraceVLA almost always fail, since the task cannot 
 ContextVLA underperforms due to non-learnable pooling observations, which may discard critical temporal and spatial details.
 MemoryVLA presents the LLM backbone with only a single frame at each timestep, leaving multi-frame reasoning to a lightweight decoder; as a result, the LLM itself does not reason over multiple frames, which limits the model's capacity.
 While these baselines have their own ways to reduce context length, they do so at the cost of information or model capacity. In contrast, our approach preserves all relevant visual information by reusing temporally persistent static tokens, enabling effective multi-frame integration within a limited context window.
+
+\input{DYSTA/tables/real_mem}
 
 \noindent\textbf{Real-world results}
 As shown in Table~\ref{tab:real_mem}, \dysta{} achieved an average success rate of $58.3\%$ across the three real-world tasks, outperforming ContextVLA, the strongest baseline on average ($35.0\%$), by $23.3$ percentage points.
@@ -191,7 +191,7 @@ We visualize the attention between the image and static/dynamic tokens across ti
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=0.9\linewidth]{figs/vis.pdf}
+    \includegraphics[width=0.75\linewidth]{figs/vis.pdf}
 % \vspace{-15pt}
     \caption{Attention map visualization across time. For each token, we compute its last-layer attention to image patches and upsample the result to the full image resolution to produce a heatmap. Heatmaps are averaged over tokens of the same type and displayed by row (e.g., the Dynamic row shows the average attention heatmap of all dynamic tokens).}
     \label{fig:attention}
