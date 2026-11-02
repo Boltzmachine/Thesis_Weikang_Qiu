@@ -137,7 +137,7 @@ MWM 利用行动的视觉后果学习支持行动意图解码的动作表征。�
 
 前者研究跨模态、跨被试的共享脑状态及刺激／干预条件下的动态预测；后者从脑源 latent/recurrent states 读出策略与价值，以疼痛相关解码提供反馈，并用新的脑记录闭合干预回路。这些是未来研究设想，不作为已验证的干预效果或直接解码生物脑内策略与价值的结论。
 
-删除旧的 decoded-image/text-to-goal integration、brain grounding for AI、geometric grounding for AI 三项未来主方向；不据此改动 deck 或四篇论文正文。Future Work 图的具体素材曾由 v3 第 50、51 页更新，但不能把 slides 整页版式搬进论文。按 2026-09-27 最新要求，Figure 7.2 依据当前 Conclusion 的内容以 TikZ 重绘为论文双面板图：actor–critic learning 与 closed-loop intervention。删除演讲标题、横幅、应用列表、示意曲线与参数，必要定义放入图注；图源为 `figures/future_directions/brain_closed_loop.tex`。Figure 7.1 保持原状。
+删除旧的 decoded-image/text-to-goal integration、brain grounding for AI、geometric grounding for AI 三项未来主方向；不据此改动 deck 或四篇论文正文。Future Work 图的具体素材曾由 v3 第 50、51 页更新，但不能把 slides 整页版式搬进论文。按 2026-09-27 最新要求，Figure 7.2 依据当前 Conclusion 的内容以 TikZ 重绘为论文双面板图：actor–critic learning 与 closed-loop intervention。删除演讲标题、横幅、应用列表、示意曲线与参数，必要定义放入图注；图源为 `figures/future_directions/brain_closed_loop.tex`。Figure 7.1 图像内容保持原状；2026-09-30 按作者要求在 `Conclusion.tex` 中用 `trim`/`clip` 裁去 slide 遗留的 “(a) World model learning…” 标题行，原 PDF 文件不变。
 
 ## 工作串联概述（不替换 Introduction 开篇）
 

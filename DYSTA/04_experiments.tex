@@ -7,7 +7,7 @@ In this study, we validate our method's performance under acceleration by enabli
 
 \noindent\textbf{Baselines}
 For baselines, we compare to those that also adopt temporal information reuse. \emph{FlashVLA} \citep{tan2025think} simply reuses the previous action based on a heuristic criterion.
-\emph{TTF-VLA} \citep{liu2025ttf} and \emph{VLA-cache} \citep{xu2025vla} identify reusable visual patches using hand-designed heuristics and cache the corresponding embeddings from previous steps; however, these cached patches are not guaranteed to remain static in the hidden representation space. All methods are based on the same VLA base model (i.e., CogACT~\citep{li2024cogact}), with all other necessary variables controlled consistently.
+\emph{TTF-VLA} \citep{liu2025ttf} and \emph{VLA-cache} \citep{xu2025vla} identify reusable visual patches using hand-designed heuristics and cache the corresponding embeddings from previous steps; however, these cached patches are not guaranteed to remain static in the hidden representation space. Within each benchmark, all methods share the same VLA base model, CogACT~\citep{li2024cogact} on SimplerEnv and OpenVLA-OFT~\citep{kim2025fine} on LIBERO and the real-world tasks, with all other necessary variables controlled consistently.
 
 \noindent\textbf{Simulation benchmark}
 We use SimplerEnv~\citep{li2024evaluating} and LIBERO~\citep{liu2023libero} task suite to evaluate the performance and acceleration. \citet{kim2025fine} offers two settings for LIBERO, one using only a third-person image and a language instruction as inputs, and another that additionally includes an extra camera view and proprioceptive state. We adopt the former setting, as it offers broader applicability and aligns more closely with standard VLA deployment scenarios. For the LIBERO benchmark, we finetune the model to the corresponding downstream datasets. For the SimplerEnv benchmark, we use Open X-Embodiment (OXE) \citep{vuong2023open} as the training dataset. All settings are consistent with the corresponding original base model.
@@ -98,7 +98,7 @@ OpenVLA-OFT
 & $15$
 & $\underline{62.5\%}$
 & $\underline{791}$
-& $\underline{1.30\times}$ \\
+& $\underline{1.38\times}$ \\
 
 + TTF
 & $35$ & $\underline{70}$ & $30$ & $55$
@@ -114,7 +114,7 @@ OpenVLA-OFT
 & $30$
 & $74.0\%$
 & $836$
-& $1.27\times$ \\
+& $1.30\times$ \\
 
 % \midrule
 + \dysta{} (Ours)

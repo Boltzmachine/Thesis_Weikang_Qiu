@@ -140,7 +140,7 @@ Across models, detection of High difficulty was uniformly poor, indicating limit
 
 Reinforcement learning has shown promise for steering LLMs toward preferred behaviors. We therefore studied whether readability can act as a useful reward signal (RQ3).
 We optimized readability using the reward in Eq.~\ref{equ:reward} within two reinforcement-learning algorithms, GRPO~\citep{shao2024deepseekmath} and DAPO~\citep{yu2025dapo}, the latter improving upon GRPO with decoupled clipping and dynamic sampling (Methods, Section~\ref{sec:methods}).
-As training-free baselines we included three readability-control methods from \citet{ribeiro-etal-2023-generating}: \emph{Prompt} (instruction-based control, prompting the base model for simple, plain-language answers), \emph{CoT} (chain-of-thought prompting), and \emph{Lookahead} (a decoding method that at each step estimates the readability of candidate continuations via a short greedy lookahead and biases generation toward the target grade level). All three were applied to the base model with no fine-tuning.
+As training-free baselines we included three readability-control methods: \emph{Prompt} (instruction-based control~\citep{ribeiro-etal-2023-generating}, prompting the base model for simple, plain-language answers), \emph{CoT} (chain-of-thought prompting~\citep{wei2022chain}), and \emph{Lookahead}~\citep{ribeiro-etal-2023-generating} (a decoding method that at each step estimates the readability of candidate continuations via a short greedy lookahead and biases generation toward the target grade level). All three were applied to the base model with no fine-tuning.
 Results are reported in Table~\ref{tab:post}.
 
 The training-free controls traded off differently across the readability axes.

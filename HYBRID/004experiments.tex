@@ -160,8 +160,8 @@ We compare our method with $3$ classes of baselines: 1) \textit{standard} method
 
 % \paragraph{Quality of Hyperedges}
 \paragraph{Results}
-We report $r$ values by CPM in Table \ref{tab:abide} and Table \ref{tab:main}. As we can see, on the ABIDE dataset, \hybrid{} consistently outperforms all the baselines on different targets, with an average improvement of $8.8\%$ compared to the state-of-the-art model.
-On the ABCD dataset, \hybrid{} outperforms the state-of-the-art predictive models on $7$ datasets of ABCD, with an average improvement of \avgimp{}. The results demonstrate our model is able to learn informative hyperedges towards different phenotypic outcomes from fMRI data of various brain states. Rest 1 is the only dataset that our model reaches the second-best.
+We report $r$ values by CPM in Table \ref{tab:abide} and Table \ref{tab:main}. As we can see, on the ABIDE dataset, \hybrid{} consistently outperforms all the baselines on different targets, improving the average $r$ over the three targets by $7.9\%$ relative to the strongest baseline, BrainNetGNN.
+On the ABCD dataset, \hybrid{} outperforms the state-of-the-art predictive models on $7$ datasets of ABCD and improves the average $r$ over all eight datasets by \avgimp{} relative to the strongest baseline, BrainNetTF. The results demonstrate our model is able to learn informative hyperedges towards different phenotypic outcomes from fMRI data of various brain states. Rest 1 is the only dataset that our model reaches the second-best.
 
 Further, the comparison between our model and the pairwise baseline demonstrates the superiority of incorporating high-order relationships over relying solely on pairwise ones.
 

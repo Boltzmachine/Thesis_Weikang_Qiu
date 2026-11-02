@@ -8,7 +8,7 @@ We first evaluate the pretrained mind model on motor regression and classificati
 We pretrain \mwm{} on 63.28 hours of synchronized EEG and egocentric video from all 40 EgoBrain participants~\citep{lin2026egobrain}. All regression and classification benchmarks use the same fixed pretrained checkpoint.
 
 \noindent\textbf{Linear-probe evaluation.}
-We evaluate every backbone on the same task-specific one-second EEG input sampled at 200\,Hz, freezing the backbone and training only a linear prediction head. We report test balanced accuracy for classification and test Pearson correlation for regression, averaging correlations across output dimensions for vector targets. Each table entry reports the mean and standard deviation over three evaluation seeds shared across models for that task.
+We evaluate every backbone on the same task-specific one-second EEG input sampled at 200\,Hz, freezing the backbone and training only a linear prediction head. To evaluate transfer to unseen participants, all downstream tasks use participant-disjoint train, validation, and test sets shared by all models within each task. We report test balanced accuracy for classification and test Pearson correlation for regression, averaging correlations across output dimensions for vector targets. Each table entry reports the mean and standard deviation over three evaluation seeds shared across models for that task.
 
 \noindent\textbf{Baselines.}
 We compare with recent EEG foundation models: BIOT~\citep{yang2023biot}, LaBraM~\citep{jiang2024large}, CBraMod~\citep{wang2025cbramod}, CSBrain~\citep{zhou2025csbrain}, and REVE~\citep{ouahidi2025reve}.

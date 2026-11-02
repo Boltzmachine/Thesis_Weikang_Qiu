@@ -33,7 +33,7 @@ A transition model would predict subsequent latent brain states, either without 
 The future prediction component of \mwm{} offers a starting point for this formulation. In \mwm{}, predicting external visual changes provides supervision for action representations learned from EEG. Here, an external intervention would condition predictions of changes in the brain itself. Establishing this capability requires evaluating responses to interventions and testing whether predictions remain reliable across individuals and over longer trajectories. 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\linewidth]{figures/future_directions/multimodal_brain_world_model.pdf}
+    \includegraphics[width=\linewidth,trim={0 0 0 37bp},clip]{figures/future_directions/multimodal_brain_world_model.pdf}
     \caption[Proposed multimodal brain world model]{Proposed multimodal brain world model. Modality-specific encoders and decoders connect neural recordings through a shared latent state. A transition model predicts subsequent states conditioned on stimuli or stimulation and can roll forward without new observations. Learning predictions that transfer across subjects and remain valid under interventions is a research objective.}
     \label{fig:future_multimodal_brain_world_model}
 \end{figure}
